@@ -1,9 +1,10 @@
 OpenStack based cloud platform for the HTWG Laboraties.
 
-# Branching
+# Branching/Issues
 
 - Branch per feature
 - Merge if feature works flawless to master
+- GitHub Issues to manage Features, Bugs, etc.
 
 # Project Goals
 
