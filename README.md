@@ -1,3 +1,5 @@
+![HTWG Lab Cloud](resources/logo.png?raw=true)
+
 OpenStack based cloud platform for the HTWG Laboraties.
 
 # Branching/Issues
