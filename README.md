@@ -12,3 +12,6 @@ OpenStack based cloud platform for the HTWG Laboraties.
 
 see Issues->Milestones
 
+# DevStack
+
+To bring the networking up and running after switching between different networks (HTWG, home, etc.) run the following in the ubuntu host: `sudo ifdown eth0 && sudo ifup eth0` 
