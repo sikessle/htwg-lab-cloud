@@ -2,8 +2,9 @@
 
 OpenStack based cloud platform for the HTWG Laboraties.
 
-# Branching/Issues
+# Branching/Issues/Folders
 
+- Put devstack related files to "devstack" and virtual machine instance related files to "instance"
 - Branch per feature
 - Merge if feature works flawless to master
 - GitHub Issues to manage Features, Bugs, etc.
