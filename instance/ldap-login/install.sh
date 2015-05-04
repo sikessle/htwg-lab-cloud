@@ -17,7 +17,7 @@ echo "\nsession required\tpam_mkhomedir.so skel=/etc/skel umask=0022\n" > /etc/p
 echo "assigning ldap users to local groups"
 echo "TODO"
 
-echo "restricting access from LDAP to single user xx"
+echo "restricting access from LDAP to single user xx. via pam_filter <filter>?"
 echo "TODO"
 
 echo "restarting naming service"
