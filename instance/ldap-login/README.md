@@ -14,6 +14,14 @@ The required configuration for Ubuntu can be found in this directory.
 - gidNumber
 - homeDirectory
 
+## HTWG LDAP
+
+URL: `ldap.htwg-konstanz.de`
+
+BaseDN: dc=fh-konstanz,dc=de
+
+Nutzer: ou=users,dc=fh-konstanz,dc=de
+
 ## Script notes
 
 Run the script ldap.sh to configure the system for LDAP. If asked always choose "no". 
