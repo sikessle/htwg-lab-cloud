@@ -31,7 +31,7 @@ Run the script ldap.sh to configure the system for LDAP. If asked always choose 
 
 **We can automate that by editing the files /etc/nsswitch.conf, /etc/ldap.conf, /etc/pam.d/common-session**
 
-ldap.conf can be customized to map the login attribute (default: uid) and groups from ldap. Overriding of values (home dir etc.) via nss_override_attribute_value.
+ldap.conf can be customized to map the login attribute (default: uid) and groups from ldap. Overriding of values (home dir etc.) via `nss_override_attribute_value`.
 
 We may need to override uidNumber, gidNumber and homeDirectory.
 
