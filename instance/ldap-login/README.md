@@ -10,9 +10,12 @@ The required configuration for Ubuntu can be found in this directory.
 
 ## LDAP Requirements
 
+- uid
 - uidNumber
 - gidNumber
 - homeDirectory
+
+or similar (can be mapped).
 
 ## HTWG LDAP
 
