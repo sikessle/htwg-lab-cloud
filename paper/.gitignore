@@ -1,0 +1,10 @@
+*.aux
+*.log
+*.bak
+*.lof
+*.lot
+*.out
+htwg-lab-cloud.pdf
+*.gz
+*.toc
+

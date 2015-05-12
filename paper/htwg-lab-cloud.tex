@@ -1,0 +1,85 @@
+\documentclass[11pt,a4paper,bibtotocnumbered]{scrreprt}		                                   
+
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{a4}
+\usepackage[onehalfspacing]{setspace}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage[babel,german=quotes]{csquotes}
+\usepackage[printonlyused]{acronym}
+\usepackage[linktoc=all, hidelinks]{hyperref}
+
+\renewcaptionname{ngerman}\figureautorefname{Abb.}
+
+\captionsetup[table]{belowskip=8pt}
+
+
+
+
+
+
+\begin{document}
+
+
+
+% ============================ FRONT MATTER
+\pagenumbering{roman}
+\begin{singlespace}
+\include{cover}
+\setcounter{page}{1}
+\end{singlespace}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter*{Abkürzungsverzeichnis} 
+
+\begin{acronym}[LAENGE]
+\acro{ACM}{Association for Computing Machinery}
+\end{acronym}
+
+\cleardoublepage
+% ============================ ENDE FRONT MATTER
+
+
+
+% ============================ HAUPTTEIL THESIS
+\pagenumbering{arabic}
+
+% ============================ CHAPTER
+\chapter{Einführung} 
+
+sdf
+ 
+% ============================ ENDE HAUPTTEIL
+
+
+
+
+
+
+
+% ============================ LITERATURVERZEICHNIS
+\begin{singlespace}
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+  Leslie Lamport,
+  \emph{\LaTeX: a document preparation system},
+  Addison Wesley, Massachusetts,
+  2nd edition,
+  1994.
+
+\end{thebibliography}
+\end{singlespace}
+% ============================ ENDE LITERATURVERZEICHNIS
+
+
+
+\end{document}
+
