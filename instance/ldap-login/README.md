@@ -6,7 +6,7 @@ The required configuration for Ubuntu can be found in this directory.
 - The client (Ubuntu instance) always contacts the LDAP server to authenticate the user.
 - The client is not allowed to change the password for the user in the LDAP server.
 - The client restricts the users who are allowed to login via LDAP to a single user. This must be injected via the cloud-init user-data field. This ensures that 1 instance maps to exactly 1 user.
-- **TODO: The client allows to login via graphic login.**
+- The client allows to login with graphical login interface
 
 ## LDAP Requirements
 
@@ -37,6 +37,7 @@ Run the script ldap.sh to configure the system for LDAP.
 - /etc/security/group.conf Assigning groups for LDAP users
 - /etc/pam.d/common-auth Adding PAM groups module
 - /etc/group Adding group for LDAP users
+- /etc/lightdm/lightdm.conf for the graphical login (greeter)
 
 ldap.conf can be customized to map the login attribute (default: uid) and groups from ldap. Overriding of values (home dir etc.) via `nss_override_attribute_value`.
 

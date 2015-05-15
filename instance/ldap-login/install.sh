@@ -10,6 +10,7 @@ fi
 USER=$1
 BASEDN="ou=users,dc=fh-konstanz,dc=de"
 LDAP_CONF=/etc/ldap.conf
+LDM_CONF=/etc/lightdm/lightdm.conf
 
 echo "configuring ldap for user: $USER"
 
@@ -40,6 +41,10 @@ echo "assigning ldap users to local groups"
 echo "\n*;*;*;Al0000-2400;adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare" >> /etc/security/group.conf 
 echo "\n\nauth\trequired\tpam_group.so use_first_pass" >> /etc/pam.d/common-auth
 echo "\n$USER:x:2000:" >> /etc/group
+
+echo "configuring graphical login (greeter)"
+touch $LDM_CONF
+echo "[SeatDefaults]\ngreeter-show-manual-login=true\ngreeter-hide-users=true" >> $LDM_CONF
 
 echo "restarting naming service"
 /etc/init.d/nscd restart
