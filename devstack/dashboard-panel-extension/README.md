@@ -12,7 +12,7 @@ In order to make the extension show up, you need to create a file called "_50_pr
 
 	# A list of applications to be added to INSTALLED_APPS.
 	ADD_INSTALLED_APPS = [
-    'openstack_dashboard.prof.courses',
+    'openstack_dashboard.dashboards.prof',
 	]
 
 Now, restart the web server:
