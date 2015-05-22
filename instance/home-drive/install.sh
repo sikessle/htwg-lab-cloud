@@ -9,7 +9,7 @@ apt-get install -y libpam-mount cifs-utils
 echo "configuring auto-mounting of home-drive"
 mkdir $MNT_POINT
 
-echo "" > $PAM_GLOBAL_CONF
+rm -f $PAM_GLOBAL_CONF
 echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" >> $PAM_GLOBAL_CONF
 echo "<!DOCTYPE pam_mount SYSTEM \"pam_mount.conf.xml.dtd\">" >> $PAM_GLOBAL_CONF
 echo "<pam_mount>" >> $PAM_GLOBAL_CONF
