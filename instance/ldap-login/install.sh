@@ -61,4 +61,9 @@ echo "user-session=ubuntu" >> $LDM_CONF
 echo "restarting naming service"
 /etc/init.d/nscd restart
 
+echo "creating home folder"
+home="/home/$USER"
+cp -R /etc/skel "$home" && echo $'\e[32m'"Copied skeleton to: $home"$'\e[m' || ( exit_code=$?; echo $'\e[31m'"Failed to create: $home"$'\e[m' ) >&2
+chown -R "$user:$user" "$home" && echo $'\e[32m'"Set owner on: $home"$'\e[m' || ( exit_code=$?; echo $'\e[31m'"Failed to set owner on: $home"$'\e[m' ) >&2
+
 echo "finished."

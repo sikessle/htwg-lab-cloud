@@ -27,7 +27,7 @@ Nutzer: ou=users,dc=fh-konstanz,dc=de
 
 ## Script notes
 
-Run the script `install.sh username` to configure the system for LDAP for the user "username". 
+Run the script `install.sh` to configure the system for LDAP. Before you have to replace the username in the script. 
 
 ### Relevant files
 
