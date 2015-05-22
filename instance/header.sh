@@ -17,5 +17,8 @@ if [ "$(whoami)" != "root" ]; then
 fi
 
 
+echo "updating apt-get"
+apt-get update 
+
 #######################
 
