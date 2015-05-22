@@ -35,7 +35,7 @@ echo "\n\nauth\trequired\tpam_group.so use_first_pass" >> /etc/pam.d/common-auth
 echo "\n$USER:x:2000:" >> /etc/group
 
 echo "configuring graphical login (greeter)"
-touch $LDM_CONF
+rm -f $LDM_CONF
 echo "[SeatDefaults]" >> $LDM_CONF
 echo "greeter-show-manual-login=true" >> $LDM_CONF
 echo "greeter-hide-users=true" >> $LDM_CONF
