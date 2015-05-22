@@ -9,4 +9,4 @@ This will generate a instance-setup.sh file, which must be run in each instance 
 
 ## Operating System
 
-- Kubuntu 14.04 LTS
+- Ubuntu 14.04 LTS
