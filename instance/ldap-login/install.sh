@@ -1,17 +1,5 @@
 # This script is only a part of a the main script in the superfolder!
 
-USER="##INSERT_USERNAME##"
-
-if [ "$USER" = "##INSERT_USERNAME##" ]; then
-	echo "##INSERT_USERNAME## not replaced by real username. Stopping."
-	exit 1
-fi
-
-if [ "$(whoami)" != "root" ]; then
-	echo "root/sudo required. Stopping."
-	exit 1
-fi
-
 BASEDN="ou=users,dc=fh-konstanz,dc=de"
 LDAP_CONF=/etc/ldap.conf
 LDM_CONF=/etc/lightdm/lightdm.conf
