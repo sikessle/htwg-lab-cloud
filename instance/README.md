@@ -10,3 +10,7 @@ This will generate a instance-setup.sh file, which must be run in each instance 
 ## Operating System
 
 - Ubuntu 14.04 LTS
+
+## Bugs
+
+- Graphical Login must be issued twice for LDAP users due to Ubuntu bugs in lightdm.
