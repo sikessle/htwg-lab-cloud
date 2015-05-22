@@ -23,7 +23,7 @@ PAM_GLOBAL_CONF=/etc/security/pam_mount.conf.xml
 echo "installing required packages"
 apt-get install -y libpam_mount cifs-utils
 
-echo "configuing auto-mounting of home-drive"
+echo "configuring auto-mounting of home-drive"
 mkdir $MNT_POINT
 touch $PAM_LOCAL_CONF
 
