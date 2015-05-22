@@ -6,3 +6,7 @@ In this folder and sub-folders goes the (virtual machine) instance related files
 
 To generate a single installation script run `make` in this folder.
 This will generate a instance-setup.sh file, which must be run in each instance to configure the instance.
+
+## Operating System
+
+- Kubuntu 14.04 LTS
