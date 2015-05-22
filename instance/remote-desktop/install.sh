@@ -1,11 +1,2 @@
-#!/bin/sh
+# This script is only a part of a the main script in the superfolder!
 
-
-if [ "$(whoami)" != "root" ]; then
-	echo "root/sudo required. Stopping."
-	exit 1
-fi
-
-
-
-echo "finished."
