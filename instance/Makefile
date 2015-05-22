@@ -6,7 +6,7 @@ TARGET=instance-setup.sh
 all: $(TARGET)
 
 # Warning! Order of source files matters. ldap-login must come first!
-$(TARGET): ldap-login/$(INSTALL_NAME) home-drive/$(INSTALL_NAME)
+$(TARGET): ldap-login/$(INSTALL_NAME) home-drive/$(INSTALL_NAME) vnc/$(INSTALL_NAME)
 	rm -f $(TARGET)
 	cat $^ > $@
 	chmod +x $@
