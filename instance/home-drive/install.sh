@@ -14,7 +14,7 @@ echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" >> $PAM_GLOBAL_CONF
 echo "<!DOCTYPE pam_mount SYSTEM \"pam_mount.conf.xml.dtd\">" >> $PAM_GLOBAL_CONF
 echo "<pam_mount>" >> $PAM_GLOBAL_CONF
 echo "<debug enable=\"0\" />" >> $PAM_GLOBAL_CONF
-echo "<volume options=\"user=$USER,workgroup=FHKN,domain=FHKN\" user=\"$USER\" mountpoint=\"/media/home-drive\" path=\"//homedrive.htwg-konstanz.de/home\" fstype=\"cifs\" />" >> $PAM_GLOBAL_CONF
+echo "<volume options=\"user=$USER,workgroup=FHKN,domain=FHKN\" user=\"$USER\" mountpoint=\"$MNT_POINT\" path=\"//homedrive.htwg-konstanz.de/home\" fstype=\"cifs\" />" >> $PAM_GLOBAL_CONF
 echo "<mntoptions require=\"\" />" >> $PAM_GLOBAL_CONF
 echo "<mntoptions allow=\"*\" />" >> $PAM_GLOBAL_CONF
 echo "<!-- mntoptions deny=\"suid,dev\" / -->" >> $PAM_GLOBAL_CONF
