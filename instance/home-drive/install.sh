@@ -1,27 +1,11 @@
-#!/bin/sh
-
-# 
-# Before running this script, replace ##INSERT_USERNAME## through the real username.
-#
-
-USER="##INSERT_USERNAME##"
-
-if [ "$USER" = "##INSERT_USERNAME##" ]; then
-	echo "##INSERT_USERNAME## not replaced by real username. Stopping."
-	exit 1
-fi
-
-if [ "$(whoami)" != "root" ]; then
-	echo "root/sudo required. Stopping."
-	exit 1
-fi
+# This script is only a part of a the main script in the superfolder!
 
 MNT_POINT=/mnt/home-drive
 PAM_LOCAL_CONF=/home/$USER/.pam_mount.conf.xml
 PAM_GLOBAL_CONF=/etc/security/pam_mount.conf.xml
 
 echo "installing required packages"
-apt-get install -y libpam_mount cifs-utils
+apt-get install -y libpam-mount cifs-utils
 
 echo "configuring auto-mounting of home-drive"
 mkdir $MNT_POINT

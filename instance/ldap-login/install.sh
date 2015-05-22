@@ -1,8 +1,4 @@
-#!/bin/sh
-
-# 
-# Before running this script, replace ##INSERT_USERNAME## through the real username.
-#
+# This script is only a part of a the main script in the superfolder!
 
 USER="##INSERT_USERNAME##"
 
