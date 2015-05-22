@@ -6,7 +6,7 @@
 
 USER="##INSERT_USERNAME##"
 
-if [ "$USER" == "##INSERT_USERNAME##" ]; then
+if [ "$USER" = "##INSERT_USERNAME##" ]; then
 	echo "##INSERT_USERNAME## not replaced by real username. Stopping."
 	exit 1
 fi
