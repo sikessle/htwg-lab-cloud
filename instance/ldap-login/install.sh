@@ -27,7 +27,7 @@ echo "setup auth services to look in ldap"
 auth-client-config -t nss -p lac_ldap
 
 echo "configure to create home folder on login"
-echo "\nsession required\tpam_mkhomedir.so skel=/etc/skel umask=0022" > /etc/pam.d/common-session
+echo "\nsession required\tpam_mkhomedir.so skel=/etc/skel umask=0022" >> /etc/pam.d/common-session
 
 echo "assigning ldap users to local groups"
 echo "\n*;*;*;Al0000-2400;adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare" >> /etc/security/group.conf 
