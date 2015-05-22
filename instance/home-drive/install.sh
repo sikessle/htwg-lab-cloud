@@ -1,6 +1,6 @@
 # This script is only a part of a the main script in the superfolder!
 
-MNT_POINT=/mnt/home-drive
+MNT_POINT=/media/home-drive
 PAM_GLOBAL_CONF=/etc/security/pam_mount.conf.xml
 
 echo "installing required packages"
