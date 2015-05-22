@@ -45,9 +45,4 @@ echo "user-session=ubuntu" >> $LDM_CONF
 echo "restarting naming service"
 /etc/init.d/nscd restart
 
-echo "creating home folder"
-home="/home/$USER"
-cp -R /etc/skel "$home"
-chown -R "$user:$user" "$home"
-
 echo "finished."
