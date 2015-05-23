@@ -14,4 +14,4 @@ This will generate a instance-setup.sh file, which must be run in each instance 
 ## Bugs
 
 - Graphical Login must be issued twice for LDAP users due to Ubuntu bugs in lightdm.
-- VNC connection is currently unsecured. Everybody can connect to the VM if he knows the IP. If a user is logged in, anybody can interfere.
+- VNC connection is currently unsecured. Everybody can connect to the VM if he knows the IP. If a user is logged in, further connections are blocked (1 Viewer at a time.).
