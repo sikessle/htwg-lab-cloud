@@ -1,8 +1,9 @@
-# RDP Server
+# VNC Server
 
 A user must be able to log into the instance (ubuntu) via a Remote Desktop client.
 
-- vnc?
+- VNC is used
+- No password for VNC, drops VNC session straight to the login screen
  
 ## Requirements
 
@@ -10,4 +11,6 @@ A user must be able to log into the instance (ubuntu) via a Remote Desktop clien
 
 ## Script notes
 
+Installs:
 
+- x11vnc
