@@ -6,7 +6,7 @@ TARGET=instance-setup.sh
 all: $(TARGET)
 
 # Warning! Order of source files matters. ldap-login must come first!
-$(TARGET): header.sh ldap-login/$(INSTALL_NAME) home-drive/$(INSTALL_NAME) remote-desktop/$(INSTALL_NAME)
+$(TARGET): header.sh ldap-login/$(INSTALL_NAME) home-drive/$(INSTALL_NAME)
 	rm -f $(TARGET)
 	cat $^ > $@
 	chmod +x $@
