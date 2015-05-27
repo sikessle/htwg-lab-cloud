@@ -14,3 +14,4 @@ echo "converting $IMAGE to openstack compatible format"
 
 VBoxManage clonehd "$IMAGE" $TARGET-raw.img --format raw
 qemu-img convert -f raw -O qcow2 "${TARGET}-raw.img" "${TARGET}-qcow2.img"
+rm -f "${TARGET}-raw.img"
