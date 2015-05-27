@@ -17,3 +17,12 @@ Includes:
 
 Username: ubuntu (full name: HTWG Lab Cloud)
 Password: ubuntu
+
+### SSH
+
+To ssh into the machine (while not in openstack), use the given ssh-key file: `ssh -i ssh-key ubuntu@<ip-of-vm>`
+
+### VNC
+
+Use any VNC Viewer to connect to the ip address of the vm and log in.
+
