@@ -8,7 +8,7 @@ if [ "$IMAGE" = "" ]; then
 	exit 1
 fi
 
-#IMAGE="/Users/sikessle/Documents/Software/Virtual\ Machines/OpenStack/Cloud-Image\ Ubuntu/Cloud-Image\ Ubuntu.vdi"
+#IMAGE="/Users/sikessle/Documents/Software/Virtual Machines/OpenStack/Cloud-Image Ubuntu/Cloud-Image Ubuntu.vdi"
 
 echo "converting $IMAGE to openstack compatible format"
 
