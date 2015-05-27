@@ -5,7 +5,7 @@ Includes:
 - VNC
 - Unity as Desktop Environment
 - Dropbox
-- cloud-init package
+- cloud-init, cloud-utils, cloud-initramfs-growroot packages
 - git
 - openssh-server (password auth not disabled)
 - vim
@@ -26,3 +26,8 @@ To ssh into the machine (while not in openstack), use the given ssh-key file: `s
 
 Use any VNC Viewer to connect to the ip address of the vm and log in.
 
+## Cloud.cfg
+
+in /etc/cloud/cloud.cfg:
+
+- lock_passwd: False
