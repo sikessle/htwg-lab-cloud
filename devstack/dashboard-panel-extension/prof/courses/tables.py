@@ -6,7 +6,7 @@ from horizon import tables
 class StartInstancesAction(tables.LinkAction):
     name = "start instance"
     verbose_name = _("Start Instances")
-    url = "horizon:prof:course:start_instances"
+    url = "horizon:prof:courses:start_instances"
     classes = ("ajax-modal",)
 
     def allowed(self, request, instance=None):

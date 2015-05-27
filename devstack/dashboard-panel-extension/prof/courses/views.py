@@ -1,8 +1,19 @@
+from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
+
 from horizon import tables
 import json
 from .tables import CoursesTable
 from .course import Course
 
+from horizon import exceptions
+from horizon import forms
+
+from horizon.utils import memoized
+
+from openstack_dashboard.dashboards.prof.courses \
+    import forms as project_forms
 
 class CoursesTableView(tables.DataTableView):
     # A very simple class-based view...
@@ -17,38 +28,37 @@ class CoursesTableView(tables.DataTableView):
             ret.append(Course(inst['name'], inst['description'], inst['id'], inst['enabled']))
         return ret
 
-'''
-class CreateSnapshotView(forms.ModalFormView):
-    form_class = project_forms.CreateSnapshot
-    template_name = 'prof/courses/templates/courses/create_snapshot.html'
-    success_url = reverse_lazy("horizon:project:images:index")
-    modal_id = "create_snapshot_modal"
-    modal_header = _("Create Snapshot")
-    submit_label = _("Create Snapshot")
-    submit_url = "horizon:prof:courses:create_snapshot"
+class StartInstancesView(forms.ModalFormView):
+    form_class = project_forms.StartInstances
+    template_name = 'prof/courses/start_instances.html'
+    success_url = reverse_lazy("horizon:prof:courses:index")
+    modal_id = "start_instances_modal"
+    modal_header = _("Start Instances")
+    submit_label = _("Create VMs")
+    submit_url = "horizon:prof:courses:start_instances"
 
     @memoized.memoized_method
     def get_object(self):
-        try:
-            return api.nova.server_get(self.request,
-                                       self.kwargs["instance_id"])
-        except Exception:
-            exceptions.handle(self.request,
-                              _("Unable to retrieve instance."))
+       course_id = self.kwargs['course_id']
+       try:
+         print course_id
+       except Exception:
+         redirect = self.success_url
+         msg = _('Unable to retrieve course.')
+         exceptions.handle(self.request, msg, redirect=redirect)
+
+
 
     def get_initial(self):
-        return {"instance_id": self.kwargs["instance_id"]}
+        return {"course_id": self.kwargs["course_id"]}
 
     def get_context_data(self, **kwargs):
-        context = super(CreateSnapshotView, self).get_context_data(**kwargs)
-        instance_id = self.kwargs['instance_id']
-        context['instance_id'] = instance_id
-        context['instance'] = self.get_object()
-        context['submit_url'] = reverse(self.submit_url, args=[instance_id])
+        context = super(StartInstancesView, self).get_context_data(**kwargs)
+        context['course_id'] = self.kwargs['course_id']
+       # context['course_id'] = instance_id
+       # context['course'] = self.get_object()
+        #context['submit_url'] = reverse(self.submit_url, args=[instance_id])
         return context
-'''
-
-
 
 
 
