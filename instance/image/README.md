@@ -43,3 +43,13 @@ Then run `glance image-create --name "Ubuntu-14.04" --is-public true --disk-form
 run `image-virtualbox-to-openstack.sh <FULL-IMAGE-PATH-TO-VDI-SNAPSHOT>`
 
 **WARNING**: Specify the path to the SNAPSHOT of the image, otherwise the snapshots are ignored and only the base vdi will be converted.
+
+## Details
+
+The following files have been edited:
+
+- /etc/default/grub and then run update-grub to enable serial console on OpenStack
+- /etc/network/interfaces
+- openssh-server config files to enable password login
+
+
