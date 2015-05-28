@@ -4,11 +4,11 @@ IMAGE=$1
 TARGET="ubuntu-14.04-openstack"
 
 if [ "$IMAGE" = "" ]; then
-	echo "pass as first argument the *FULL* path to the image you want to convert"
+	echo "pass as first argument the *FULL* path to the snapshot of the image you want to convert"
 	exit 1
 fi
 
-IMAGE="/Users/sikessle/Documents/Software/Virtual Machines/OpenStack/Cloud-Image Ubuntu/Cloud-Image Ubuntu.vdi"
+IMAGE="/Users/sikessle/Documents/Software/Virtual Machines/OpenStack/Cloud-Image Ubuntu/Snapshots/{179a4be3-3a8d-4231-91a4-02675e0e2d6a}.vdi"
 
 echo "converting $IMAGE to openstack compatible format"
 

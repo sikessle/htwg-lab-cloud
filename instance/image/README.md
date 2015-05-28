@@ -41,6 +41,6 @@ Then run `glance image-create --name "Ubuntu-14.04" --is-public true --disk-form
 
 ## Convert VirtualBox Image to OpenStack
 
-run `image-virtualbox-to-openstack.sh <FULL-IMAGE-PATH-TO-VDI>`
+run `image-virtualbox-to-openstack.sh <FULL-IMAGE-PATH-TO-VDI-SNAPSHOT>`
 
-**WARNING**: Does only convert the base vdi not the snapshots! So before converting merge all snapshots.
+**WARNING**: Specify the path to the SNAPSHOT of the image, otherwise the snapshots are ignored and only the base vdi will be converted.
