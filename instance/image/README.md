@@ -4,7 +4,6 @@
 
 Includes:
 
-- VNC
 - Unity as Desktop Environment
 - Dropbox
 - cloud-init, cloud-utils, cloud-initramfs-growroot packages
@@ -26,7 +25,7 @@ To ssh into the machine (while not in openstack), use the given ssh-key file: `s
 
 ### VNC
 
-Use any VNC Viewer to connect to the ip address of the vm and log in.
+Use nova get-vnc-console etc. or SPICE to access instance.
 
 ## Cloud.cfg
 
