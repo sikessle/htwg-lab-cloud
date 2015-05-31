@@ -6,6 +6,7 @@ from horizon import tables
 import json
 from .tables import CoursesTable
 from .course import Course
+from .course import CourseHelper
 
 from horizon import exceptions
 from horizon import forms
@@ -20,13 +21,10 @@ class CoursesTableView(tables.DataTableView):
     table_class = CoursesTable
     template_name = 'prof/courses/index.html'
 
+
     def get_data(self):
-        dummyData = '[{"name": "WebTech", "description": "WebTechnologien", "id": 1, "enabled": "Yes"}, {"name": "DBSYS", "description": "Datenbanksysteme", "id": 2, "enabled": "No"},{"name": "CloudAppDev", "description": "Cloud Application Development", "id": 3, "enabled": "Yes"}]'
-        instances = json.loads(dummyData)
-        ret = []
-        for inst in instances:
-            ret.append(Course(inst['name'], inst['description'], inst['id'], inst['enabled']))
-        return ret
+	helper = CourseHelper()
+	return helper.getCourses()
 
 class StartInstancesView(forms.ModalFormView):
     form_class = project_forms.StartInstances
