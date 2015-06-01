@@ -1,4 +1,4 @@
-from .client import Client
+from client import Client
 
 class Course:
     """
@@ -10,8 +10,15 @@ class Course:
         self.description = description
         self.id = id
         self.enabled = enabled
+        # TODO : set email of course owner here.
+        self.owner = "test@test.de"
+        # TODO : set list of all course members
+        self.members = ["student1@test.de", "studen2@test.de"]
 
 class CourseHelper:
+    """
+    Helper class to handle courses.
+    """
     def __init__(self):
         client = Client()
         self.keystone = client.keystone()
@@ -34,7 +41,6 @@ class CourseHelper:
         list.append(Course(name="WebTech", description="WebTechnologien", id="1", enabled="Yes"))
         list.append(Course(name="DBSYS", description="Datenbanksysteme", id="2", enabled="No"))
         list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="3", enabled="No"))
-	list.append(Course(name="ITSecurity", description="IT Security", id="4", enabled="No"))
         return list
     
     # load a list with all tenants
@@ -49,14 +55,15 @@ class CourseHelper:
     # add a course
     def addCourse(self, course):
         tenants = self.getTenants()
+        # check if the tenant already exist.
         if course.id in tenants:
             return False
         # Create the course
         tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
-        # Create a user and set the role 
-        #self.keystone.users.create(name="cloud", password="12345678", email="some@test.de", tenant_id=tenant.id)
-        # TODO : check if we need to set a role.        
-        # self.keystone.roles.add_user_role(user, role, tenant)
+        # get the admin role.
+        role = self.keystone.roles.find(name="admin")
+        # get the owner of the course
+        user = self.keystone.users.find(email=course.owner)
+        # set the course owner as the admin of the tenant      
+        self.keystone.roles.add_user_role(user, role, tenant)
         return True
-
-
