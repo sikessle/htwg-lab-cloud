@@ -60,10 +60,10 @@ class CourseHelper:
             return False
         # Create the course
         tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
-        # get the admin role.
-        role = self.keystone.roles.find(name="admin")
+        # get the Member role.
+        role = self.keystone.roles.find(name="Member")
         # get the owner of the course
         user = self.keystone.users.find(email=course.owner)
-        # set the course owner as the admin of the tenant      
+        # add the course owner to the tenant      
         self.keystone.roles.add_user_role(user, role, tenant)
         return True
