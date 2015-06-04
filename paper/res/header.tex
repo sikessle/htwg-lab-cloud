@@ -1,0 +1,165 @@
+%
+%
+% Latex Einstellungen
+%
+%
+\documentclass[a4paper,			% Papiersorte
+				BCOR10mm,
+				11pt,				% Schriftgroesse
+				headsepline,		% Linie nach Kopfzeile
+				headinclude,
+				numbers=noenddot,
+				%footsepline,		% Linie vor Fusszeile
+				bibliography=totoc,	% Aufführen des Literaturverzeichnisses
+				listof=totoc,
+				parskip=half,		% Zwischen Absätzen entsteht eine halbe Seite Abstand
+				cleardoublepage=empty,
+				ngerman,			% Übersetzer
+				twoside				% Doppelseitig
+				]{scrbook}
+						
+% verbesserte Font-Darstellung
+\usepackage{ae}
+%Tabellenunterschriften verkleinern
+\usepackage[font=small]{caption}
+%Häckchen
+\usepackage{amssymb}
+% Zeichenkodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{wrapfig} % Paket zur Positionierung einbinden
+% Verwendung von Microtype für Zeilenumbrüche etc.
+\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+% neue deutsche Rechtschreibung
+\usepackage[ngerman]{babel}
+\usepackage{amsmath}
+
+% Zeilenabstand
+\usepackage[onehalfspacing]{setspace}
+% Anführungszeichen 
+\usepackage[babel,german=guillemets]{csquotes}
+
+%Schriften
+\usepackage[scaled=.90]{helvet}
+\setkomafont{descriptionlabel}{\normalfont\bfseries}
+%kleinerer abstand bei listen
+\usepackage{mdwlist}
+% Farben
+\usepackage{color}
+\usepackage{colortbl}
+\definecolor{lightgrey}{gray}{0.95}
+\definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
+\definecolor{LinkColor}{rgb}{0,0,0.2}
+% Literaturverweise mit (Autor Jahr) nach DIN
+\usepackage[square,numbers]{natbib}
+\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
+
+%für Tabellenlinien
+\usepackage{booktabs}
+\usepackage{hhline}
+\usepackage{tabularx}
+\usepackage{tabulary}
+% für lange Tabellen
+\usepackage{longtable}
+\usepackage{filecontents}
+\usepackage{ltxtable}
+\setlength{\tabcolsep}{10pt} % Abstand zwischen Spalten
+\renewcommand{\arraystretch}{1.5} % Zeilenabstand
+% Gliederungstiefe im Inhaltsverzeichnis ändern
+\setcounter{tocdepth}{3}
+\usepackage{multirow}
+\usepackage{bigstrut}
+% Grafiken
+\usepackage{graphicx}
+
+% Silbentrennung
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+\usepackage{pdfpages}
+% PDF Optionen
+\usepackage[bookmarks=true,
+            bookmarksopen=true,
+            bookmarksnumbered=true,
+            bookmarksopenlevel=2,%
+            hyperindex=true,
+            hyperfootnotes=false,
+            plainpages=false,
+            pdfstartview=FitV,
+            pdfpagelabels=true,
+            linkcolor=black,
+            colorlinks=true,
+            citecolor=black,
+            urlcolor=black,
+            pdfauthor={Marco Grupe},
+            pdftitle={Praktische Umsetzbarkeit von Datenschutzpunkten als Regulierungsansatz},
+            pdfsubject={Bachelorarbeit},
+            pdfdisplaydoctitle=true, % Dokumenttitel statt Dateiname anzeigen.
+            pdflang=de, % Sprache des Dokuments.
+            pdfkeywords={Marco Grupe, Bachelorarbeit, HTWG Konstanz,
+            doubleSlash Net-Business GmbH}, ]{hyperref}                 
+
+%\hypersetup{%
+%	colorlinks=false, % Aktivieren von farbigen Links im Dokument
+%	linkcolor=LinkColor, % Farbe festlegen
+%	citecolor=LinkColor,
+%	filecolor=LinkColor,
+%	menucolor=LinkColor,
+%	urlcolor=LinkColor,
+%	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
+%}
+
+%\Auflistungsabstände kleiner machen
+\usepackage{paralist}
+% für Glossar
+\usepackage[intoc,german]{nomencl}
+\let\abbrev\nomenclature
+\renewcommand{\nomname}{Abkürzungsverzeichnis}
+\setlength{\nomlabelwidth}{.19\hsize}
+\renewcommand{\nomlabel}[1]{#1 \dotfill}
+\setlength{\nomitemsep}{-\parsep}
+\makenomenclature
+
+\usepackage[normalem]{ulem}
+\newcommand{\markup}[1]{\uline{#1}}
+
+% Buchumschlag Rändereinstellung
+\usepackage{vmargin}
+
+% Seitengröße
+\setpapersize{A4}
+
+% eine Randnote fuer fehlende Teile 
+\newcommand{\fehlt}[1]{(\marginpar[\hfill!$\longrightarrow$]{$\longleftarrow$!}Hier fehlt \emph{#1})}
+
+% Absatzabstand etwas groesser
+\setlength{\parskip}{1.5ex plus0.5ex minus0.5ex}
+
+% Abstand zweier Listenelemente kleiner
+\setlength{\itemsep}{0ex plus0.2ex}
+
+\renewcommand{\floatpagefraction}{.8}
+\renewcommand{\textfraction}{.10}
+\setlength{\footnotesep}{4mm}
+\usepackage{float}
+% Überschriften nach irgendwelchen DIN-Normen
+\renewcommand{\bibname}{Quellenverzeichnis}    
+\renewcommand{\contentsname}{Inhalt}    
+    
+% Kopfzeilen enthalten Überschriften oberster Ebene
+\pagestyle{headings}
+
+%fullref für Kapitel
+\newcommand{\fullref}[1]{Kapitel~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
+\newcommand{\fullrefapdx}[1]{Anhang~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
+
+%fullref fuer Abschnitte
+\newcommand{\fullrefsct}[1]{Abschnitt \textit{\nameref{#1}} auf Seite \pageref{#1}}
+
+% Fußnoten seitenweise nummerieren
+\usepackage{footnpag}
+\usepackage{enumitem}
+\usepackage{epigraph}
+\usepackage{quotchap}
+\usepackage{bookmark}	
