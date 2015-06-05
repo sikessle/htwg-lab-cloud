@@ -61,12 +61,16 @@ class CourseHelper:
 
         # Create the course
         tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
-        # get the Member role.
-        role = self.keystone.roles.find(name="Member")
-        # get the owner of the course
-        user = self.keystone.users.find(email=course.owner)
-        # add the course owner to the tenant      
-        self.keystone.roles.add_user_role(user, role, tenant)
+        # if something goes wrong on setting the owner of the tenant, we do not throw an exception.
+        try:
+            # get the Member role.
+            role = self.keystone.roles.find(name="Member")
+            # get the owner of the course
+            user = self.keystone.users.find(email=course.owner)
+            # add the course owner to the tenant      
+            self.keystone.roles.add_user_role(user, role, tenant)
+        except:
+            print "Unable to set owner of tenant."
         return True
 
     def stopInstances(self, course=None):
