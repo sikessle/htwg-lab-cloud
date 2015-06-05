@@ -1,12 +1,17 @@
-INSTALL_NAME=install.sh
+INSTALL_SCRIPT=install.sh
 TARGET=instance-setup.sh
+
+# Warning! Order of source files matters. ldap-login must come first!
+# Add in the following line the modules:
+MODULES=ldap-login home-drive block-storage
+
+SOURCES=$(addsuffix /$(INSTALL_SCRIPT), $(MODULES))
 
 .PHONY: clean, all
 
 all: $(TARGET)
 
-# Warning! Order of source files matters. ldap-login must come first!
-$(TARGET): header.sh ldap-login/$(INSTALL_NAME) home-drive/$(INSTALL_NAME) footer.sh
+$(TARGET): header.sh $(SOURCES) footer.sh
 	rm -f $(TARGET)
 	cat $^ > $@
 	chmod +x $@
