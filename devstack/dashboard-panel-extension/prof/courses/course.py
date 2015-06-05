@@ -49,7 +49,7 @@ class CourseHelper:
         tenants = self.keystone.tenants.list()
         for tenant in tenants:
             list.append(tenant.id)
-        print self.keystone.roles.list()
+        #print self.keystone.roles.list()
         return list
 
     # add a course
@@ -83,17 +83,32 @@ class CourseHelper:
 
     def startInstances(self, course=None, imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
         for member in course.members:
-            instanceName = course.id + "-" + member
-            if (False == self.__instanceExist(name=instanceName)):
-                self.__startInstance(instanceName=instanceName, imageName=imageName, flavorName=flavorName)
+            name = course.id + "-" + member
+            if (False == self.__instanceExist(name=name)):
+                self.__startInstance(instanceName=name, imageName=imageName, flavorName=flavorName)
+            if (False == self.__volumeExist(name=name)):
+                self.cinder.volumes.create(name=name, size=1)
+            # from this point instance and volume should exist
+            # get the instance and attach the volume to it.
+            instance = self.nova.servers.list(search_opts={'name': name})        
+            volume = self.cinder.volumes.list(search_opts={'name': name})
+
 
     def __instanceExist(self, name="courseId-studentEmails"):
-        try:
-            self.nova.servers.find(name=name)
-            print "Instance already exist"
-            return True
-        except Exception:
+        instance = self.nova.servers.list(search_opts={'name': name})
+        if not instance:
             return False
+        else:
+            print "Intance already exist"
+            return True
+
+    def __volumeExist(self, name="courseId-studentEmails"):
+        volume = self.cinder.volumes.list(search_opts={'name': name})
+        if not volume:
+            return False
+        else:
+            print "Volume already exist"
+            return True
 
     def __startInstance(self, instanceName="courseId-studentEmail", imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
         print "start instance"
@@ -121,9 +136,11 @@ class CourseHelper:
 # manually start for test.
 helper = CourseHelper()
 courses = helper.getCourses()
-for course in courses:
-    print course.members
+#for course in courses:
+#    print course.members
     #helper.startInstances(course=course)
-    helper.stopInstances(course=course)
+#    helper.stopInstances(course=course)
 
-
+helper.startInstances(course=courses[0])
+#helper.stopInstances(course=courses[0])
+#helper.createVolume()

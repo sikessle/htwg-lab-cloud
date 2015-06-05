@@ -40,9 +40,15 @@ class Admin:
         client = glclient.Client(endpoint, token=self.ks.auth_token)
         return client
 
-    def cinder(self):
-        endpoint = self.ks.service_catalog.url_for(service_type='volume', endpoint_type='publicURL')
-        client = ciclient.Client(endpoint, token=self.ks.auth_token)
+    def cinder(self, tenant="demo"):
+        #endpoint = self.ks.service_catalog.url_for(service_type='volume', endpoint_type='publicURL')
+        #client = ciclient.Client(endpoint, token=self.ks.auth_token)
+        creds = {}
+        creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
+        creds['username'] = "admin"
+        creds['api_key'] = "adminpw"
+        creds['project_id'] = tenant
+        client = ciclient.Client(**creds)        
         return client
 
 
