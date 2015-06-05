@@ -45,4 +45,10 @@ echo "user-session=ubuntu" >> $LDM_CONF
 echo "restarting naming service"
 /etc/init.d/nscd restart
 
+echo "restarting lightdm login manager"
+service lightdm restart
+
+echo "sleeping 10 seconds to wait for lightdm"
+sleep 10
+
 echo "finished."
