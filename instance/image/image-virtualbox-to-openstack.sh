@@ -8,10 +8,15 @@ if [ "$IMAGE" = "" ]; then
 	exit 1
 fi
 
-IMAGE="/Users/sikessle/Documents/Software/Virtual Machines/OpenStack/Cloud-Image Ubuntu/Snapshots/{179a4be3-3a8d-4231-91a4-02675e0e2d6a}.vdi"
+IMAGE="/Users/sikessle/Documents/Software/Virtual Machines/OpenStack/Cloud-Image Ubuntu/Snapshots/{9ce5f09a-333f-4136-b5b2-d45f6b519749}.vdi"
 
+echo "***************************************************"
 echo "converting $IMAGE to openstack compatible format"
+echo "***************************************************"
 
 VBoxManage clonehd "$IMAGE" $TARGET-raw.img --format raw
 qemu-img convert -f raw -O qcow2 "${TARGET}-raw.img" "${TARGET}-qcow2.img"
 rm -f "${TARGET}-raw.img"
+echo "***************************************************"
+echo "${TARGET}-qcow2.img is ready to deploy in OpenStack"
+echo "***************************************************"
