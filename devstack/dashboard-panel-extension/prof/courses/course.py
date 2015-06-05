@@ -1,4 +1,5 @@
 import time
+import inspect
 from client import Admin
 
 class Course:
@@ -75,11 +76,23 @@ class CourseHelper:
 
     def stopInstances(self, course=None):
         print "stop instances"
+        if (None == course):
+            return
+        # stop running instances
         servers = self.nova.servers.list()
         for server in servers:
-            if (None != course and server.name.startswith(course.id)):
+            if (server.name.startswith(course.id)):
                 print "Stop Server " + server.name
                 server.delete()
+        # remove volumes.
+        volumes = self.cinder.volumes.list()
+        for volume in volumes:
+            if (volume.name.startswith(course.id)):
+                print "Remove Volume " + volume.name
+                # if volume is still attached we need to detach
+                if (volume.status == "in-use"):             
+                    volume.detach()
+                volume.delete()
 
     def startInstances(self, course=None, imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
         for member in course.members:
@@ -92,7 +105,17 @@ class CourseHelper:
             # get the instance and attach the volume to it.
             instance = self.nova.servers.list(search_opts={'name': name})        
             volume = self.cinder.volumes.list(search_opts={'name': name})
-
+            # TODO : remove method lookup            
+            #methods = inspect.getmembers(volume[0])
+            #for i in methods:
+            #    print i
+            # check the state of the volume to check if we need to attach it.
+            print "Volume " + volume[0].name + " is " + volume[0].status
+            # check if we need to attach the volume.
+            if (volume[0].status == "creating" or volume[0].status == "available"):
+                # It's possible that there are multiple instances/volumes with the same name.
+                # We just use the first one.
+                attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdi", mode="rw")
 
     def __instanceExist(self, name="courseId-studentEmails"):
         instance = self.nova.servers.list(search_opts={'name': name})
@@ -141,6 +164,6 @@ courses = helper.getCourses()
     #helper.startInstances(course=course)
 #    helper.stopInstances(course=course)
 
-helper.startInstances(course=courses[0])
+#helper.startInstances(course=courses[0])
 #helper.stopInstances(course=courses[0])
 #helper.createVolume()
