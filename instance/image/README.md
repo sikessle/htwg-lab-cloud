@@ -40,6 +40,16 @@ Then run `glance image-create --name "Ubuntu-14.04" --is-public true --disk-form
 
 ## Convert VirtualBox Image to OpenStack
 
+### Prerequisites
+
+The image must have installed the packages cloud-init, cloud-utils, cloud-initramfs-growroot. Also a password login must be enabled in cloud.cfg. 
+
+**WARNING**: after executing these steps, the image cannot be booted anynmore in VirtualBox (without providing a cloud-init mock). So always execute these steps at last.
+
+Copy and execute with sudo the script `cloud-init-script.sh` on the image. 
+
+### Convert vdi to qcow2 img
+
 run `image-virtualbox-to-openstack.sh <FULL-IMAGE-PATH-TO-VDI-SNAPSHOT>`
 
 **WARNING**: Specify the path to the SNAPSHOT of the image, otherwise the snapshots are ignored and only the base vdi will be converted.
