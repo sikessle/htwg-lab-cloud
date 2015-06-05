@@ -4,7 +4,11 @@ import glanceclient.v2.client as glclient
 import cinderclient.v2.client as ciclient
 import json
 
-class Client:
+class Admin:
+    """
+    Course class can be used to access services as an Admin.
+    This is required for some actions (e.g. creating a tenant).
+    """
     def __init__(self):
         self.ks = self.keystone()
 
@@ -13,21 +17,21 @@ class Client:
         print json.dumps(endpoints, sort_keys=True, indent=4, separators=(',', ': '))
         return endpoints
 
-    def keystone(self):
+    def keystone(self, tenant="demo"):
         creds = {}
         creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
         creds['username'] = "admin"
         creds['password'] = "adminpw"
-        creds['tenant_name'] = "demo"
+        creds['tenant_name'] = tenant
         keystone = ksclient.Client(**creds)
         return keystone
 
-    def nova(self):
+    def nova(self, tenant="demo"):
         creds = {}
         creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
         creds['username'] = "admin"
         creds['api_key'] = "adminpw"
-        creds['project_id'] = "demo"
+        creds['project_id'] = tenant
         nova = nvclient.Client(**creds)
         return nova
 
@@ -37,7 +41,6 @@ class Client:
         return client
 
     def cinder(self):
-	print self.ks.auth_token
         endpoint = self.ks.service_catalog.url_for(service_type='volume', endpoint_type='publicURL')
         client = ciclient.Client(endpoint, token=self.ks.auth_token)
         return client

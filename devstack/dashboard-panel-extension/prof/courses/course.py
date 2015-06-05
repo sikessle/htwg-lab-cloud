@@ -1,10 +1,9 @@
-from client import Client
+from client import Admin
 
 class Course:
     """
     Course class represents the course data
     """
- 
     def __init__(self, name, description, id, enabled):
         self.name = name
         self.description = description
@@ -17,10 +16,10 @@ class Course:
 
 class CourseHelper:
     """
-    Helper class to handle courses.
+    Helper class to create Openstack tenants based on moodle courses.
     """
     def __init__(self):
-        client = Client()
+        client = Admin()
         self.keystone = client.keystone()
         self.glance = client.glance()
         self.nova = client.nova()
@@ -29,7 +28,7 @@ class CourseHelper:
     # get all courses by loading moodle courses and creating a tenant for each non existing course.
     def getCourses(self):
         moodleCourses = self.getMoodleCourses()
-        
+
         # create a course for each
         for course in moodleCourses:
             self.addCourse(course)
@@ -58,6 +57,7 @@ class CourseHelper:
         # check if the tenant already exist.
         if course.id in tenants:
             return False
+
         # Create the course
         tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
         # get the Member role.
@@ -67,3 +67,47 @@ class CourseHelper:
         # add the course owner to the tenant      
         self.keystone.roles.add_user_role(user, role, tenant)
         return True
+
+    def stopInstances(course=None):
+        print "stop instances"
+        servers = nova.servers.list()
+        for server in servers:
+            if (None != course and server.name.startswith(course)):
+                print "Stop Server " + server.name
+                server.delete()
+
+    def startInstances(course, imageName="cirros-0.3.2-x86_64-uec", flavorName="m1.tiny"):
+        for member in course.members:
+            instanceName = course.id + member
+            if (False == self.__instanceExist(name=instanceName)):
+                self.__startInstance(instanceName=instanceName, imageName=imageName, flavorName=flavorName)
+
+    def __instanceExist(name="courseId-studentEmails"):
+        try:
+            nova.servers.find(name=name)
+            print "Instance already exist"
+            return True
+        except Exception:
+            return False
+
+    def __startInstance(instanceName="courseId-studentEmail", imageName="cirros-0.3.2-x86_64-uec", flavorName="m1.tiny"):
+        print "start instance"
+        #if not nova.keypairs.findall(name="mykey"):
+        #    with open(os.path.expanduser('~/.ssh/id_rsa.pub')) as fpubkey:
+        #        nova.keypairs.create(name="mykey", public_key=fpubkey.read())
+        
+        # find the image we like to use
+        image = nova.images.find(name=imageName)
+        # find the flavor we like to use
+        flavor = nova.flavors.find(name=flavorName)
+        # create the instance
+        instance = nova.servers.create(name=instanceName, image=image, flavor=flavor)
+
+        # Poll at 5 second intervals, until the status is no longer 'BUILD'
+        status = instance.status
+        while status == 'BUILD':
+            time.sleep(5)
+            # Retrieve the instance again so the status field updates
+            instance = nova.servers.get(instance.id)
+            status = instance.status
+            print "status: %s" % status
