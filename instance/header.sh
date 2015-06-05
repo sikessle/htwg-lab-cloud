@@ -2,12 +2,13 @@
 
 # 
 # Before running this script, replace ##INSERT_USERNAME## through the real username.
+# USE Linux tools: sed -i '' 's/##INSERT_USERNAME##/exampleuser/g' instance-setup.sh
 #
 
 USER="##INSERT_USERNAME##"
 
-if [ "$USER" = "##INSERT_USERNAME##" ]; then
-	echo "##INSERT_USERNAME## not replaced by real username. Stopping."
+if [ "${USER:0:2}" == "##" ]; then
+	echo "username placeholder not replaced by real username. Stopping."
 	exit 1
 fi
 
