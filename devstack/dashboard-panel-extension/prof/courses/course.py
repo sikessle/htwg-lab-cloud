@@ -1,3 +1,4 @@
+import time
 from client import Admin
 
 class Course:
@@ -27,15 +28,15 @@ class CourseHelper:
 
     # get all courses by loading moodle courses and creating a tenant for each non existing course.
     def getCourses(self):
-        moodleCourses = self.getMoodleCourses()
+        moodleCourses = self.__getMoodleCourses()
 
         # create a course for each
         for course in moodleCourses:
-            self.addCourse(course)
+            self.__addCourse(course)
         return moodleCourses
     
     # load moodle courses and return all of them in a list.
-    def getMoodleCourses(self):
+    def __getMoodleCourses(self):
         list = []
         list.append(Course(name="WebTech", description="WebTechnologien", id="1", enabled="Yes"))
         list.append(Course(name="DBSYS", description="Datenbanksysteme", id="2", enabled="No"))
@@ -43,7 +44,7 @@ class CourseHelper:
         return list
     
     # load a list with all tenants
-    def getTenants(self):
+    def __getTenants(self):
         list = []
         tenants = self.keystone.tenants.list()
         for tenant in tenants:
@@ -52,8 +53,8 @@ class CourseHelper:
         return list
 
     # add a course
-    def addCourse(self, course):
-        tenants = self.getTenants()
+    def __addCourse(self, course):
+        tenants = self.__getTenants()
         # check if the tenant already exist.
         if course.id in tenants:
             return False
@@ -68,46 +69,57 @@ class CourseHelper:
         self.keystone.roles.add_user_role(user, role, tenant)
         return True
 
-    def stopInstances(course=None):
+    def stopInstances(self, course=None):
         print "stop instances"
-        servers = nova.servers.list()
+        servers = self.nova.servers.list()
         for server in servers:
-            if (None != course and server.name.startswith(course)):
+            if (None != course and server.name.startswith(course.id)):
                 print "Stop Server " + server.name
                 server.delete()
 
-    def startInstances(course, imageName="cirros-0.3.2-x86_64-uec", flavorName="m1.tiny"):
+    def startInstances(self, course=None, imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
         for member in course.members:
-            instanceName = course.id + member
+            instanceName = course.id + "-" + member
             if (False == self.__instanceExist(name=instanceName)):
                 self.__startInstance(instanceName=instanceName, imageName=imageName, flavorName=flavorName)
 
-    def __instanceExist(name="courseId-studentEmails"):
+    def __instanceExist(self, name="courseId-studentEmails"):
         try:
-            nova.servers.find(name=name)
+            self.nova.servers.find(name=name)
             print "Instance already exist"
             return True
         except Exception:
             return False
 
-    def __startInstance(instanceName="courseId-studentEmail", imageName="cirros-0.3.2-x86_64-uec", flavorName="m1.tiny"):
+    def __startInstance(self, instanceName="courseId-studentEmail", imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
         print "start instance"
-        #if not nova.keypairs.findall(name="mykey"):
+        #if not self.nova.keypairs.findall(name="mykey"):
         #    with open(os.path.expanduser('~/.ssh/id_rsa.pub')) as fpubkey:
         #        nova.keypairs.create(name="mykey", public_key=fpubkey.read())
         
         # find the image we like to use
-        image = nova.images.find(name=imageName)
+        image = self.nova.images.find(name=imageName)
         # find the flavor we like to use
-        flavor = nova.flavors.find(name=flavorName)
+        flavor = self.nova.flavors.find(name=flavorName)
         # create the instance
-        instance = nova.servers.create(name=instanceName, image=image, flavor=flavor)
+        instance = self.nova.servers.create(name=instanceName, image=image, flavor=flavor)
 
         # Poll at 5 second intervals, until the status is no longer 'BUILD'
         status = instance.status
         while status == 'BUILD':
             time.sleep(5)
             # Retrieve the instance again so the status field updates
-            instance = nova.servers.get(instance.id)
+            instance = self.nova.servers.get(instance.id)
             status = instance.status
             print "status: %s" % status
+
+# TODO : remove
+# manually start for test.
+helper = CourseHelper()
+courses = helper.getCourses()
+for course in courses:
+    print course.members
+    #helper.startInstances(course=course)
+    helper.stopInstances(course=course)
+
+
