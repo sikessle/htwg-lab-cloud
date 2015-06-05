@@ -27,6 +27,8 @@ To ssh into the machine (while not in openstack), use the given ssh-key file: `s
 
 Use nova get-vnc-console etc. or SPICE to access instance.
 
+**WATCH OUT**: If using the OpenStack Dashboard VNC client, the keyboard layout may be not the one you're using locally. So beware when entering usernames and passwords (watch for z/y i.e. on German/Englisch keyboards).
+
 ## Cloud.cfg
 
 in /etc/cloud/cloud.cfg:
