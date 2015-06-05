@@ -21,8 +21,12 @@ class StartInstances(forms.SelfHandlingForm):
     def handle(self, request, data):
         try:
             helper = CourseHelper()
+            # TODO : we should not use getCourses() here. The course object should
+            # be get by the action itself.
             courses = helper.getCourses()
-            helper.startInstances(courses[0])
+            # start all instances for a course.
+            helper.startInstances(courses[0], imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny")
+
             message = _('Creating Form')
             messages.info(request, message)
             return True
