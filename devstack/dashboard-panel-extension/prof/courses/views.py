@@ -2,19 +2,18 @@ from django.core.urlresolvers import reverse
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from horizon import tables
+from horizon import exceptions, tables, workflows, forms, tabs
 import json
 from .tables import CoursesTable
 from .course import Course
 from .course import CourseHelper
 
-from horizon import exceptions
-from horizon import forms
-
 from horizon.utils import memoized
 
 from openstack_dashboard.dashboards.prof.courses \
     import forms as project_forms
+    
+from openstack_dashboard.dashboards.prof.courses.workflows.create_instance import LaunchInstance
 
 class CoursesTableView(tables.DataTableView):
     # A very simple class-based view...
@@ -58,5 +57,12 @@ class StartInstancesView(forms.ModalFormView):
         #context['submit_url'] = reverse(self.submit_url, args=[instance_id])
         return context
 
+class LaunchInstanceView(workflows.WorkflowView):
+    workflow_class = LaunchInstance
 
+    def get_initial(self):
+        initial = super(LaunchInstanceView, self).get_initial()
+        initial['project_id'] = self.request.user.tenant_id
+        initial['user_id'] = self.request.user.id
+        return initial
 
