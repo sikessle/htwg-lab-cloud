@@ -6,9 +6,6 @@ from horizon import forms
 
 from openstack_dashboard import api
 
-from .course import Course
-from .course import CourseHelper
-
 class StartInstances(forms.SelfHandlingForm):
     name = forms.CharField(max_length="255", label=_("Name"))
     other = forms.CharField(widget=forms.Textarea,
@@ -20,13 +17,6 @@ class StartInstances(forms.SelfHandlingForm):
 
     def handle(self, request, data):
         try:
-            helper = CourseHelper()
-            # TODO : we should not use getCourses() here. The course object should
-            # be get by the action itself.
-            courses = helper.getCourses()
-            # start all instances for a course.
-            helper.startInstances(courses[0], imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny")
-
             message = _('Creating Form')
             messages.info(request, message)
             return True

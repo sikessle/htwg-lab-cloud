@@ -46,6 +46,8 @@ from openstack_dashboard.dashboards.project.images \
 from openstack_dashboard.dashboards.project.instances \
     import utils as instance_utils
 
+from ..course import Course
+from ..course import CourseHelper
 
 LOG = logging.getLogger(__name__)
 
@@ -896,6 +898,15 @@ class LaunchInstance(workflows.Workflow):
                                                   context['profile_id'])
 
         try:
+            helper = CourseHelper()
+            # TODO : we should not use getCourses() here. The course object should
+            # be get by the action itself.
+            courses = helper.getCourses()
+            # start all instances for a course.
+            helper.startInstances(courses[0], imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny")
+            
+            return True
+
             api.nova.server_create(request,
                                    context['name'],
                                    image_id,
