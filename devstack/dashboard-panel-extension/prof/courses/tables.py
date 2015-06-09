@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ungettext_lazy
 
 from horizon import tables
 
@@ -7,10 +8,23 @@ class StartInstancesAction(tables.LinkAction):
     name = "start instance"
     verbose_name = _("Start Instances")
     url = "horizon:prof:courses:start_instances"
-    classes = ("ajax-modal",)
+    classes = ("ajax-modal", "btn-launch")
 
     def allowed(self, request, instance=None):
         return True
+
+# action to stop instances
+class StopInstancesAction(tables.BatchAction):
+    name = "stop instance"
+    action_present = _("Stop")
+    action_past = _("Stopped")
+    data_type_singular = _("Instance")
+
+    def allowed(self, request, instance=None):
+       return True
+
+   # def action(self, request, obj_id):
+    #    stopInstance
 
 # default row filter
 class FilterAction(tables.FilterAction):
@@ -30,4 +44,4 @@ class CoursesTable(tables.DataTable):
         name = "coursesTbl"
         verbose_name = _("Courses")
 	table_actions = (FilterAction,)
-	row_actions = (StartInstancesAction,)
+	row_actions = (StartInstancesAction, StopInstancesAction,)
