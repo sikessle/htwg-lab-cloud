@@ -620,10 +620,7 @@ class LaunchInstance(workflows.Workflow):
     multipart = True
     default_steps = (SelectProjectUser,
                      SetInstanceDetails,
-                     SetAccessControls,
-                     SetNetwork,
-                     PostCreationStep,
-                     SetAdvanced)
+                     SetNetwork)
 
     def format_status_message(self, message):
         name = self.context.get('name', 'unknown instance')
