@@ -3,6 +3,9 @@ from django.utils.translation import ungettext_lazy
 
 from horizon import tables
 
+from .course import Course
+from .course import CourseHelper
+
 # action to start instances
 class StartInstancesAction(tables.LinkAction):
     name = "start instance"
@@ -23,8 +26,14 @@ class StopInstancesAction(tables.BatchAction):
     def allowed(self, request, instance=None):
        return True
 
-   # def action(self, request, obj_id):
-    #    stopInstance
+    def action(self, request, obj_id):
+        helper = CourseHelper()
+        # TODO : we should not use getCourses() here. The course object should
+        # be get by the action itself.
+        courses = helper.getCourses()
+        # stop all instances for a course.
+        helper.stopInstances(courses[0])
+        return True
 
 # default row filter
 class FilterAction(tables.FilterAction):
