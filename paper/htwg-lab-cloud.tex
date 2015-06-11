@@ -1,92 +1,61 @@
-\documentclass[11pt,a4paper,bibtotocnumbered]{scrreprt}		                                   
+%===========================================================
+% MSI - Cloud Application Development - Projekt 
+% Autoren: Dennis Parlak, Simon Kessler,\\Tobias Keh, Marco Grupe
+% Hochschule für Technik, Wirtschaft und Gestaltung, Konstanz
+%	Fakultät Informatik
+%===========================================================
 
-\usepackage{graphicx}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{a4}
-\usepackage[onehalfspacing]{setspace}
-\usepackage[ngerman]{babel}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{caption}
-\usepackage{listings}
-\usepackage[babel,german=quotes]{csquotes}
-\usepackage[printonlyused]{acronym}
-\usepackage[linktoc=all, hidelinks]{hyperref}
+\include{res/header}
 
-\renewcaptionname{ngerman}\figureautorefname{Abb.}
+\newcommand{\thema}{HTWG Lab Cloud mit OpenStack}
+\newcommand{\zusammenfassung}{Hier kommt eine kurze Zusammenfassung der Arbeit}
 
-\captionsetup[table]{belowskip=8pt}
-
-
-
-
-
-
+\newcommand{\ausgabedatum}{}
+\newcommand{\abgabedatum}{}
+\newcommand{\autor}{Dennis Parlak, Simon Kessler, Tobias Keh, Marco Grupe}
+\newcommand{\autorStrasse}{}
+\newcommand{\autorPLZ}{}
+\newcommand{\autorOrt}{}
+\newcommand{\autorGeburtsort}{}
+\newcommand{\autorGeburtsdatum}{}
+\newcommand{\prueferA}{Prof. Dr. Hanno Langweg}
+\newcommand{\prueferB}{}
+\newcommand{\firma}{}
+\newcommand{\studiengang}{MSI Informatik}
+\bibliographystyle{alphadin}
+\raggedbottom
 \begin{document}
-
-
-
-% ============================ FRONT MATTER
-\pagenumbering{roman}
-\begin{singlespace}
-\include{cover}
-\setcounter{page}{1}
-\end{singlespace}
-
-\tableofcontents
+\frontmatter
+\include{res/cover}
+\include{res/abstract}
+% Inhaltsverzeichnis
+\setcounter{tocdepth}{1}
+\tableofcontents 
+% Abbildungsverzeichnis
 \listoffigures
+% Tabellenverzeichnis
 \listoftables
+% Abkürzungsverzeichnis
+\printnomenclature
+\include{res/abbreviations}
+\mainmatter
+% Einleitung  
+    	\include{einleitung}
+% Grundlagen  
+ 	\part{Theoretische Grundlagen}
 
-\chapter*{Abkürzungsverzeichnis} 
-
-\begin{acronym}[LAENGE]
-\acro{ACM}{Association for Computing Machinery}
-\end{acronym}
-
-\cleardoublepage
-% ============================ ENDE FRONT MATTER
-
-
-
-% ============================ HAUPTTEIL THESIS
-\pagenumbering{arabic}
-
-% ============================ CHAPTER
-\chapter{Einführung} 
-
-sdf
-
-% ============================ CHAPTER
-\chapter{Probleme bei der Entwicklung} 
-
-- Doku von OpenStack
-- Bugs in DevStack, Ubuntu etc.
-- HTWG..
- 
-% ============================ ENDE HAUPTTEIL
-
-
-
-
-
-
-
-% ============================ LITERATURVERZEICHNIS
-\begin{singlespace}
-\begin{thebibliography}{9}
-
-\bibitem{lamport94}
-  Leslie Lamport,
-  \emph{\LaTeX: a document preparation system},
-  Addison Wesley, Massachusetts,
-  2nd edition,
-  1994.
-
-\end{thebibliography}
-\end{singlespace}
-% ============================ ENDE LITERATURVERZEICHNIS
-
-
-
+% Konzeption  
+ 		\part{Konzeption}
+		
+\bookmarksetup{startatroot}
+%Literaturverzeichnis
+	\pagenumbering{roman}
+   	\cleardoublepage
+   	\setcounter{page}{12}
+	\bibliography{res/latexlit} 
+	
+% Anhang
+\begin{appendix}   
+\end{appendix}
+\backmatter
 \end{document}
-
