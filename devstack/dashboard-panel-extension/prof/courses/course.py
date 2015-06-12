@@ -115,7 +115,7 @@ class CourseHelper:
             if (volume[0].status == "creating" or volume[0].status == "available"):
                 # It's possible that there are multiple instances/volumes with the same name.
                 # We just use the first one.
-                attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdi", mode="rw")
+                attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdb", mode="rw")
 
     def __instanceExist(self, name="courseId-studentEmails"):
         instance = self.nova.servers.list(search_opts={'name': name})
