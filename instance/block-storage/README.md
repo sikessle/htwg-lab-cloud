@@ -24,6 +24,6 @@ Involved files:
 - /etc/fstab Mounting parameters and correct user rights:
 	``
 - /etc/udev/rules.d/80-mount.rules runs as soon as the block device is available:
-	`SUBSYSTEM=="block", run+="/bin/mount -a"`
+	`SUBSYSTEM=="block", RUN+="/bin/mount -a"`
 - /etc/udev/rules.d/99-udisks2.rules to modify the default mount point to /media/*:
 	`ENV{ID_FS_USAGE}=="filesystem|other|crypto", ENV{UDISKS_FILESYSTEM_SHARED}="1"`
