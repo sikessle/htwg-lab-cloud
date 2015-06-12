@@ -13,7 +13,7 @@ The `lab-drive` must be the **first** attached volume, as it is assumed to be ma
 
 ## Script notes
 
-As the volumne (block storage) is not always available or may be available after the /etc/fstab file got processed. Therefor we have to deploy this mount strategy:
+As the volumne (block storage) is not always available or may be available after the /etc/fstab file got processed. Therefore we have to deploy this mount strategy:
 
 - Create mount point /media/lab-drive
 - Create entry in /etc/fstab
