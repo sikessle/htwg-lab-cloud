@@ -150,7 +150,6 @@ class SetInstanceDetailsAction(workflows.Action):
             request, context, *args, **kwargs)
 
         print "COURSE TO SESSION"
-        print request.session['course']
         tmp = self.request.GET.get('course', None)
         if (tmp != None):
             request.session['course'] = tmp

@@ -16,11 +16,6 @@ class Course:
         # TODO : set list of all course members
         self.members = ["student1@test.de", "studen2@test.de"]
 
-class CourseSession:
-    print "init of CourseSession->>>>>>>>>>>>>>>>>>>>>>>"
-    # static attribute to pass arguments over 
-    selectedCourse = None
-
 class CourseHelper:
     """
     Helper class to create Openstack tenants based on moodle courses.
