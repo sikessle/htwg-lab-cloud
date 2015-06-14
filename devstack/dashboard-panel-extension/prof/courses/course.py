@@ -48,9 +48,9 @@ class CourseHelper:
     # load moodle courses and return all of them in a list.
     def __getMoodleCourses(self):
         list = []
-        list.append(Course(name="WebTech", description="WebTechnologien", id="a1", enabled="Yes"))
-        list.append(Course(name="DBSYS", description="Datenbanksysteme", id="a2", enabled="No"))
-        list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="a3", enabled="No"))
+        list.append(Course(name="WebTech", description="WebTechnologien", id="1", enabled="Yes"))
+        list.append(Course(name="DBSYS", description="Datenbanksysteme", id="2", enabled="No"))
+        list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="3", enabled="No"))
         return list
     
     # load a list with all tenants
