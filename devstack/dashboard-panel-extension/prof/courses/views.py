@@ -20,10 +20,9 @@ class CoursesTableView(tables.DataTableView):
     table_class = CoursesTable
     template_name = 'prof/courses/index.html'
 
-
     def get_data(self):
-	helper = CourseHelper()
-	return helper.getCourses()
+        helper = CourseHelper()
+        return helper.getCourses()
 
 class StartInstancesView(forms.ModalFormView):
     form_class = project_forms.StartInstances
@@ -36,13 +35,13 @@ class StartInstancesView(forms.ModalFormView):
 
     @memoized.memoized_method
     def get_object(self):
-       course_id = self.kwargs['course_id']
-       try:
-         print course_id
-       except Exception:
-         redirect = self.success_url
-         msg = _('Unable to retrieve course.')
-         exceptions.handle(self.request, msg, redirect=redirect)
+        course_id = self.kwargs['course_id']
+        try:
+            print course_id
+        except Exception:
+            redirect = self.success_url
+            msg = _('Unable to retrieve course.')
+            exceptions.handle(self.request, msg, redirect=redirect)
 
 
 
@@ -62,7 +61,13 @@ class LaunchInstanceView(workflows.WorkflowView):
 
     def get_initial(self):
         initial = super(LaunchInstanceView, self).get_initial()
-        initial['project_id'] = self.request.user.tenant_id
+        # FIXME : We pass course as a query parameter to get it available in create_instance.py
+        # This method get's called on creation of the input form and after clicking the submit button.
+        # On the first call 'course' is available, but on the second it's None. However we expected that
+        # get_initial will only be called once and not twice.        
+        # course should be the same as tenant_id, but tenant_id is set to the actual active tenant.
+        initial['project_id'] = initial.get('course', self.request.user.tenant_id)
         initial['user_id'] = self.request.user.id
         return initial
+
 

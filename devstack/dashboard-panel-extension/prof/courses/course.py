@@ -16,6 +16,11 @@ class Course:
         # TODO : set list of all course members
         self.members = ["student1@test.de", "studen2@test.de"]
 
+class CourseSession:
+    print "init of CourseSession->>>>>>>>>>>>>>>>>>>>>>>"
+    # static attribute to pass arguments over 
+    selectedCourse = None
+
 class CourseHelper:
     """
     Helper class to create Openstack tenants based on moodle courses.
@@ -26,6 +31,15 @@ class CourseHelper:
         self.glance = client.glance()
         self.nova = client.nova()
         self.cinder = client.cinder()
+
+    # get a course by a id
+    def getCourse(self, id):
+        courses = self.getCourses()
+        for course in courses:
+            if (course.id == id):
+                return course
+        # course not exist
+        raise Exception('Course does not exist', id)
 
     # get all courses by loading moodle courses and creating a tenant for each non existing course.
     def getCourses(self):
@@ -39,9 +53,9 @@ class CourseHelper:
     # load moodle courses and return all of them in a list.
     def __getMoodleCourses(self):
         list = []
-        list.append(Course(name="WebTech", description="WebTechnologien", id="1", enabled="Yes"))
-        list.append(Course(name="DBSYS", description="Datenbanksysteme", id="2", enabled="No"))
-        list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="3", enabled="No"))
+        list.append(Course(name="WebTech", description="WebTechnologien", id="a1", enabled="Yes"))
+        list.append(Course(name="DBSYS", description="Datenbanksysteme", id="a2", enabled="No"))
+        list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="a3", enabled="No"))
         return list
     
     # load a list with all tenants
@@ -74,10 +88,9 @@ class CourseHelper:
             print "Unable to set owner of tenant."
         return True
 
-    def stopInstances(self, course=None):
+    def stopInstances(self, courseId=None):
         print "stop instances"
-        if (None == course):
-            return
+        course = self.getCourse(courseId)
         # stop running instances
         servers = self.nova.servers.list()
         for server in servers:
@@ -94,28 +107,25 @@ class CourseHelper:
                     volume.detach()
                 volume.delete()
 
-    def startInstances(self, course=None, imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
+    def startInstances(self, courseId=None, imageId=None, flavorId=None):
+        course = self.getCourse(courseId)
         for member in course.members:
             name = course.id + "-" + member
             if (False == self.__instanceExist(name=name)):
-                self.__startInstance(instanceName=name, imageName=imageName, flavorName=flavorName)
+                self.__startInstance(instanceName=name, imageId=imageId, flavorId=flavorId)
             if (False == self.__volumeExist(name=name)):
                 self.cinder.volumes.create(name=name, size=1)
             # from this point instance and volume should exist
             # get the instance and attach the volume to it.
             instance = self.nova.servers.list(search_opts={'name': name})        
             volume = self.cinder.volumes.list(search_opts={'name': name})
-            # TODO : remove method lookup            
-            #methods = inspect.getmembers(volume[0])
-            #for i in methods:
-            #    print i
             # check the state of the volume to check if we need to attach it.
             print "Volume " + volume[0].name + " is " + volume[0].status
             # check if we need to attach the volume.
             if (volume[0].status == "creating" or volume[0].status == "available"):
                 # It's possible that there are multiple instances/volumes with the same name.
                 # We just use the first one.
-                attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdb", mode="rw")
+                attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdi", mode="rw")
 
     def __instanceExist(self, name="courseId-studentEmails"):
         instance = self.nova.servers.list(search_opts={'name': name})
@@ -133,16 +143,16 @@ class CourseHelper:
             print "Volume already exist"
             return True
 
-    def __startInstance(self, instanceName="courseId-studentEmail", imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny"):
+    def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
         print "start instance"
         #if not self.nova.keypairs.findall(name="mykey"):
         #    with open(os.path.expanduser('~/.ssh/id_rsa.pub')) as fpubkey:
         #        nova.keypairs.create(name="mykey", public_key=fpubkey.read())
         
         # find the image we like to use
-        image = self.nova.images.find(name=imageName)
+        image = self.nova.images.find(id=imageId)
         # find the flavor we like to use
-        flavor = self.nova.flavors.find(name=flavorName)
+        flavor = self.nova.flavors.find(id=flavorId)
         # create the instance
         instance = self.nova.servers.create(name=instanceName, image=image, flavor=flavor)
 
@@ -167,3 +177,8 @@ courses = helper.getCourses()
 #helper.startInstances(course=courses[0])
 #helper.stopInstances(course=courses[0])
 #helper.createVolume()
+
+#print CourseSession.selectedCourse
+#CourseSession.selectedCourse = helper.getCourses()[0]
+#print CourseSession.selectedCourse
+

@@ -51,13 +51,13 @@ from ..course import CourseHelper
 
 LOG = logging.getLogger(__name__)
 
-
 class SelectProjectUserAction(workflows.Action):
     project_id = forms.ChoiceField(label=_("Project"))
     user_id = forms.ChoiceField(label=_("User"))
 
     def __init__(self, request, *args, **kwargs):
         super(SelectProjectUserAction, self).__init__(request, *args, **kwargs)
+
         # Set our project choices
         projects = [(tenant.id, tenant.name)
                     for tenant in request.user.authorized_tenants]
@@ -136,7 +136,7 @@ class SetInstanceDetailsAction(workflows.Action):
                                              required=False,
                                              help_text=_("Delete volume on "
                                                          "instance terminate"))
-
+    
     class Meta(object):
         name = _("Details")
         help_text_template = ("project/instances/"
@@ -148,6 +148,12 @@ class SetInstanceDetailsAction(workflows.Action):
         self.context = context
         super(SetInstanceDetailsAction, self).__init__(
             request, context, *args, **kwargs)
+
+        print "COURSE TO SESSION"
+        print request.session['course']
+        tmp = self.request.GET.get('course', None)
+        if (tmp != None):
+            request.session['course'] = tmp
 
         # Hide the device field if the hypervisor doesn't support it.
         if not nova.can_set_mount_point():
@@ -620,7 +626,8 @@ class LaunchInstance(workflows.Workflow):
     multipart = True
     default_steps = (SelectProjectUser,
                      SetInstanceDetails,
-                     SetNetwork)
+                     SetNetwork) 
+
 
     def format_status_message(self, message):
         name = self.context.get('name', 'unknown instance')
@@ -634,7 +641,9 @@ class LaunchInstance(workflows.Workflow):
     @sensitive_variables('context')
     def handle(self, request, context):
         custom_script = context.get('script_data', '')
-
+	print "__CONTEXT"
+	print context
+	print"__CONTEXT"
         dev_mapping_1 = None
         dev_mapping_2 = None
 
@@ -679,11 +688,8 @@ class LaunchInstance(workflows.Workflow):
 
         try:
             helper = CourseHelper()
-            # TODO : we should not use getCourses() here. The course object should
-            # be get by the action itself.
-            courses = helper.getCourses()
             # start all instances for a course.
-            helper.startInstances(courses[0], imageName="cirros-0.3.4-x86_64-uec", flavorName="m1.tiny")
+            helper.startInstances(courseId=request.session['course'], imageId=image_id, flavorId=context['flavor'])
             
             return True
 

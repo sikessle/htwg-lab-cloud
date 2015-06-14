@@ -16,6 +16,13 @@ class StartInstancesAction(tables.LinkAction):
     def allowed(self, request, instance=None):
         return True
 
+    def get_link_url(self, datum):
+	# we add the id of the course as a query string to the url
+        base_url = super(StartInstancesAction, self).get_link_url(datum)
+        course_query_string = "course=" + datum.id
+        print "?".join([base_url, course_query_string])
+        return "?".join([base_url, course_query_string])
+
 # action to stop instances
 class StopInstancesAction(tables.BatchAction):
     name = "stop instance"
@@ -28,11 +35,8 @@ class StopInstancesAction(tables.BatchAction):
 
     def action(self, request, obj_id):
         helper = CourseHelper()
-        # TODO : we should not use getCourses() here. The course object should
-        # be get by the action itself.
-        courses = helper.getCourses()
-        # stop all instances for a course.
-        helper.stopInstances(courses[0])
+        # stop all instances of the course.
+        helper.stopInstances(courseId=obj_id)
         return True
 
 # default row filter
