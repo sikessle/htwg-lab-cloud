@@ -10,6 +10,9 @@ class Admin:
     This is required for some actions (e.g. creating a tenant).
     """
     def __init__(self):
+        self.auth_url = 'http://192.168.35.129:35357/v2.0'
+        self.username = 'admin'
+        self.password = 'adminpw'
         self.ks = self.keystone()
 
     def getServiceEndpoints(self):
@@ -19,18 +22,18 @@ class Admin:
 
     def keystone(self, tenant="demo"):
         creds = {}
-        creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
-        creds['username'] = "admin"
-        creds['password'] = "adminpw"
+        creds['auth_url'] = self.auth_url
+        creds['username'] = self.username
+        creds['password'] = self.password
         creds['tenant_name'] = tenant
         keystone = ksclient.Client(**creds)
         return keystone
 
     def nova(self, tenant="demo"):
         creds = {}
-        creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
-        creds['username'] = "admin"
-        creds['api_key'] = "adminpw"
+        creds['auth_url'] = self.auth_url
+        creds['username'] = self.username
+        creds['api_key'] = self.password
         creds['project_id'] = tenant
         nova = nvclient.Client(**creds)
         return nova
@@ -44,9 +47,9 @@ class Admin:
         #endpoint = self.ks.service_catalog.url_for(service_type='volume', endpoint_type='publicURL')
         #client = ciclient.Client(endpoint, token=self.ks.auth_token)
         creds = {}
-        creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
-        creds['username'] = "admin"
-        creds['api_key'] = "adminpw"
+        creds['auth_url'] = self.auth_url
+        creds['username'] = self.username
+        creds['api_key'] = self.password
         creds['project_id'] = tenant
         client = ciclient.Client(**creds)        
         return client

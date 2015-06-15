@@ -21,7 +21,7 @@ class CoursesTableView(tables.DataTableView):
     template_name = 'prof/courses/index.html'
 
     def get_data(self):
-        helper = CourseHelper()
+        helper = CourseHelper(self.request.user)
         return helper.getCourses()
 
 class StartInstancesView(forms.ModalFormView):

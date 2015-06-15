@@ -686,7 +686,7 @@ class LaunchInstance(workflows.Workflow):
                                                   context['profile_id'])
 
         try:
-            helper = CourseHelper()
+            helper = CourseHelper(request.user)
             # start all instances for a course.
             helper.startInstances(courseId=request.session['course'], imageId=image_id, flavorId=context['flavor'])
             

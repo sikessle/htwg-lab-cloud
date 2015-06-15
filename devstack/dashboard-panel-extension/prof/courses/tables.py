@@ -34,7 +34,16 @@ class StopInstancesAction(tables.BatchAction):
        return True
 
     def action(self, request, obj_id):
-        helper = CourseHelper()
+        # TODO : remove when we implemented moodle connection
+        #import inspect
+        #for x in inspect.getmembers(request.user):
+        #    print x
+        #print "USER_DATA_XX"
+        #print request.user.id
+        #print request.user.username
+        #print request.user.token.id
+
+        helper = CourseHelper(request.user)
         # stop all instances of the course.
         helper.stopInstances(courseId=obj_id)
         return True

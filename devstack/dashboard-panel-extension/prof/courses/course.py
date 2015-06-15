@@ -1,31 +1,35 @@
 import time
 import inspect
 from client import Admin
+from moodle import get_user_courses
+from moodle import get_enrolled_students
 
 class Course:
     """
     Course class represents the course data
     """
-    def __init__(self, name, description, id, enabled):
+    def __init__(self, name, id, description):
         self.name = name
-        self.description = description
         self.id = id
-        self.enabled = enabled
-        # TODO : set email of course owner here.
-        self.owner = "test@test.de"
-        # TODO : set list of all course members
-        self.members = ["student1@test.de", "studen2@test.de"]
+        self.description = description
+        self.enabled = True
 
 class CourseHelper:
     """
     Helper class to create Openstack tenants based on moodle courses.
     """
-    def __init__(self):
-        client = Admin()
-        self.keystone = client.keystone()
-        self.glance = client.glance()
-        self.nova = client.nova()
-        self.cinder = client.cinder()
+    def __init__(self, user):
+        self.user = user
+        self.client = Admin()
+        self.actualTenant = None
+        self.switchTenant('demo')
+
+    def switchTenant(self, name=None):
+        if self.actualTenant != name:
+            self.actualTenant = name
+            self.keystone = self.client.keystone(self.actualTenant)
+            self.nova = self.client.nova(self.actualTenant)
+            self.cinder = self.client.cinder(self.actualTenant)
 
     # get a course by a id
     def getCourse(self, id):
@@ -47,10 +51,11 @@ class CourseHelper:
     
     # load moodle courses and return all of them in a list.
     def __getMoodleCourses(self):
-        list = []
-        list.append(Course(name="WebTech", description="WebTechnologien", id="1", enabled="Yes"))
-        list.append(Course(name="DBSYS", description="Datenbanksysteme", id="2", enabled="No"))
-        list.append(Course(name="CloudAppDev", description="Cloud Application Development", id="3", enabled="No"))
+        list = []        
+        # TODO : replace token with token=self.user.token.id
+        moodleCourses = get_user_courses(ldap_userid=3701, token="32c2fad270a6ca8ff1d712c62e37822c")
+        for moodleId in moodleCourses:
+            list.append(Course(name=moodleCourses[moodleId]['shortname'], id=moodleId, description=moodleCourses[moodleId]['fullname']))
         return list
     
     # load a list with all tenants
@@ -74,9 +79,9 @@ class CourseHelper:
         # if something goes wrong on setting the owner of the tenant, we do not throw an exception.
         try:
             # get the Member role.
-            role = self.keystone.roles.find(name="Member")
+            role = self.keystone.roles.find(name="admin")
             # get the owner of the course
-            user = self.keystone.users.find(email=course.owner)
+            user = self.keystone.users.find(id=self.user.id)
             # add the course owner to the tenant      
             self.keystone.roles.add_user_role(user, role, tenant)
         except:
@@ -84,18 +89,19 @@ class CourseHelper:
         return True
 
     def stopInstances(self, courseId=None):
-        print "stop instances"
         course = self.getCourse(courseId)
+        self.switchTenant(course.name)
+        print "stop instances"
         # stop running instances
         servers = self.nova.servers.list()
         for server in servers:
-            if (server.name.startswith(course.id)):
+            if (server.name.startswith(courseId)):
                 print "Stop Server " + server.name
                 server.delete()
         # remove volumes.
         volumes = self.cinder.volumes.list()
         for volume in volumes:
-            if (volume.name.startswith(course.id)):
+            if (volume.name.startswith(courseId)):
                 print "Remove Volume " + volume.name
                 # if volume is still attached we need to detach
                 if (volume.status == "in-use"):             
@@ -104,11 +110,15 @@ class CourseHelper:
 
     def startInstances(self, courseId=None, imageId=None, flavorId=None):
         course = self.getCourse(courseId)
-        for member in course.members:
-            name = course.id + "-" + member
-            if (False == self.__instanceExist(name=name)):
+        self.switchTenant(course.name)
+        # TODO : replace token with token=self.user.token.id
+        #members = get_enrolled_students(course_id=courseId, token="32c2fad270a6ca8ff1d712c62e37822c")
+        members = ['studentA', 'studentB']                
+        for member in members:
+            name = courseId + "-" + member
+            if not self.nova.servers.list(search_opts={'name': name}):
                 self.__startInstance(instanceName=name, imageId=imageId, flavorId=flavorId)
-            if (False == self.__volumeExist(name=name)):
+            if not self.cinder.volumes.list(search_opts={'name': name}):
                 self.cinder.volumes.create(name=name, size=1)
             # from this point instance and volume should exist
             # get the instance and attach the volume to it.
@@ -121,22 +131,6 @@ class CourseHelper:
                 # It's possible that there are multiple instances/volumes with the same name.
                 # We just use the first one.
                 attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdb", mode="rw")
-
-    def __instanceExist(self, name="courseId-studentEmails"):
-        instance = self.nova.servers.list(search_opts={'name': name})
-        if not instance:
-            return False
-        else:
-            print "Intance already exist"
-            return True
-
-    def __volumeExist(self, name="courseId-studentEmails"):
-        volume = self.cinder.volumes.list(search_opts={'name': name})
-        if not volume:
-            return False
-        else:
-            print "Volume already exist"
-            return True
 
     def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
         print "start instance"
@@ -159,21 +153,4 @@ class CourseHelper:
             instance = self.nova.servers.get(instance.id)
             status = instance.status
             print "status: %s" % status
-
-# TODO : remove
-# manually start for test.
-helper = CourseHelper()
-courses = helper.getCourses()
-#for course in courses:
-#    print course.members
-    #helper.startInstances(course=course)
-#    helper.stopInstances(course=course)
-
-#helper.startInstances(course=courses[0])
-#helper.stopInstances(course=courses[0])
-#helper.createVolume()
-
-#print CourseSession.selectedCourse
-#CourseSession.selectedCourse = helper.getCourses()[0]
-#print CourseSession.selectedCourse
 
