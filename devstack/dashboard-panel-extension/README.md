@@ -24,3 +24,10 @@ Now, restart the web server:
 View the extension in your dashboard at the url:
 
 	http://yourHost/prof/
+
+
+To run the instances of the mocked courses we need to create a dummy user.
+Therefore we can use the dashboard. The test user should have following attributes:
+name            : test
+email           : test@test.de
+primary Project : demo

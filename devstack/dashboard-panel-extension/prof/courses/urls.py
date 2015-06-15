@@ -6,5 +6,8 @@ from openstack_dashboard.dashboards.prof.courses import views
 
 urlpatterns = patterns('',
     url(r'^$',
-        views.IndexView.as_view(), name='index'),
+        views.CoursesTableView.as_view(), name='index'),
+    url(r'^(?P<course_id>[^/]+)/start_instances/$',
+        views.LaunchInstanceView.as_view(),
+        name='start_instances'),
 )
