@@ -10,27 +10,26 @@
 				headinclude,
 				numbers=noenddot,
 				%footsepline,		% Linie vor Fusszeile
-				bibliography=totoc,	% AuffÃ¼hren des Literaturverzeichnisses
+				bibliography=totoc,	% Aufführen des Literaturverzeichnisses
 				listof=totoc,
-				parskip=half,		% Zwischen AbsÃ¤tzen entsteht eine halbe Seite Abstand
+				parskip=half,		% Zwischen Absätzen entsteht eine halbe Seite Abstand
 				cleardoublepage=empty,
-				ngerman,			% Ãœbersetzer
+				ngerman,			% Übersetzer
 				twoside				% Doppelseitig
-				openany			% unterdrÃ¼ckt leere Seiten vor Kapiteln
+				openany			% unterdrückt leere Seiten vor Kapiteln
 				]{scrbook}
 \let\cleardoublepage\clearpage
 % verbesserte Font-Darstellung
 \usepackage{ae}
 %Tabellenunterschriften verkleinern
 \usepackage[font=small]{caption}
-%HÃ¤ckchen
+%Häkchen
 \usepackage{amssymb}
 % Zeichenkodierung
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{wrapfig} % Paket zur Positionierung einbinden
-% Verwendung von Microtype fÃ¼r ZeilenumbrÃ¼che etc.
+% Verwendung von Microtype für Zeilenumbrüche etc.
 \usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
 % neue deutsche Rechtschreibung
 \usepackage[ngerman]{babel}
@@ -38,7 +37,7 @@
 
 % Zeilenabstand
 \usepackage[onehalfspacing]{setspace}
-% AnfÃ¼hrungszeichen 
+% Anführungszeichen 
 \usepackage[babel,german=guillemets]{csquotes}
 
 %Schriften
@@ -56,18 +55,18 @@
 \usepackage[square,numbers]{natbib}
 \renewcommand{\cite}{\citep} % citep zu cite umgebogen.
 
-%fÃ¼r Tabellenlinien
+% für Tabellenlinien
 \usepackage{booktabs}
 \usepackage{hhline}
 \usepackage{tabularx}
 \usepackage{tabulary}
-% fÃ¼r lange Tabellen
+% für lange Tabellen
 \usepackage{longtable}
 \usepackage{filecontents}
 \usepackage{ltxtable}
 \setlength{\tabcolsep}{10pt} % Abstand zwischen Spalten
 \renewcommand{\arraystretch}{1.5} % Zeilenabstand
-% Gliederungstiefe im Inhaltsverzeichnis Ã¤ndern
+% Gliederungstiefe im Inhaltsverzeichnis ändern
 \setcounter{tocdepth}{3}
 \usepackage{multirow}
 \usepackage{bigstrut}
@@ -93,13 +92,12 @@
             colorlinks=true,
             citecolor=black,
             urlcolor=black,
-            pdfauthor={Marco Grupe},
-            pdftitle={Praktische Umsetzbarkeit von Datenschutzpunkten als Regulierungsansatz},
-            pdfsubject={Bachelorarbeit},
+            pdfauthor={Dennis Parlak, Simon Kessler, Tobias Keh, Marco Grupe},
+            pdftitle={HTWG Lab Cloud mit OpenStack},
+            pdfsubject={Projektarbeit},
             pdfdisplaydoctitle=true, % Dokumenttitel statt Dateiname anzeigen.
-            pdflang=de, % Sprache des Dokuments.
-            pdfkeywords={Marco Grupe, Bachelorarbeit, HTWG Konstanz,
-            doubleSlash Net-Business GmbH}, ]{hyperref}                 
+            pdflang=de % Sprache des Dokuments.
+             ]{hyperref}                 
 
 %\hypersetup{%
 %	colorlinks=false, % Aktivieren von farbigen Links im Dokument
@@ -108,15 +106,15 @@
 %	filecolor=LinkColor,
 %	menucolor=LinkColor,
 %	urlcolor=LinkColor,
-%	bookmarksnumbered=true % Ãœberschriftsnummerierung im PDF Inhalt anzeigen.
+%	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
 %}
 
-%\AuflistungsabstÃ¤nde kleiner machen
+%Auflistungsabstände kleiner machen
 \usepackage{paralist}
-% fÃ¼r Glossar
+% für Glossar
 \usepackage[intoc,german]{nomencl}
 \let\abbrev\nomenclature
-\renewcommand{\nomname}{AbkÃ¼rzungsverzeichnis}
+\renewcommand{\nomname}{Abkürzungsverzeichnis}
 \setlength{\nomlabelwidth}{.19\hsize}
 \renewcommand{\nomlabel}[1]{#1 \dotfill}
 \setlength{\nomitemsep}{-\parsep}
@@ -125,10 +123,10 @@
 \usepackage[normalem]{ulem}
 \newcommand{\markup}[1]{\uline{#1}}
 
-% Buchumschlag RÃ¤ndereinstellung
+% Buchumschlag Rändereinstellung
 \usepackage{vmargin}
 
-% SeitengrÃ¶ÃŸe
+% SeitengrößŸe
 \setpapersize{A4}
 
 % eine Randnote fuer fehlende Teile 
@@ -144,21 +142,21 @@
 \renewcommand{\textfraction}{.10}
 \setlength{\footnotesep}{4mm}
 \usepackage{float}
-% Ãœberschriften nach irgendwelchen DIN-Normen
+% Überschriften nach irgendwelchen DIN-Normen
 \renewcommand{\bibname}{Quellenverzeichnis}    
 \renewcommand{\contentsname}{Inhalt}    
     
-% Kopfzeilen enthalten Ãœberschriften oberster Ebene
+% Kopfzeilen enthalten Üœberschriften oberster Ebene
 \pagestyle{headings}
 
-%fullref fÃ¼r Kapitel
+%fullref für Kapitel
 \newcommand{\fullref}[1]{Kapitel~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
 \newcommand{\fullrefapdx}[1]{Anhang~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
 
 %fullref fuer Abschnitte
 \newcommand{\fullrefsct}[1]{Abschnitt \textit{\nameref{#1}} auf Seite \pageref{#1}}
 
-% FuÃŸnoten seitenweise nummerieren
+% Fußoten seitenweise nummerieren
 \usepackage{footnpag}
 \usepackage{enumitem}
 \usepackage{epigraph}
