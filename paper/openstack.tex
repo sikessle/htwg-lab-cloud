@@ -4,9 +4,11 @@ Kurzabriss des Kapitels
 
 \section{Kurzbeschreibung}OpenStack ist eine Open-Source-Software zur Erstellung und Verwaltung privater, öffentlicher und hybrider Cloud-Umgebungen. Nach der Definition des National Institute of Standards and Technology (NIST) handelt es sich bei OpenStack um eine Infrastructure-as-a-Service- (IaaS-) Cloud. Sowohl über RESTful APIs als auch per Weboberfläche können große Pools von virtuellen Rechen-, Speicher- und Netzwerkressourcen verwaltet werden. Durch die offene Architektur und den modularen Aufbau bietet OpenStack eine enorm hohe Flexibilität und Skalierbarkeit. Entwickelt wird OpenStack in der Programmiersprache Python und ist unter der Apache-2.0-Lizenz lizensiert \cite[vgl.][S. 7ff]{Beitter}. 
 
-Initiiert wurde das Projekt ursprünglich durch eine Zusammenarbeit der NASA und von Rackspace. Bedingt dadurch, dass Wissenschaftler nach Beendingung ihrer Experimente die dafür eigens angeschaffte Hardware nicht mehr benötigten, bestand das Ziel von OpenStack darin, Rechenkapazität an zentraler Stelle zu bündeln und diese auf Abruf bereitzustellen \cite[vgl.][]{Loschwitz}. Mittlerweile wird die Entwicklung und Verteilung von OpenStack von einer Organisation, der OpenStack Foundation, koordiniert, die derzeit mehr als 18.000 Mitglieder aus 140 Ländern auf der ganzen Welt besitzt. Wichtige strategische und finanzielle Entscheidungen werden von einem Aufsichtsrat getroffen. Zu den Mitgliedern zählen unter anderem AT&T, Hewlett-Packard, IBM, RedHat, SUSE Linux GmbH und Cisco Systems \cite[vgl.][]{OpenStackFoundation}.
+Initiiert wurde das Projekt ursprünglich durch eine Zusammenarbeit der NASA und von Rackspace. Bedingt dadurch, dass Wissenschaftler nach Beendingung ihrer Experimente die dafür eigens angeschaffte Hardware nicht mehr benötigten, bestand das Ziel von OpenStack darin, Rechenkapazität an zentraler Stelle zu bündeln und diese auf Abruf bereitzustellen \cite[vgl.][]{Loschwitz}.
 
-\section{Komponenten}Das Projekt, das seit dem ersten Release im Jahr 2010 eine stetige Fortentwickung verfolgt, liegt inzwischen in der Version 2015.1 vor. Mit jedem neuem Release sind weitere Komponenten hinzugekommen, die eigenständige Projekte darstellen und verschiedene Aufgaben erfüllen. Die wichtigsten dieser Komponenten sollen nachfolgend kurz erläutert werden.
+Mittlerweile wird die Entwicklung und Verteilung von OpenStack von einer Organisation, der OpenStack Foundation, koordiniert, die derzeit mehr als 18.000 Mitglieder aus 140 Ländern auf der ganzen Welt besitzt. Wichtige strategische und finanzielle Entscheidungen werden von einem Aufsichtsrat getroffen. Zu den Mitgliedern zählen unter anderem AT\&T, Hewlett-Packard, IBM, RedHat, SUSE Linux GmbH und Cisco Systems \cite[vgl.][]{OpenStackFoundation}.
+
+\section{Komponenten}Das Projekt, das seit dem ersten Release im Jahr 2010 eine stetige Fortentwickung verfolgt, liegt inzwischen in der Version 2015.1 vor. Mit jedem neuem Release sind weitere Komponenten hinzugekommen, die eigenständige Projekte darstellen und verschiedene Aufgaben erfüllen. Zu unterscheiden sind in diesem Zusammenhang OpenStack-Projekte, die einer kontinuierlichen Weiterentwicklung seitens der Community unterliegen, und weiteren für den Betrieb einer Cloud-Umgebung notwendigen Projekten, wie beispielsweise der Datenbank MySQL und dem Messaging Service RabbitMQ. Die wichtigsten Komponenten sind nachfolgend aufgeführt \cite[vgl.][S. 20-28]{Beitter}.
 \begin{description}
 \item[Keystone]
 \item[Glance]
@@ -14,7 +16,7 @@ Initiiert wurde das Projekt ursprünglich durch eine Zusammenarbeit der NASA und
 \item[Cinder]
 \item[Swift]
 \item[Neutron]
-\item[Horizon]
-\item[Ceilometer]
-\item[Heat]
+\item[Horizon] ist für die Verwaltung der Instanzen, der Netzwerke oder auch der Projekte und seiner Benutzer zuständig. Die Administration erfolgt über ein Webinterface, das zudem aufgrund der modularen Struktur individuell erweitert und angepasst werden kann. 
+\item[Ceilometer] dient als Schnittstelle zum Erfassen und Sammeln von Daten über die Ressourcennutzung der einzelnen Benutzer, um eine spätere Auswertungen und Analysen zu ermöglichen.
+\item[Heat] ermöglicht das Zusammenfassen verschiedener Services zu einzelnen Prozessen. Dadurch können gesamte Infrastrukturen, beispielsweise bestehend aus Cloud-Instanzen, Benutzern und Netzwerken, anhand von Konfigurationsvorlagen, den sogenannten Heat Orchestration Templates (HOT), automatisiert aufgebaut werden.
 \end{description}
