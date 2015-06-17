@@ -56,8 +56,6 @@ Kurzabriss des Kapitels
 
 Kurzabriss des Kapitels
 
-LOGO einfügen
-
 Source-Code unter \url{http://github.com/sikessle/htwg-lab-cloud}
 
 \section{Zielsetzung}
@@ -75,46 +73,80 @@ Source-Code unter \url{http://github.com/sikessle/htwg-lab-cloud}
 % ------------------------------------------ Simon
 \section{Lab-Compute Image}
 
-Basis-Image
+Da die OpenStack Umgebung gewisse Anforderungen an das Instanz-Image stellt, wurde in diesem Projekt ein Basis-Image entwickelt. 
+Dieses kann in der OpenStack Umgebung gestartet und vom Professor für die jeweilige Übung angepasst werden.
+Grundsätzlich sind in OpenStack Windows XP, 7, 8 und Linux-basierte Betriebssysteme als Instanz konfigurierbar. 
+Aus lizenzrechtlichen Gründen wurde die Entscheidung für das Linux-basierte Betriebssystem \emph{Ubuntu} getroffen. 
+Prinzipiell lassen sich die hier durchgeführten Anpassungen auch auf Windows übertragen, wobei die konkrete Konfiguration abweicht.
 
-`https://www.dropbox.com/sh/0dgcaxc2u7cbfgi/AAAgnS87aYXRp6HJzK7oWSrma?dl=0`
+Der Workflow, um ein Image anzupassen und nachfolgend Instanzen mit diesem den Studenten bereitzustellen ergibt sich wie folgt:
 
-Ubuntu 14.04 LTS!!
+\begin{itemize}
+\item Starten des Basis-Images in einer Instanz durch den Professor.
+\item Installation von Programmen, Konfiguration der Instanz und andere Anpassungen.
+\item Erstellen eines Snapshots, um die Änderungen festzuhalten. Dies erzeugt ein neues Image.
+\item Starten der einzelnen Instanzen für die Studenten. Dabei wird die Instanz automatisch an den Student angepasst, sodass nur dieser Zugriff mittels seiner im LDAP hinterlegten Zugangsdaten hat.
+\end{itemize}
 
-Default Login
-Username: ubuntu (full name: HTWG Lab Cloud)
-Password: ubuntu
+Im Folgenden werden auf die einzelnen Komponenten, die im Zuge dieser Projektarbeit erarbeitet wurden, eingegangen.
 
-ssh
+\subsection{Details}
 
-Rechte
+Als Betriebssystem wurde Ubuntu 14.04 Desktop LTS ausgewählt. 
+Dieses ist zwar nicht die neuste Ubuntu-Version, bietet jedoch aufgrund des \emph{Long Term Support} Updates und relevante Sicherheitsfixes für 5 Jahre. 
+Somit ist gewährleistet, dass das Basis-Image 2019 mit relevanten Updates versorgt wird. 
+Insbesondere unter Betrachtung des Support-Aufwands durch das HTWG-Rechenzentrums, soll so eine lange Laufzeit gewährleistet werden.
 
-Programme
+Aufgrund der Dateigröße ($> 5$ GB) kann das Image nicht in Git eingecheckt werden und wird über Dropbox unter \url{https://www.dropbox.com/sh/0dgcaxc2u7cbfgi/AAAgnS87aYXRp6HJzK7oWSrma?dl=0} bereitgestellt. Das Image kann auch direkt bei den Autoren der Projektarbeit angefordert werden.
 
-Includes:
+Da das Basis-Image noch keine personenbezogenen Daten enthält, wird ein Standard-Account mit sudo Rechten bereitgestellt:
 
-- Unity as Desktop Environment
-- Dropbox
-- git
-- openssh-server (password auth not disabled)
-- vim
-- OpenOffice
-- Firefox 
-- and other default application
+\begin{itemize}
+\item \emph{Benutzer:} ubuntu (Vollständiger Name: HTWG Lab Cloud)
+\item \emph{Passwort:} ubuntu
+\end{itemize}
 
-Konvertierungsscript (VirtualBox to OS)
+Das von uns bereitgestellte Image enthält bereits einige Standardprogramme:
 
-Installationsskript (setup-instance.sh)
+\begin{itemize}
+\item Unity als Desktop-Manager
+\item Dropbox
+\item git
+\item openssh-server
+\item vim
+\item OpenOffice
+\item Firefox
+\item und weitere Office-Applikationen
+\end{itemize}
+
+Auf andere Cloudspeicher-Anbieter musste verzichtet werden, da Google Drive und Windows OneDrive Linux nicht nativ unterstützen.
 
 \subsection{Cloud-Kompatibilität}
 
-- cloud-init, cloud-utils, cloud-initramfs-growroot packages
-cloud-init Script installiert dies automatisch.
-- /etc/default/grub and then run update-grub to enable serial console on OpenStack
-- /etc/network/interfaces
-- openssh-server config files to enable password login
+OpenStack stellt gewisse Anforderungen an die Gast-Betriebssysteme, die sich im OpenStack Handbuch \cite{osImageRequirement} nachschlagen lassen. 
+Die initiale Konfiguration des Basis-Images wurde aus Performance-Gründen in VirtualBox durchgeführt.
+Durch Installation einiger Packete und Anpassung von Konfigurationsdateien, wurde das Ubuntu Image OpenStack kompatibel gemacht:
+
+\begin{itemize}
+\item Installation von cloud-init, cloud-utils und cloud-initramfs-growroot *
+\item Anpassen der Kernel-Boot-Parameter in der Datei /etc/default/grub. Dort wurde der Parameter \emph{console=tty,ttyS0} ergänz. Ein anschließendes \emph{update-grub} aktualisert den Grub-Bootloader. Diese Änderung aktiviert die Ausgabe der Log-Meldungen im Horizon-Dashboard.
+\item Anpassen von \emph{cloud.cfg} des Pakets cloud-init. Dieses deaktiviert standardmäßig den Passwort-Login des Images. Da Nutzer jedoch per LDAP bzw. mit dem Standardbenutzername sich anmelden können sollen, muss dies aktiviert werden. *
+\end{itemize}
+
+Die mit * gekennzeichneten Punkte werden von dem entworfenen Skript \emph{cloud-init-script.sh} automatisch ausgeführt. 
+Anschließend löscht sich das Skript und fährt das Betriebssystem herunter.
+Da nach Ausführung des \emph{cloud-init-script.sh} Skripts das Image in VirtualBox nicht mehr ohne weiteres gestartet werden kann, sollte das Skript am Ende der Konfiguration ausgeführt werden.
+
+\subsection{Konvertierung von VirtualBox nach OpenStack}
+
+Nachdem das Basis-Image konfiguriert und kompatibel zu OpenStack gemacht wurde muss das Image noch in ein Format gewandelt werden, das OpenStack versteht.
+Das entwickelte Skript \emph{image-virtualbox-to-openstack.sh} führt diese Umwandlung aus. 
+Die Benutzung erfolgt mit folgendem Aufruf: \emph{./image-virtualbox-to-openstack.sh <Pfad zum gewünschten VirtualBox Image Snapshot>}.
+Im Wesentlichen wird dabei mittels \emph{VBoxManage} das Image in ein \emph{raw} Format gewandelt und anschließend mit \emph{qemu-img} nach \emph{qcow2} überführt.
 
 \subsection{LDAP-Authentifizierung}
+
+Screenshot Graphischer Login
 
 Read-Only
 Graphischer Login
@@ -159,7 +191,21 @@ Basis-Image -> Snapshot -> Image für Studenten
 
 OpenStack VNC Proxy
 
+Screenshot
+
 \subsection{Netzwerk}
+
+\subsection{Installationsskript  für Benutzerkonfiguration}
+
+Um die einzelnen Instanzen beim Erstellen auf einen Studenten anzupassen, muss das Image pro Student individuell verändert werden. 
+Das \emph{cloud-init} Packet bietet die Möglichkeit mittels dem Parameter \emph{user-data} ein Skript beim Starten mitzugeben. 
+
+Zur Installation der vorhergehend genannten Funktionen (LDAP-Authentifizierung etc.) wird ein generisches Skript generiert, welches nur noch minimal pro Student angepasst werden muss.
+Dieses Skript \emph{setup-instance.sh} wird durch ein Makefile erstellt, in dem alle \emph{install.sh} Skripte der einzelnen Features aneinander gehängt und durch einen Header und Footer Teil ergänzt werden.
+Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \emph{USER} Variable gesetzt wurde und \emph{apt-get} aktualisiert. 
+Der Footer ist dafür zuständig, nach dem Ausführen aller Teilskripte den Rechner neuzustarten.
+Die \emph{USER} Variable muss vor dem Ausführen durch den tatsächlichen Rechenzentrum Benutzernamen des Studenten ersetzt werden.
+Im Dashboard wird mittels Python das Skript angepasst und als user-data Parameter gesetzt.
 
 
 % ------------------------------------------ ENDE Simon
