@@ -76,21 +76,91 @@ Source-Code unter \url{http://github.com/sikessle/htwg-lab-cloud}
 \section{Lab-Compute Image}
 
 Basis-Image
-Konvertierungsscript
 
-Siehe \cite{erling_emissionshandel_2008}
+`https://www.dropbox.com/sh/0dgcaxc2u7cbfgi/AAAgnS87aYXRp6HJzK7oWSrma?dl=0`
+
+Ubuntu 14.04 LTS!!
+
+Default Login
+Username: ubuntu (full name: HTWG Lab Cloud)
+Password: ubuntu
+
+ssh
+
+Rechte
+
+Programme
+
+Includes:
+
+- Unity as Desktop Environment
+- Dropbox
+- git
+- openssh-server (password auth not disabled)
+- vim
+- OpenOffice
+- Firefox 
+- and other default application
+
+Konvertierungsscript (VirtualBox to OS)
+
+Installationsskript (setup-instance.sh)
+
+\subsection{Cloud-Kompatibilität}
+
+- cloud-init, cloud-utils, cloud-initramfs-growroot packages
+cloud-init Script installiert dies automatisch.
+- /etc/default/grub and then run update-grub to enable serial console on OpenStack
+- /etc/network/interfaces
+- openssh-server config files to enable password login
 
 \subsection{LDAP-Authentifizierung}
 
+Read-Only
+Graphischer Login
+Nur ein einzelner User pro VM
+
+Nötige Attribute:
+- uid
+- uidNumber
+- gidNumber
+- homeDirectory
+- loginShell
+
+HTWG LDAP
+URL: ldap.htwg-konstanz.de
+BaseDN: dc=fh-konstanz,dc=de
+Nutzer: ou=users,dc=fh-konstanz,dc=de
+
+Attribut-Mapping
+
+Headless Installation
+
+\subsection{HTWG home-Laufwerk}
+
+smb://homedrive.htwg-konstanz.de/home
+
+Auth mit LDAP
+PAM
+
 \subsection{Block-Storage}
+
+Zweck
+Cinder
+fstab
+udev
 
 \subsection{Snapshots}
 
-\subsection{Netzwerk}
+Basis-Image -> Snapshot -> Image für Studenten
+
 
 \subsection{Fernzugriff (VNC)}
 
-\subsection{HTWG home-Laufwerk}
+OpenStack VNC Proxy
+
+\subsection{Netzwerk}
+
 
 % ------------------------------------------ ENDE Simon
 
