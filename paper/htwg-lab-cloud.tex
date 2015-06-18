@@ -1,4 +1,3 @@
-% !TEX encoding = UTF-8 Unicode
 %===========================================================
 % MSI - Cloud Application Development - Projekt 
 % Autoren: Dennis Parlak, Simon Kessler, Tobias Keh, Marco Grupe
@@ -23,10 +22,9 @@
 \newcommand{\prueferB}{}
 \newcommand{\firma}{}
 \newcommand{\studiengang}{MSI Informatik}
-\bibliographystyle{alphadin}
 \raggedbottom 
 \begin{document}
-\frontmatter
+%\frontmatter
 \include{res/cover}
 \include{res/abstract}
 % Inhaltsverzeichnis
@@ -39,7 +37,7 @@
 % Abkürzungsverzeichnis
 %\printnomenclature
 %\include{res/abbreviations}
-\mainmatter
+%\mainmatter
 \pagenumbering{arabic}
 		
 % ------------------------------------------ CHAPTER
@@ -56,7 +54,7 @@ Kurzabriss des Kapitels
 
 Kurzabriss des Kapitels
 
-Source-Code unter \url{http://github.com/sikessle/htwg-lab-cloud}
+Source-Code unter GitHub \cite{git-source}.
 
 \section{Zielsetzung}
 
@@ -72,8 +70,44 @@ Rechtemanagement etc.
 
 \section{Anbindung an Moodle}
 
-% ------------------------------------------ Simon
-\section{Lab-Compute Image}
+
+\section{Fernzugriff (VNC)}
+
+Meist wird in OpenStack Umgebungen lediglich von Instanzen ohne graphische Oberfläche ausgegangen, auf denen beliebige Serveranwendungen laufen. 
+Der dadurch oft genannte SSH-Zugang ist dafür vollkommen ausreichend.
+Die HTWG Lab Cloud stellt jedoch eher eine \emph{Virtual Desktop Infrastructure} bereit.
+Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnte graphische Desktopumgebung (z. B. Unity oder KDE) in dieser Cloud-Lösung.
+
+Da VNC ein inhärent unsicheres (unverschlüsseltes) Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
+
+Der OpenStack VNC Console Proxy bietet diese Funktionen an.
+Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id xvpvnc}.
+Mit einem angepassten Java VNC Client \cite{vncJava} kann auf die jeweilige Instanz per VNC zugegriffen werden. 
+Dazu ist lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
+
+Alternativ ist auch der Zugriff per Web-VNC möglich. 
+Dazu muss lediglich beim Erstellen der URL der Parameter \code{novnc} angegeben werden. 
+Anschließend kann auf die Instanz über den Browser zugegriffen werden.
+
+\section{Snapshots}
+
+Das hier vorgestellte Basis-Image stellt lediglich die Grundfunktionalitäten bereit. 
+Um maximalen Nutzen aus der HTWG Lab Cloud zu ziehen, ist es elementar das Image an die jeweilige Übung möglichst genau anzupassen.
+
+Hierbei wurden die Boardmittel von OpenStack evaluiert.
+Wie sich herausgestellt hat, bietet OpenStack mit der \emph{Snapshot} Funktionalität genau dieses Feature an.
+Von einer erstellten Instanz kann jederzeit ein Snapshot angefertigt werden.
+Dieser entspricht exakt einem neuen herkömmlichen Image.
+
+Also kann ein Professor das Basis-Image in einer Instanz starten, an die Übungsstunde anpassen und über \emph{Snapshot} ein neues Image erstellen.
+Anschließend wird das Image beim Start der Instanzen ausgewählt.
+
+\section{Netzwerk}
+
+TODO Simon
+
+
+\section{Compute Image}
 
 Da die OpenStack Umgebung gewisse Anforderungen an das Instanz-Image stellt, wurde in diesem Projekt ein Basis-Image entwickelt. 
 Dieses kann in der OpenStack Umgebung gestartet und vom Professor für die jeweilige Übung angepasst werden.
@@ -90,18 +124,18 @@ Der Workflow, um ein Image anzupassen und nachfolgend Instanzen mit diesem den S
 \item Starten der einzelnen Instanzen für die Studenten. Dabei wird die Instanz automatisch an den Student angepasst, sodass nur dieser Zugriff mittels seiner im LDAP hinterlegten Zugangsdaten hat.
 \end{itemize}
 
-Im Folgenden werden auf die einzelnen Komponenten, die im Zuge dieser Projektarbeit erarbeitet wurden, eingegangen.
+Im Folgenden wird auf die einzelnen Komponenten, die im Zuge dieser Projektarbeit erarbeitet wurden, eingegangen. 
 
 \subsection{Details}
 
 Als Betriebssystem wurde Ubuntu 14.04 Desktop LTS ausgewählt. 
 Dieses ist zwar nicht die neuste Ubuntu-Version, bietet jedoch aufgrund des \emph{Long Term Support} Updates und relevante Sicherheitsfixes für 5 Jahre. 
-Somit ist gewährleistet, dass das Basis-Image 2019 mit relevanten Updates versorgt wird. 
-Insbesondere unter Betrachtung des Support-Aufwands durch das HTWG-Rechenzentrums, soll so eine lange Laufzeit gewährleistet werden.
+Somit ist gewährleistet, dass das Basis-Image bis 2019 mit relevanten Updates versorgt wird. 
+Insbesondere unter Betrachtung des Support-Aufwands durch das HTWG-Rechenzentrums soll so eine lange Laufzeit gewährleistet werden.
 
-Aufgrund der Dateigröße ($> 5$ GB) kann das Image nicht in Git eingecheckt werden und wird über Dropbox unter \url{https://www.dropbox.com/sh/0dgcaxc2u7cbfgi/AAAgnS87aYXRp6HJzK7oWSrma?dl=0} bereitgestellt. Das Image kann auch direkt bei den Autoren der Projektarbeit angefordert werden.
+Aufgrund der Dateigröße ($> 5$ GB) kann das Image nicht in Git eingecheckt werden und wird über Dropbox \cite{dropboxImage} bereitgestellt. Das Image kann auch direkt bei den Autoren der Projektarbeit angefordert werden.
 
-Da das Basis-Image noch keine personenbezogenen Daten enthält, wird ein Standard-Account mit sudo Rechten bereitgestellt:
+Da das Basis-Image noch keine personenbezogenen Daten enthält, wird ein Standard-Account mit \code{sudo} Rechten bereitgestellt:
 
 \begin{itemize}
 \item \emph{Benutzer:} ubuntu (Vollständiger Name: HTWG Lab Cloud)
@@ -127,96 +161,175 @@ Auf andere Cloudspeicher-Anbieter musste verzichtet werden, da Google Drive und 
 
 OpenStack stellt gewisse Anforderungen an die Gast-Betriebssysteme, die sich im OpenStack Handbuch \cite{osImageRequirement} nachschlagen lassen. 
 Die initiale Konfiguration des Basis-Images wurde aus Performance-Gründen in VirtualBox durchgeführt.
-Durch Installation einiger Packete und Anpassung von Konfigurationsdateien, wurde das Ubuntu Image OpenStack kompatibel gemacht:
+Durch Installation einiger Pakete und Anpassung von Konfigurationsdateien, wurde das Ubuntu Image OpenStack kompatibel gemacht:
 
 \begin{itemize}
-\item Installation von cloud-init, cloud-utils und cloud-initramfs-growroot *
-\item Anpassen der Kernel-Boot-Parameter in der Datei /etc/default/grub. Dort wurde der Parameter \emph{console=tty,ttyS0} ergänz. Ein anschließendes \emph{update-grub} aktualisert den Grub-Bootloader. Diese Änderung aktiviert die Ausgabe der Log-Meldungen im Horizon-Dashboard.
-\item Anpassen von \emph{cloud.cfg} des Pakets cloud-init. Dieses deaktiviert standardmäßig den Passwort-Login des Images. Da Nutzer jedoch per LDAP bzw. mit dem Standardbenutzername sich anmelden können sollen, muss dies aktiviert werden. *
+\item Installation von \code{cloud-init}, \code{cloud-utils} und \code{cloud-initramfs-growroot} *
+\item Anpassen der Kernel-Boot-Parameter in der Datei \code{/etc/default/grub}. Dort wurde der Parameter \code{console=tty,ttyS0} ergänzt. Ein anschließendes \code{update-grub} aktualisert den Grub-Bootloader. Diese Änderung aktiviert die Ausgabe der Log-Meldungen im Horizon-Dashboard.
+\item Anpassen von \code{cloud.cfg} des Pakets \code{cloud-init}. Dieses deaktiviert standardmäßig den Passwort-Login des Images. Da sich Nutzer jedoch per LDAP bzw. mit dem Standardbenutzername anmelden können sollen, muss dies aktiviert werden. *
 \end{itemize}
 
-Die mit * gekennzeichneten Punkte werden von dem entworfenen Skript \emph{cloud-init-script.sh} automatisch ausgeführt. 
+Die mit * gekennzeichneten Punkte werden von dem entworfenen Skript \code{cloud-init-script.sh} automatisch ausgeführt. 
 Anschließend löscht sich das Skript und fährt das Betriebssystem herunter.
-Da nach Ausführung des \emph{cloud-init-script.sh} Skripts das Image in VirtualBox nicht mehr ohne weiteres gestartet werden kann, sollte das Skript am Ende der Konfiguration ausgeführt werden.
+Da nach Ausführung des \code{cloud-init-script.sh} Skripts das Image in VirtualBox nicht mehr ohne weiteres gestartet werden kann, sollte das Skript am Ende der Konfiguration ausgeführt werden.
 
 \subsection{Konvertierung von VirtualBox nach OpenStack}
 
 Nachdem das Basis-Image konfiguriert und kompatibel zu OpenStack gemacht wurde muss das Image noch in ein Format gewandelt werden, das OpenStack versteht.
-Das entwickelte Skript \emph{image-virtualbox-to-openstack.sh} führt diese Umwandlung aus. 
-Die Benutzung erfolgt mit folgendem Aufruf: \emph{./image-virtualbox-to-openstack.sh <Pfad zum gewünschten VirtualBox Image Snapshot>}.
-Im Wesentlichen wird dabei mittels \emph{VBoxManage} das Image in ein \emph{raw} Format gewandelt und anschließend mit \emph{qemu-img} nach \emph{qcow2} überführt.
+Das entwickelte Skript \code{image-virtualbox-to-openstack.sh} führt diese Umwandlung aus. 
+Die Benutzung erfolgt mit folgendem Aufruf: \code{./image-virtualbox-to-openstack.sh <Pfad zum gewünschten VirtualBox Image Snapshot>}.
+Im Wesentlichen wird dabei mittels \code{VBoxManage} das Image in ein \code{raw} Format gewandelt und anschließend mit \code{qemu-img} nach \code{qcow2} überführt.
 
 \subsection{LDAP-Authentifizierung}
 
-Screenshot Graphischer Login
+Studenten sollen sich mit ihren gewohnten HTWG Zugangsdaten bei den Instanzen anmelden können. 
+Deshalb wird auf den LDAP-Server der HTWG zugegriffen, um den Benutzer beim Login in das Betriebssystem zu authentisieren. 
+Da lediglich lesender Zugriff auf den LDAP-Server notwendig ist, sind keine speziellen Rechte erforderlich, um  mit dem LDAP-Server zu kommunizieren (insbesondere ist kein \emph{Bind DN} erforderlich).
 
-Read-Only
-Graphischer Login
-Nur ein einzelner User pro VM
+Der HTWG LDAP-Server ist unter \url{ldap.htwg-konstanz.de} über die LDAP-Version 3 im Hochschulnetz erreichbar. 
+Um auf das Wurzelverzeichnis zugreifen zu können, muss der \emph{Base DN} \code{dc=fh-konstanz,dc=de} gewählt werden. 
+Einzelne Benutzer lassen sich mit dem DN \code{ou=users,dc=fh-konstanz,dc=de} auslesen, wobei die ungefilterte Anzeige auf 50 Benutzer begrenzt ist. 
 
-Nötige Attribute:
-- uid
-- uidNumber
-- gidNumber
-- homeDirectory
-- loginShell
+Für das Projekt sind die Attribute
 
-HTWG LDAP
-URL: ldap.htwg-konstanz.de
-BaseDN: dc=fh-konstanz,dc=de
-Nutzer: ou=users,dc=fh-konstanz,dc=de
+\begin{itemize}
+\item uid: Benutzername
+\item uidNumber: Benutzernummer
+\item gidNumber: Gruppennummer
+\item homeDirectory: Pfad zum home-Laufwerk
+\item loginShell: Die für den Login genutzte Shell
+\end{itemize}
 
-Attribut-Mapping
+relevant. Alle Attribute finden sich im HTWG LDAP-Server wieder und müssen somit nicht explizit gemappt werden. 
+Eine Besonderheit besteht darin, dass die Attribute uidNumber, gidNumber, homeDirectory und loginShell bereits mit HTWG-spezifischen Werten belegt sind. 
+So ist z. B. homeDirectory mit \enquote{/rzhome/username} vorbelegt.
+Diese Werte lassen sich nicht für dieses Projekt verwenden.
+Um trotzdem mit der HTWG interoperabel zu bleiben, werden diese Einträge beim Auslesen mittels \code{nss_override_attribute_value} überschrieben. 
+Dabei werden jedoch im LDAP-Server \emph{keine} Einträge verändert, lediglich dem lokalen System erscheint der Eintrag als modifiziert.
 
-Headless Installation
+Die Benutzer- und Gruppennummer wird auf fix auf 2000 gesetzt.
+Damit ist genügend Raum für weitere lokale Benutzer, die eventuell von Programmen angelegt werden und automatisch bei 1001 starten.
+Benutzer werden die Gruppen <username>, adm, cdrom, sudo, dip, plugdev, lpadmin, sambashare zugewiesen. 
+Diese entsprechen den Ubuntu Standardgruppen eines neuen Benutzers.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[scale=0.6]{img/lightdm.png}
+\caption{Grafischer Login mit LightDM}
+\label{lightdm}
+\end{figure}
+
+Betriebssystemseitig müssen die Pakete \code{ldap-auth-client} und \code{nscd} installiert werden. 
+Die Authentifizierung wird mit dem Pluggable Authentication Modules (PAM) Framework realisiert. 
+Mit dessen Hilfe lässt sich die Authentifizierung vom üblichen System abkoppeln und in ein LDAP-Modul auslagern.
+
+Sicherheitsrelevant ist außerdem, dass eine einzelne Instanz nur von einem Benutzer erreichbar ist. 
+Andernfalls besteht Gefahr, dass sich andere Nutzer auf der Instanz mit ihren Zugangsdaten anmelden und mittels \code{sudo} Adminrechte erlangen.
+Danach wäre der Zugriff auf eventuell sensible private Daten (Cloudspeicher, HTWG home-Laufwerk, etc.) möglich.
+
+Zur Verhinderung dieses Szenarios wird die LDAP-Authentifizierung durch die Zeile  \code{nss_base_passwd uid=<username>} auf den jeweiligen Benutzer beschränkt.
+Somit wird die Suche für das Passwort eines Benutzer im LDAP-Verzeichnis gefiltert.
+
+Schlussendlich sollen sich Benutzer über die gewohnte graphische Oberfläche (vgl. \autoref{lightdm}) am System anmelden können.
+Hierzu muss der Login-Manager \emph{LightDM} konfiguriert werden und die Eingabe eines beliebigen Benutzernamens erlauben (ggü. dem Standard, der nur lokale Benutzer aus einer Liste zur Auswahl anbietet).
+Dieses Ziel wurde erreicht, in dem die \code{SeatDefaults} in der entsprechenden Konfigurationsdatei angepasst wurden.
+
+Da diese Installationen der Pakete normalerweise einen interaktiven Dialog erfordern, musste ein Weg gefunden werden, um dies automatisiert ausführen zu lassen.
+Hier war der Befehl \code{DEBIAN_FRONTEND=noninteractive apt-get -y -q install ..} hilfreich. 
+Dadurch werden bei interaktiven Dialogen die Standardwerte angenommen und alles weitere ohne Nachfrage installiert. 
+Die anschließende manuelle Änderung der Konfigurationsdateien über ein Skript stellt die korrekten Einstellungen sicher.
+
+Alle vorhergehenden Konfigurationen werden in den folgenden Dateien durchgeführt. 
+Die genauen Details finden sich in den Readme und Skript Dateien bei den Projektquellen.
+
+\begin{itemize}
+\item \code{/etc/nsswitch.conf}: LDAP als PAM Authentifizierungsmodul
+\item \code{/etc/ldap.conf}: LDAP Konfiguration inkl. Attributmapping und -überschreiben
+\item \code{/etc/pam.d/common-session}: Erstellen des lokalen home Verzeichnisses beim erstmaligen Login
+\item \code{/etc/security/group.conf}: Zuweisung von lokalen Systemgruppen an LDAP Benutzer
+\item \code{/etc/pam.d/common-auth}: Hinzufügen des PAM Gruppenmoduls
+\item \code{/etc/group}: Definition der Systemgruppen für den jeweiligen LDAP-Benutzer
+\item \code{/etc/lightdm/lightdm.conf}: LDAP Login über den graphischen Login-Manager ermöglichen
+\end{itemize}
 
 \subsection{HTWG home-Laufwerk}
 
-smb://homedrive.htwg-konstanz.de/home
+Eine weitere Dienstleistung besteht darin, dem Benutzer sein gewohntes HTWG home-Laufwerk zur Verfügung zu stellen, um einen nahtlosen Wechsel zwischen OpenStack Instanz und lokalen Rechenzentrum-PCs sicherzustellen.
 
-Auth mit LDAP
-PAM
+Das jeweilige home-Laufwerk unter \code{smb://homedrive.htwg-konstanz.de/home} erfordert eine Authentisierung des Nutzers gegenüber dem HTWG-Server. 
+Jedoch soll aus Bequemlichkeitsgründen eine Single-Sign-On Lösung implementiert werden.
+Der zentrale und einzige Login soll somit der Anmeldevorgang am Betriebssystem sein.
 
-\subsection{Block-Storage}
+Als ideale Lösung stellt sich ein weiteres PAM-Modul heraus. \code{libpam_mount} bietet die gewünschte Funktionalität. 
+Über zwei XML-Konfigurationsdateien wird das home-Laufwerk als \enquote{home-drive} unter \code{/media/home-drive} eingebunden.
+Dadurch erscheint das Verzeichnis in der Seitenleiste des Nautilus Dateimanagers und ist komfortabel erreichbar.
 
-Zweck
-Cinder
-fstab
-udev
+\subsection{Block-Storage lab-drive}
 
-\subsection{Snapshots}
+OpenStack Instanzen können jederzeit neu gestartet oder erstellt werden.
+Dies stellt die Verwaltung von benutzerspezifischen Dateien vor das Problem, auch über die Lebenszeit einer Instanz hinaus Daten speichern zu können. 
 
-Basis-Image -> Snapshot -> Image für Studenten
+Die Block-Storage Komponente \emph{Cinder} bietet die Möglichkeit ein Stück Speicher mit Blockadressierung einer Instanz bereitzustellen. 
+Dabei ist die Lebensdauer unabhängig von der Instanz. 
+Dies erlaubt es, pro Übung eine neue Instanz zu starten mit jeweilig neuem Image, ohne wichtige Daten zu verlieren.
 
+Zwar könnte grundsätzlich das home-Laufwerk der HTWG diese Stellung einnehmen, stellt aber aufgrund der sehr eingeschränkten Speicherkapazität keine zufriedenstellende Lösung dar.
+Deshalb wird pro Instanz ein variabel großes Cinder-Laufwerk \enquote{lab-drive} erstellt und unter \code{/dev/vdb} angebunden.
+Eine Herausforderung stellt die Hotplug-Fähigkeit dar. 
+Das Laufwerk könnte zu jeder Zeit an die Instanz an- und abgeschlossen werden.
+Des Weiteren muss beim ersten Anbinden das Laufwerk als ext4 formatiert werden.
 
-\subsection{Fernzugriff (VNC)}
+Die Linux Systemdienste \code{mount mit fstab} und \code{udev} bieten die nötige Infrastruktur zur Realisierung.
+Nachfolgen ist der Ablauf beschrieben, wie mit dem Laufwerk umgegangen wird bzw. die Tools installiert und konfiguriert werden.
 
-OpenStack VNC Proxy
+\begin{itemize}
+\item Einmaliges Erstellen des Mountpunktes \code{/media/lab-drive}.
+\item Eintrag mit Mount-Informationen in \code{/etc/fstab} erstellen.
+\item Ablages eines Skripts unter \code{/usr/local/bin/mount-lab-drive.sh}, welches das Mounten und Formatieren des Laufwerks übernimmt.
+\item udev Regeldatei erstellen, die bei Änderungen im Linux Subsystem \code{block} das Mount-Skript aufruft.
+\end{itemize}
 
-Screenshot
-
-\subsection{Netzwerk}
+Ebenso wie das home-Laufwerk erscheint das lab-drive in der Seitenleiste des Nautilus Dateimanagers.
 
 \subsection{Installationsskript  für Benutzerkonfiguration}
 
 Um die einzelnen Instanzen beim Erstellen auf einen Studenten anzupassen, muss das Image pro Student individuell verändert werden. 
-Das \emph{cloud-init} Packet bietet die Möglichkeit mittels dem Parameter \emph{user-data} ein Skript beim Starten mitzugeben. 
+Das \code{cloud-init} Paket bietet die Möglichkeit mittels dem Parameter \code{user-data} ein Skript beim Starten mitzugeben. 
 
 Zur Installation der vorhergehend genannten Funktionen (LDAP-Authentifizierung etc.) wird ein generisches Skript generiert, welches nur noch minimal pro Student angepasst werden muss.
-Dieses Skript \emph{setup-instance.sh} wird durch ein Makefile erstellt, in dem alle \emph{install.sh} Skripte der einzelnen Features aneinander gehängt und durch einen Header und Footer Teil ergänzt werden.
-Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \emph{USER} Variable gesetzt wurde und \emph{apt-get} aktualisiert. 
+Dieses Skript \code{setup-instance.sh} wird durch ein Makefile erstellt, in dem alle \code{install.sh} Skripte der einzelnen Features aneinander gehängt und durch einen Header und Footer Teil ergänzt werden.
+Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \code{USER} Variable gesetzt wurde und \code{apt-get} aktualisiert. 
 Der Footer ist dafür zuständig, nach dem Ausführen aller Teilskripte den Rechner neuzustarten.
-Die \emph{USER} Variable muss vor dem Ausführen durch den tatsächlichen Rechenzentrum Benutzernamen des Studenten ersetzt werden.
-Im Dashboard wird mittels Python das Skript angepasst und als user-data Parameter gesetzt.
-
-
-% ------------------------------------------ ENDE Simon
-
+Die \code{USER} Variable muss vor dem Ausführen durch den tatsächlichen Rechenzentrum Benutzernamen des Studenten ersetzt werden.
+Im Dashboard wird mittels Python das Skript angepasst und als \code{user-data} Parameter gesetzt.
 
 \section{Probleme bei der Implementierung}
 
+Da OpenStack rasant weiter entwickelt wird, bleibt an einigen Stellen die Dokumentation auf der Strecke bzw. ist veraltet. 
+Herauszufinden, wie die Dienste konfiguriert werden müssen war mit oftmals stundenlangen Recherchen verbunden.
+Auch die Linux Module PAM mit LDAP sind sehr lückenhaft und veraltet dokumentiert.
+Dies hat unweigerlich zu unzähligen Trial and Error Sitzungen geführt.
+Meist resultiert die Lösung in nur wenigen Zeilen Code, diese jedoch mangels Dokumentation zu erstellen hat die Geschwindigkeit der Entwicklung stark gebremst.
+
+
+
+WEITERES VON DEN ANDEREN SECTIONS
+
+
+Die Netzwerkfunktionalität von OpenStack ist einerseits extrem flexibel, zugleich aber auch extrem kompliziert und nur schwer zu durchdringen.
+Eine lauffähige Netzwerkumgebung aufzusetzen, erforderte ebenfalls großen Aufwand.
+
+Ein weiteres Problem bestand in der Erstellung des Basis-Image aufgrund von Performance Problemen.
+Auf einem handelsüblichen Notebook eine Virtuelle Maschine mit DevStack zu starten und in dieser dann nochmals ein komplettes Betriebssystem wie Ubuntu zu virtualisieren, zeigte der Hardware die Grenzen auf.
+Deshalb musste zuerst ein VirtualBox Image konfiguriert und Skripte zur Umwandlung nach OpenStack entwickelt werden.
+
+Insgesamt lässt sich mit einem so komplexen System wie OpenStack kein schneller Program-Compile-Execute Zyklus durchführen.
+
 \section{Bekannte Bugs}
 
+\begin{itemize}
+\item Der LDAP-Login am Image muss zweimal durchgeführt werden. Hier liegt ein Bug seitens des LightDM Login-Managers vor.
+\end{itemize}
 
 % ------------------------------------------ CHAPTER
 \chapter{Deployment}
@@ -239,10 +352,9 @@ Kurzabriss des Kapitels
    	\cleardoublepage
 	\pagenumbering{roman}
    	\setcounter{page}{12}
-	\bibliography{res/latexlit} 
-	
+	\printbibliography
 % Anhang
 \begin{appendix}   
 \end{appendix}
-\backmatter
+%\backmatter
 \end{document}

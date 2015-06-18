@@ -10,26 +10,26 @@
 				headinclude,
 				numbers=noenddot,
 				%footsepline,		% Linie vor Fusszeile
-				bibliography=totoc,	% Aufführen des Literaturverzeichnisses
+				bibliography=totoc,	% AuffÃ¼hren des Literaturverzeichnisses
 				listof=totoc,
-				parskip=half,		% Zwischen Absätzen entsteht eine halbe Seite Abstand
+				parskip=half,		% Zwischen AbsÃ¤tzen entsteht eine halbe Seite Abstand
 				cleardoublepage=empty,
-				ngerman,			% Übersetzer
-				twoside				% Doppelseitig
-				openany			% unterdrückt leere Seiten vor Kapiteln
-				]{scrbook}
+				ngerman,			% Ãœbersetzer
+				oneside,				% Einseitig
+				openany			% unterdrÃ¼ckt leere Seiten vor Kapiteln
+				]{scrreprt}
 \let\cleardoublepage\clearpage
 % verbesserte Font-Darstellung
 \usepackage{ae}
 %Tabellenunterschriften verkleinern
 \usepackage[font=small]{caption}
-%Häkchen
+%HÃ¤kchen
 \usepackage{amssymb}
 % Zeichenkodierung
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
 \usepackage{wrapfig} % Paket zur Positionierung einbinden
-% Verwendung von Microtype für Zeilenumbrüche etc.
+% Verwendung von Microtype fÃ¼r ZeilenumbrÃ¼che etc.
 \usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
 % neue deutsche Rechtschreibung
 \usepackage[ngerman]{babel}
@@ -37,8 +37,8 @@
 
 % Zeilenabstand
 \usepackage[onehalfspacing]{setspace}
-% Anführungszeichen 
-\usepackage[babel,german=guillemets]{csquotes}
+% AnfÃ¼hrungszeichen 
+\usepackage[babel,german]{csquotes}
 
 %Schriften
 \usepackage[scaled=.90]{helvet}
@@ -52,21 +52,21 @@
 \definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
 \definecolor{LinkColor}{rgb}{0,0,0.2}
 % Literaturverweise mit (Autor Jahr) nach DIN
-\usepackage[square,numbers]{natbib}
-\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
+\usepackage[backend=biber]{biblatex}
+%\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
 
-% für Tabellenlinien
+% fÃ¼r Tabellenlinien
 \usepackage{booktabs}
 \usepackage{hhline}
 \usepackage{tabularx}
 \usepackage{tabulary}
-% für lange Tabellen
+% fÃ¼r lange Tabellen
 \usepackage{longtable}
 \usepackage{filecontents}
 \usepackage{ltxtable}
 \setlength{\tabcolsep}{10pt} % Abstand zwischen Spalten
 \renewcommand{\arraystretch}{1.5} % Zeilenabstand
-% Gliederungstiefe im Inhaltsverzeichnis ändern
+% Gliederungstiefe im Inhaltsverzeichnis Ã¤ndern
 \setcounter{tocdepth}{3}
 \usepackage{multirow}
 \usepackage{bigstrut}
@@ -106,15 +106,15 @@
 %	filecolor=LinkColor,
 %	menucolor=LinkColor,
 %	urlcolor=LinkColor,
-%	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
+%	bookmarksnumbered=true % Ãœberschriftsnummerierung im PDF Inhalt anzeigen.
 %}
 
-%Auflistungsabstände kleiner machen
+%AuflistungsabstÃ¤nde kleiner machen
 \usepackage{paralist}
-% für Glossar
+% fÃ¼r Glossar
 \usepackage[intoc,german]{nomencl}
 \let\abbrev\nomenclature
-\renewcommand{\nomname}{Abkürzungsverzeichnis}
+\renewcommand{\nomname}{AbkÃ¼rzungsverzeichnis}
 \setlength{\nomlabelwidth}{.19\hsize}
 \renewcommand{\nomlabel}[1]{#1 \dotfill}
 \setlength{\nomitemsep}{-\parsep}
@@ -123,10 +123,10 @@
 \usepackage[normalem]{ulem}
 \newcommand{\markup}[1]{\uline{#1}}
 
-% Buchumschlag Rändereinstellung
+% Buchumschlag RÃ¤ndereinstellung
 \usepackage{vmargin}
 
-% SeitengrößŸe
+% SeitengrÃ¶ÃŸÅ¸e
 \setpapersize{A4}
 
 % eine Randnote fuer fehlende Teile 
@@ -142,23 +142,46 @@
 \renewcommand{\textfraction}{.10}
 \setlength{\footnotesep}{4mm}
 \usepackage{float}
-% Überschriften nach irgendwelchen DIN-Normen
+% Ãœberschriften nach irgendwelchen DIN-Normen
 \renewcommand{\bibname}{Quellenverzeichnis}    
 \renewcommand{\contentsname}{Inhalt}    
     
-% Kopfzeilen enthalten Üœberschriften oberster Ebene
+% Kopfzeilen enthalten ÃœÅ“berschriften oberster Ebene
 \pagestyle{headings}
 
-%fullref für Kapitel
+%fullref fÃ¼r Kapitel
 \newcommand{\fullref}[1]{Kapitel~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
 \newcommand{\fullrefapdx}[1]{Anhang~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
 
 %fullref fuer Abschnitte
 \newcommand{\fullrefsct}[1]{Abschnitt \textit{\nameref{#1}} auf Seite \pageref{#1}}
 
-% Fußoten seitenweise nummerieren
+% FuÃŸoten seitenweise nummerieren
 \usepackage{footnpag}
 \usepackage{enumitem}
 \usepackage{epigraph}
 \usepackage{quotchap}
 \usepackage{bookmark}	
+
+\usepackage{listings}
+
+% Listings formatieren
+\lstset{%
+basicstyle=\ttfamily,
+breaklines=true,
+keepspaces
+}
+
+\lstset{literate=%
+{Ã–}{{\"O}}1
+{Ã„}{{\"A}}1
+{Ãœ}{{\"U}}1
+{ÃŸ}{{\ss}}2
+{Ã¼}{{\"u}}1
+{Ã¤}{{\"a}}1
+{Ã¶}{{\"o}}1
+}
+
+\newcommand{\code}[1]{\lstinline!#1!}
+
+\addbibresource{res/latexlit.bib}

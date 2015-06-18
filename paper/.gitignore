@@ -1,4 +1,6 @@
 *.aux
+*.xml
+*.bcf
 *.bbl
 *.bbg
 *.blg
