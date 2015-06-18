@@ -1,6 +1,6 @@
 \chapter{OpenStack}
 
-Kurzabriss des Kapitels
+In diesem Kapitel wird eine Einführung in das Softwareprojekt OpenStack gegeben, das für die Umsetzung der HTWG Lab Cloud eine große Relevanz darstellt. Anschließend findet eine kurze Beschreibung der einzelnen OpenStack-Komponenten und deren Funktion statt.
 
 \section{Kurzbeschreibung}OpenStack ist eine Open-Source-Software zur Erstellung und Verwaltung privater, öffentlicher und hybrider Cloud-Umgebungen. Nach der Definition des National Institute of Standards and Technology (NIST) handelt es sich bei OpenStack um eine Infrastructure-as-a-Service- (IaaS-) Cloud. Sowohl über RESTful APIs als auch per Weboberfläche können große Pools von virtuellen Rechen-, Speicher- und Netzwerkressourcen verwaltet werden. Durch die offene Architektur und den modularen Aufbau bietet OpenStack eine enorm hohe Flexibilität und Skalierbarkeit. Entwickelt wird OpenStack in der Programmiersprache Python und ist unter der Apache-2.0-Lizenz lizensiert \cite[vgl.][S. 7ff]{Beitter}. 
 
@@ -10,13 +10,13 @@ Mittlerweile wird die Entwicklung und Verteilung von OpenStack von einer Organis
 
 \section{Komponenten}Das Projekt, das seit dem ersten Release im Jahr 2010 eine stetige Fortentwickung verfolgt, liegt inzwischen in der Version 2015.1 vor. Mit jedem neuem Release sind weitere Komponenten hinzugekommen, die eigenständige Projekte darstellen und verschiedene Aufgaben erfüllen. Zu unterscheiden sind in diesem Zusammenhang OpenStack-Projekte, die einer kontinuierlichen Weiterentwicklung seitens der Community unterliegen, und weiteren für den Betrieb einer Cloud-Umgebung notwendigen Projekten, wie beispielsweise der Datenbank MySQL und dem Messaging Service RabbitMQ. Die wichtigsten Komponenten sind nachfolgend aufgeführt \cite[vgl.][S. 20-28]{Beitter}.
 \begin{description}
-\item[Keystone]
-\item[Glance]
-\item[Nova]
-\item[Cinder]
-\item[Swift]
-\item[Neutron]
+\item[Keystone] gilt als Kernkomponente von OpenStack. Der Dienst ist für die Authentifizierung der Benutzer und das Rechtemanagement zuständig. Vor dem Ausführen einer Aktion ist eine Anmeldung seitens des Benutzers bei Keystone notwendig. Zur Autorisierung verwendet Keystone einen zeitlich begrenzten Token.
+\item[Glance] bezeichnet einen Dienst, der virtuelle Systemabbilder registriert, verwaltet und Benutzern der OpenStack-Umgebung verfügbar macht. Auf diese Abbilder kann anschließend der Compute Service Nova zum Starten neuer Instanzen zugreifen. 
+\item[Nova] ist der zentrale Compute Service, der sämtliche Dienste beinhaltet, die mithilfe eines der beiden unterstützten Hypervisoren KVM und Xen die virtuellen Maschinen bereitstellen und verwalten.
+\item[Cinder] stellt virtuellen Maschinen blockbasierten Speicher in Form von Volumes zur dauerhaften Speicherung der Daten zur Verfügung. 
+\item[Swift] ist ein verteiltes, skalierbares und objektbasiertes Speichersystem, das vorallem zur redundaten Speicherung der Images und Snapshots der Cloud-Instanzen genutzt wird.
+\item[Neutron] fungiert als Netzwerkdienst für die OpenStack-Umgebung. Er übernimmt anhand der IP-Konfiguration und Erstellung der Routing-Regeln die interne sowie externe Kommunikation der beteiligten Instanzen.
 \item[Horizon] ist für die Verwaltung der Instanzen, der Netzwerke oder auch der Projekte und seiner Benutzer zuständig. Die Administration erfolgt über ein Webinterface, das zudem aufgrund der modularen Struktur individuell erweitert und angepasst werden kann. 
-\item[Ceilometer] dient als Schnittstelle zum Erfassen und Sammeln von Daten über die Ressourcennutzung der einzelnen Benutzer, um eine spätere Auswertungen und Analysen zu ermöglichen.
-\item[Heat] ermöglicht das Zusammenfassen verschiedener Services zu einzelnen Prozessen. Dadurch können gesamte Infrastrukturen, beispielsweise bestehend aus Cloud-Instanzen, Benutzern und Netzwerken, anhand von Konfigurationsvorlagen, den sogenannten Heat Orchestration Templates (HOT), automatisiert aufgebaut werden.
+\item[Ceilometer] dient als Schnittstelle zum Erfassen und Sammeln von Daten über die Ressourcennutzung der einzelnen Benutzer, um spätere Auswertungen und Analysen zu ermöglichen.
+\item[Heat] ermöglicht das Zusammenfassen verschiedener Services zu einzelnen Prozessen. Dadurch können Infrastrukturen, beispielsweise bestehend aus Cloud-Instanzen, Benutzern und Netzwerken, anhand von Konfigurationsvorlagen automatisiert aufgebaut werden.
 \end{description}
