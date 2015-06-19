@@ -154,8 +154,20 @@ keepspaces
 
 % Titel, Autoren, Betreuer, Studiengang
 \newcommand{\thema}{HTWG Lab Cloud mit OpenStack}
-\newcommand{\zusammenfassung}{Hier kommt eine kurze Zusammenfassung der Arbeit}
 \newcommand{\betreuer}{Prof. Dr. Hanno Langweg}
 \newcommand{\autor}{Dennis Parlak, Simon Kessler, Tobias Keh, Marco Grupe}
 \newcommand{\studiengang}{MSI Informatik}
+% Abstract
+\newcommand{\zusammenfassung}{%
+Im Rahmen der Vorlesung \enquote{Cloud Application Development} bei Herrn \betreuer{}  wurde die Cloud-basierte OpenStack Infrastruktur \emph{HTWG Lab Cloud} zur Unterstützung der HTWG-Labore entworfen und entwickelt. 
+Dies beinhaltet die Konzeption des Systems, den Workflow einer Übungsstunde und die Entwicklung mit DevStack, einer OpenStack Entwicklungsumgebung. 
+Die HTWG Lab Cloud bietet die Möglichkeit interaktive Übungsstunden in den Laboren effektiver zu nutzen.
+Durch die Bereitstellung von angepassten virtuellen Rechnern, wird keine Zeit für die oftmals unnötig komplizierte Installation und Konfiguration von Tools verschwendet.
+Durch Virtualisierung der einzelnen Laborrechner, können mit einem Klick alle Rechner mit einem vom Professor angepassten Betriebssystem-Image hochgefahren werden.
+Durch die enge Anbindung an Moodle, kann so ein kompletter Moodle-Kurs mit entsprechenden Laborrechnern versorgt werden.
+Die Studenten erhalten daraufhin eine E-Mail mit der URL, um sich per VNC mit den Rechnern zu verbinden. 
+Über LDAP wird eine Single-Sign-On Lösung angeboten, sodass die gewohnten HTWG Zugangsdaten für die Rechner als auch die Administrator-Oberfläche gelten.
+Des Weiteren stehen im entwickelten Betriebssystem-Image das HTWG home-Laufwerk und ein \enquote{lab-drive} zur dauerhaften Speicherung von Daten zur Verfügung.
+Eine angepasstes Web-Dashboard bietet den Professoren einen einfachen und unkomplizierten Zugang zur HTWG Lab Cloud.
+}
 
