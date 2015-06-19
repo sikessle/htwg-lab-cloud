@@ -15,19 +15,18 @@
 				parskip=half,		% Zwischen Absätzen entsteht eine halbe Seite Abstand
 				cleardoublepage=empty,
 				ngerman,			% Übersetzer
-				twoside				% Doppelseitig
+				oneside,				% Einseitig
 				openany			% unterdrückt leere Seiten vor Kapiteln
-				]{scrbook}
+				]{scrreprt}
 \let\cleardoublepage\clearpage
 % verbesserte Font-Darstellung
 \usepackage{ae}
 %Tabellenunterschriften verkleinern
 \usepackage[font=small]{caption}
-%Häckchen
+%Häkchen
 \usepackage{amssymb}
 % Zeichenkodierung
 \usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
 \usepackage{textcomp}
 \usepackage{wrapfig} % Paket zur Positionierung einbinden
 % Verwendung von Microtype für Zeilenumbrüche etc.
@@ -39,7 +38,7 @@
 % Zeilenabstand
 \usepackage[onehalfspacing]{setspace}
 % Anführungszeichen 
-\usepackage[babel,german=guillemets]{csquotes}
+\usepackage[babel,german]{csquotes}
 
 %Schriften
 \usepackage[scaled=.90]{helvet}
@@ -53,10 +52,10 @@
 \definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
 \definecolor{LinkColor}{rgb}{0,0,0.2}
 % Literaturverweise mit (Autor Jahr) nach DIN
-\usepackage[square,numbers]{natbib}
-\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
+\usepackage[backend=biber]{biblatex}
+%\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
 
-%für Tabellenlinien
+% für Tabellenlinien
 \usepackage{booktabs}
 \usepackage{hhline}
 \usepackage{tabularx}
@@ -110,7 +109,7 @@
 %	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
 %}
 
-%\Auflistungsabstände kleiner machen
+%Auflistungsabstände kleiner machen
 \usepackage{paralist}
 % für Glossar
 \usepackage[intoc,german]{nomencl}
@@ -127,7 +126,7 @@
 % Buchumschlag Rändereinstellung
 \usepackage{vmargin}
 
-% Seitengröße
+% SeitengrößŸe
 \setpapersize{A4}
 
 % eine Randnote fuer fehlende Teile 
@@ -147,7 +146,7 @@
 \renewcommand{\bibname}{Quellenverzeichnis}    
 \renewcommand{\contentsname}{Inhalt}    
     
-% Kopfzeilen enthalten Überschriften oberster Ebene
+% Kopfzeilen enthalten Üœberschriften oberster Ebene
 \pagestyle{headings}
 
 %fullref für Kapitel
@@ -157,9 +156,32 @@
 %fullref fuer Abschnitte
 \newcommand{\fullrefsct}[1]{Abschnitt \textit{\nameref{#1}} auf Seite \pageref{#1}}
 
-% Fußnoten seitenweise nummerieren
+% Fußoten seitenweise nummerieren
 \usepackage{footnpag}
 \usepackage{enumitem}
 \usepackage{epigraph}
 \usepackage{quotchap}
 \usepackage{bookmark}	
+
+\usepackage{listings}
+
+% Listings formatieren
+\lstset{%
+basicstyle=\ttfamily,
+breaklines=true,
+keepspaces
+}
+
+\lstset{literate=%
+{Ö}{{\"O}}1
+{Ä}{{\"A}}1
+{Ü}{{\"U}}1
+{ß}{{\ss}}2
+{ü}{{\"u}}1
+{ä}{{\"a}}1
+{ö}{{\"o}}1
+}
+
+\newcommand{\code}[1]{\lstinline!#1!}
+
+\addbibresource{res/latexlit.bib}

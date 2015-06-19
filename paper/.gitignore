@@ -1,5 +1,11 @@
 *.aux
+*.xml
+*.bcf
+*.bbl
+*.bbg
+*.blg
 *.log
+*.nls
 *.bak
 *.lof
 *.lot
@@ -9,4 +15,5 @@ htwg-lab-cloud.pdf
 *.toc
 *.tks
 *.nlo
+*.nls
 
