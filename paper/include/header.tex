@@ -3,47 +3,52 @@
 % Latex Einstellungen
 %
 %
-\documentclass[a4paper,			% Papiersorte
-				BCOR10mm,
-				11pt,				% Schriftgroesse
-				headsepline,		% Linie nach Kopfzeile
+
+\documentclass[a4paper,
+				11pt,
+				headsepline,				% Linie nach Kopfzeile
 				headinclude,
 				numbers=noenddot,
-				%footsepline,		% Linie vor Fusszeile
 				bibliography=totoc,	% Aufführen des Literaturverzeichnisses
 				listof=totoc,
-				parskip=half,		% Zwischen Absätzen entsteht eine halbe Seite Abstand
+				parskip=half,				% Zwischen Absätzen entsteht eine halber Abstand
 				cleardoublepage=empty,
-				ngerman,			% Übersetzer
-				oneside,				% Einseitig
-				openany			% unterdrückt leere Seiten vor Kapiteln
+				ngerman,				
+				oneside,						% Einseitig (für den nicht-Druck)
+				openany					% unterdrückt leere Seiten vor Kapiteln
 				]{scrreprt}
-\let\cleardoublepage\clearpage
+
 % verbesserte Font-Darstellung
 \usepackage{ae}
 %Tabellenunterschriften verkleinern
 \usepackage[font=small]{caption}
 %Häkchen
 \usepackage{amssymb}
+\usepackage{amsmath}
 % Zeichenkodierung
 \usepackage[utf8]{inputenc}
 \usepackage{textcomp}
-\usepackage{wrapfig} % Paket zur Positionierung einbinden
+% Positionierung von Figuren
+\usepackage{wrapfig} 
 % Verwendung von Microtype für Zeilenumbrüche etc.
-\usepackage[activate={true,nocompatibility},final,tracking=true,kerning=true,spacing=true,factor=1100,stretch=10,shrink=10]{microtype}
+\usepackage[activate={true,nocompatibility},
+				final,
+				tracking=true,
+				kerning=true,
+				spacing=true,
+				factor=1100,
+				stretch=10,
+				shrink=10]{microtype}
 % neue deutsche Rechtschreibung
 \usepackage[ngerman]{babel}
-\usepackage{amsmath}
-
 % Zeilenabstand
 \usepackage[onehalfspacing]{setspace}
 % Anführungszeichen 
 \usepackage[babel,german]{csquotes}
-
-%Schriften
+% Schriften
 \usepackage[scaled=.90]{helvet}
 \setkomafont{descriptionlabel}{\normalfont\bfseries}
-%kleinerer abstand bei listen
+% kleinerer abstand bei listen
 \usepackage{mdwlist}
 % Farben
 \usepackage{color}
@@ -51,10 +56,6 @@
 \definecolor{lightgrey}{gray}{0.95}
 \definecolor{dunkelgrau}{rgb}{0.8,0.8,0.8}
 \definecolor{LinkColor}{rgb}{0,0,0.2}
-% Literaturverweise mit (Autor Jahr) nach DIN
-\usepackage[backend=biber]{biblatex}
-%\renewcommand{\cite}{\citep} % citep zu cite umgebogen.
-
 % für Tabellenlinien
 \usepackage{booktabs}
 \usepackage{hhline}
@@ -64,8 +65,10 @@
 \usepackage{longtable}
 \usepackage{filecontents}
 \usepackage{ltxtable}
-\setlength{\tabcolsep}{10pt} % Abstand zwischen Spalten
-\renewcommand{\arraystretch}{1.5} % Zeilenabstand
+% Abstand zwischen Spalten
+\setlength{\tabcolsep}{10pt} 
+% Zeilenabstand
+\renewcommand{\arraystretch}{1.5} 
 % Gliederungstiefe im Inhaltsverzeichnis ändern
 \setcounter{tocdepth}{3}
 \usepackage{multirow}
@@ -99,45 +102,10 @@
             pdflang=de, % Sprache des Dokuments.
             pdfkeywords={OpenStack, HTWG}, ]{hyperref}                 
 
-%\hypersetup{%
-%	colorlinks=false, % Aktivieren von farbigen Links im Dokument
-%	linkcolor=LinkColor, % Farbe festlegen
-%	citecolor=LinkColor,
-%	filecolor=LinkColor,
-%	menucolor=LinkColor,
-%	urlcolor=LinkColor,
-%	bookmarksnumbered=true % Überschriftsnummerierung im PDF Inhalt anzeigen.
-%}
-
 %Auflistungsabstände kleiner machen
 \usepackage{paralist}
-% für Glossar
-\usepackage[intoc,german]{nomencl}
-\let\abbrev\nomenclature
-\renewcommand{\nomname}{Abkürzungsverzeichnis}
-\setlength{\nomlabelwidth}{.19\hsize}
-\renewcommand{\nomlabel}[1]{#1 \dotfill}
-\setlength{\nomitemsep}{-\parsep}
-\makenomenclature
-
-\usepackage[normalem]{ulem}
-\newcommand{\markup}[1]{\uline{#1}}
-
-% Buchumschlag Rändereinstellung
-\usepackage{vmargin}
-
-% SeitengrößŸe
-\setpapersize{A4}
-
-% eine Randnote fuer fehlende Teile 
-\newcommand{\fehlt}[1]{(\marginpar[\hfill!$\longrightarrow$]{$\longleftarrow$!}Hier fehlt \emph{#1})}
-
-% Absatzabstand etwas groesser
-\setlength{\parskip}{1.5ex plus0.5ex minus0.5ex}
-
 % Abstand zweier Listenelemente kleiner
 \setlength{\itemsep}{0ex plus0.2ex}
-
 \renewcommand{\floatpagefraction}{.8}
 \renewcommand{\textfraction}{.10}
 \setlength{\footnotesep}{4mm}
@@ -145,33 +113,28 @@
 % Überschriften nach irgendwelchen DIN-Normen
 \renewcommand{\bibname}{Quellenverzeichnis}    
 \renewcommand{\contentsname}{Inhalt}    
-    
-% Kopfzeilen enthalten Üœberschriften oberster Ebene
+% Kopfzeilen enthalten Üerschriften oberster Ebene
 \pagestyle{headings}
-
-%fullref für Kapitel
+% fullref für Kapitel
 \newcommand{\fullref}[1]{Kapitel~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
 \newcommand{\fullrefapdx}[1]{Anhang~\ref{#1} \textit{(\nameref{#1})} auf Seite \pageref{#1}}
-
-%fullref fuer Abschnitte
+% fullref fuer Abschnitte
 \newcommand{\fullrefsct}[1]{Abschnitt \textit{\nameref{#1}} auf Seite \pageref{#1}}
-
 % Fußoten seitenweise nummerieren
 \usepackage{footnpag}
 \usepackage{enumitem}
 \usepackage{epigraph}
 \usepackage{quotchap}
 \usepackage{bookmark}	
-
+% Quellcode Listings
 \usepackage{listings}
-
 % Listings formatieren
 \lstset{%
 basicstyle=\ttfamily,
 breaklines=true,
 keepspaces
 }
-
+% Umlaute in Listings erlauben
 \lstset{literate=%
 {Ö}{{\"O}}1
 {Ä}{{\"A}}1
@@ -181,17 +144,18 @@ keepspaces
 {ä}{{\"a}}1
 {ö}{{\"o}}1
 }
-
+% \code{...} für inline Code
 \newcommand{\code}[1]{\lstinline!#1!}
-
+% Literaturverzeichnis
+\usepackage[backend=biber]{biblatex}
+\bookmarksetup{startatroot}
 \addbibresource{include/latexlit.bib}
 
 
+% Titel, Autoren, Betreuer, Studiengang
 \newcommand{\thema}{HTWG Lab Cloud mit OpenStack}
 \newcommand{\zusammenfassung}{Hier kommt eine kurze Zusammenfassung der Arbeit}
 \newcommand{\betreuer}{Prof. Dr. Hanno Langweg}
 \newcommand{\autor}{Dennis Parlak, Simon Kessler, Tobias Keh, Marco Grupe}
 \newcommand{\studiengang}{MSI Informatik}
-\raggedbottom 
 
-\bookmarksetup{startatroot}
