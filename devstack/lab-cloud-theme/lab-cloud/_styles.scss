@@ -1,0 +1,35 @@
+#splash .login {
+	background-image: url(/static/themes/lab-cloud/logo-login.png);
+	background-position: center 0;
+}
+
+.topbar {
+	background: $brand-primary;
+	h1.brand a {
+    		background-image: url(/static/themes/lab-cloud/logo-banner.png);
+  	}
+}
+
+.nav_accordion dt li a.active, 
+.nav_accordion dd li a.active {
+	border-left: 4px solid $brand-primary;
+}
+
+.nav_accordion dt li a.active, 
+.nav_accordion dt li a:hover, 
+.nav_accordion dd li a.active, 
+.nav_accordion dd li a:hover {
+	color: $brand-primary;
+}
+
+.topbar .switcher_bar .btn.btn-topnav {
+	color: #fff;
+	background-color: #039de0;
+	border-color: #039de0; 
+}
+
+.topbar .switcher_bar .btn.btn-topnav:hover, .topbar .switcher_bar .btn.btn-topnav:focus, .topbar .switcher_bar .btn.btn-topnav:active, .topbar .switcher_bar .btn.btn-topnav.active, .open > .topbar .switcher_bar .btn.btn-topnav.dropdown-toggle {
+	color: #fff;
+	background-color: $brand-primary;
+	border-color: $brand-primary; 
+}
