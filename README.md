@@ -1,4 +1,4 @@
-![HTWG Lab Cloud](design/logo.png?raw=true)
+![HTWG Lab Cloud](design/logo-large.png?raw=true)
 
 OpenStack based cloud platform for the HTWG Laboraties.
 
