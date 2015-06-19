@@ -1,4 +1,5 @@
 *.aux
+*.fot
 *.xml
 *.bcf
 *.bbl
