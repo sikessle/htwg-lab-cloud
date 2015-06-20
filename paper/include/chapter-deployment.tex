@@ -7,11 +7,16 @@ Durch den gleichen Ansatz, fügt sich der HTWG Lab Cloud Deployment Prozess sehr
 
 \begin{enumerate}
 \item Installation von Ubuntu 14.04 LTS als Host für die HTWG Lab Cloud.
-\item Konfiguration der virtuellen Maschine im Hypervisor. Vergabe von zwei Netzwerkadaptern: NAT und Host-Only. Der Host-only Adapter sollte folgende Einstellungen haben: Kein DHCP, IP Adresse: 172.16.0.254, Netzmaske: 255.255.0.0.
+\item Konfiguration der virtuellen Maschine im Hypervisor.
 \item Klonen des HTWG Lab Cloud Git Repositories von GitHub \cite{git-source}.
 \item Ausführen des \code{deploy.sh} Skriptes im obersten Verzeichnis (als normaler Benutzer).
 \item Das deploy.sh Skript führt rekursiv alle weiteren Skripte in den Unterordnern der einzelnen Erweiterungen aus.
 \item Daraufhin werden alle nötigen Anpassungen am Hostbetriebssystem durchgeführt.  Des Weiteren werden alle OpenStack Komponenten heruntergeladen und installiert. Schlussendlich werden die Erweiterungen in OpenStack installiert. Als Installationsort wird \code{/opt/stack} und \code{/opt/stack/htwg} verwendet.
-\item Das Basis-Image steht im home-Verzeichnis des Hosts zur Verfügung.
+\item Das Basis-Image für die Instanzen steht im home-Verzeichnis des Hosts zur Verfügung.
 \item Das Dashboard steht unter \code{http://localhost} zur Verfügung. Als Zugangsdaten werden die gewohnten HTWG Zugangsdaten der Professoren verwendet.
 \end{enumerate}
+
+Zudem wurde mittels Vagrant \cite{Vagrant} eine schnelle Möglichkeit geschaffen mit wenigen Befehlen die HTWG Lab Cloud in einer virtuellen Maschine (VirtualBox) zu starten. 
+Dazu reicht es aus, im Projektverzeichnis den Befehl \code{vagrant up} auszuführen.
+Anschließend steht das Dashboard unter der angezeigten IP-Adresse zur Verfügung.
+
