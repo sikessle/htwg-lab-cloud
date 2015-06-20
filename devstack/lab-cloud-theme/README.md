@@ -4,7 +4,9 @@
 
 - OpenStack `kilo` Release
 
-## Installation
+## Deployment
+
+Horizon must be installed. Then:
 
 - Copy `local_settings.py` to `horizon/openstack_dashboard/local/`
 - Copy `lab-cloud` to `horizon/openstack_dashboard/static/themes/`

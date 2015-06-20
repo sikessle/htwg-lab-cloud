@@ -60,8 +60,8 @@ run `image-virtualbox-to-openstack.sh <FULL-IMAGE-PATH-TO-VDI-SNAPSHOT>`
 
 The following files have been edited:
 
-- /etc/default/grub and then run update-grub to enable serial console on OpenStack
-- /etc/network/interfaces
+- /etc/default/grub added console=tty,ttyS0 and then run update-grub to enable serial console on OpenStack
+- /etc/network/interfaces auto config 
 - openssh-server config files to enable password login
 
 
