@@ -2,4 +2,5 @@
 instance/image/ubuntu-14.04-openstack-raw.img
 instance/image/ubuntu-14.04-openstack-qcow2.img
 *.*~
+.vagrant
 

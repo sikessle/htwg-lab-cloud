@@ -20,5 +20,8 @@ Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (whic
 - Vagrant
 - VirtualBox
 
-Run `vagrant up` in this folder
-`vagrant ssh` to ssh in machine
+## Running
+- Run `vagrant up` in this folder to bring the machine up
+- `vagrant ssh` to ssh in machine
+- `vagrant destroy` to clean up everything and delete all traces
+
