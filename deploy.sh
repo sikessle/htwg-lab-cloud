@@ -2,8 +2,8 @@
 
 # Deploys the HTWG Lab Cloud
 
-if [ "$(whoami)" != "root" ]; then
-	echo "root/sudo required for installing HTWG Lab CLoud. Stopping."
+if [ "$(whoami)" == "root" ]; then
+	echo "Required to run as normal user. Stopping."
 	exit 1
 fi
 

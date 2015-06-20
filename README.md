@@ -19,4 +19,4 @@ To bring the networking up and running after switching between different network
 
 # Deployment
 
-Run `deploy.sh` in this folder with sudo/root.
+Run `deploy.sh` in this folder as normal user.
