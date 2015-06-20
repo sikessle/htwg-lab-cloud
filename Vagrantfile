@@ -7,8 +7,9 @@ Vagrant.configure(2) do |config|
     config.vm.hostname = "htwglabcloud"
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
-    # VM will have eth0: NAT, eth1: host-only
+    # VM will have eth0: nat, eth1: host-only, eth2: bridged dhcp
     config.vm.network :private_network, ip: "172.16.100.10"
+    config.vm.network :public_network
 
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "4096"]
@@ -32,6 +33,6 @@ Vagrant.configure(2) do |config|
         echo "***************************"
     SHELL
 
-    config.vm.provision "shell", inline: $script, privileged: false
+    #config.vm.provision "shell", inline: $script, privileged: false
 
 end
