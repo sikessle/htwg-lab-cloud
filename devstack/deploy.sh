@@ -2,11 +2,6 @@
 
 # Deploys devstack
 
-# setup network adapters
-cd network
-./deploy.sh
-cd ..
-
 # install devstack
 git clone https://github.com/openstack-dev/devstack.git -b stable/kilo ~/devstack/
 cp "local.conf" ~/devstack/
