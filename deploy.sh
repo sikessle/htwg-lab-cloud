@@ -7,9 +7,6 @@ if [ "$(whoami)" == "root" ]; then
 	exit 1
 fi
 
-sudo apt-get install -y git
-sudo apt-get install -y make
-
 cd devstack
 ./deploy.sh || echo "failed. Stopping."
 cd ..
