@@ -10,14 +10,13 @@ fi
 sudo apt-get install -y git
 sudo apt-get install -y make
 
-(
 cd devstack
-./deploy.sh
-) || (echo "failed. Stopping." && exit 1)
-(
+./deploy.sh || echo "failed. Stopping."
+cd ..
+
 cd instance
-./deploy.sh
-) || (echo "failed. Stopping." && exit 1)
+./deploy.sh || echo "failed. Stopping."
+cd ..
 
 echo "**********************************"
 echo "HTWG Lab Cloud installed."

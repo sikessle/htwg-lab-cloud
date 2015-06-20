@@ -2,7 +2,9 @@
 
 # Deploys this feature
 
-cp local_settings.py /opt/stack/horizon/openstack_dashboard/local/
+echo "CUSTOM_THEME_PATH = 'static/themes/lab-cloud'" >> /opt/stack/horizon/openstack_dashboard/local/local_settings.py
+echo "SITE_BRANDING = 'HTWG Lab Cloud'" >> /opt/stack/horizon/openstack_dashboard/local/local_settings.py
+
 cp -r lab-cloud /opt/stack/horizon/openstack_dashboard/static/themes/
 python /opt/stack/horizon/manage.py collectstatic --noinput --clear
 python /opt/stack/horizon/manage.py compress --force

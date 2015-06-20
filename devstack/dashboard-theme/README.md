@@ -8,7 +8,7 @@
 
 Horizon must be installed. Then:
 
-- Copy `local_settings.py` to `horizon/openstack_dashboard/local/`
+- Add `CUSTOM_THEME_PATH = 'static/themes/lab-cloud'` and `SITE_BRANDING = 'HTWG Lab Cloud'` to `horizon/openstack_dashboard/local/local_settings.py`
 - Copy `lab-cloud` to `horizon/openstack_dashboard/static/themes/`
 - Run in `horizon/` folder `python manage.py collectstatic --noinput --clear`
 - Run in `horizon/` folder `python manage.py compress --force`
