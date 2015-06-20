@@ -12,7 +12,10 @@ Vagrant.configure(2) do |config|
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "4096"]
         vb.name = "htwg-lab-cloud"
-        vb.gui = true
+        # openstack guests to talk to each other
+        vb.customize ["modifyvm", :id, "--nicpromisc1", "allow-all"]
+        vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+        #vb.gui = true
     end
 
     $script = <<-SHELL
