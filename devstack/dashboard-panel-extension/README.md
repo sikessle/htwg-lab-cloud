@@ -1,4 +1,6 @@
-# Extension Installation
+# Deployment
+
+Horizon must be installed.
 
 First copy the folder named "prof" to "/opt/stack/horizon/openstack_dashboard/dashboards".
 
