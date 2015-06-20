@@ -7,6 +7,7 @@ Vagrant.configure(2) do |config|
     config.vm.hostname = "htwglabcloud"
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
+    # VM will have eth0: NAT, eth1: host-only
     config.vm.network :private_network, ip: "172.16.100.10"
 
     config.vm.provider :virtualbox do |vb|
