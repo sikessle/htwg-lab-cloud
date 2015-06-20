@@ -9,18 +9,10 @@ OpenStack based cloud platform for the HTWG Laboraties.
 - Merge if feature works flawless to master
 - GitHub Issues to manage Features, Bugs, etc.
 
-# Project Goals
-
-see Issues->Milestones
-
-# DevStack
-
-To bring the networking up and running after switching between different networks (HTWG, home, etc.) run the following in the ubuntu host: `sudo ifdown eth0 && sudo ifup eth0` 
-
-# Deployment
+# Deployment on Ubuntu 14.04
 
 Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (which will be the HTWG Cloud Lab Host).
 
-# Deployment incl. VirtualBox
+# Deployment with VirtualBox
 
 run `vagrant up` 
