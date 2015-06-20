@@ -4,16 +4,15 @@
 Vagrant.configure(2) do |config|
 
     config.vm.box = "ubuntu/trusty64"
-
     config.vm.hostname = "htwglabcloud"
+    config.vm.synced_folder ".", "/vagrant", disabled: true
 
     config.vm.network :private_network, ip: "172.16.100.10"
-
-    config.vm.synced_folder ".", "/vagrant", disabled: true
 
     config.vm.provider :virtualbox do |vb|
         vb.customize ["modifyvm", :id, "--memory", "4096"]
         vb.name = "htwg-lab-cloud"
+        vb.gui = true
     end
 
     $script = <<-SHELL
