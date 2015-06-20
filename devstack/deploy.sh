@@ -8,6 +8,10 @@ cp "local.conf" ~/devstack/
 ~/devstack/stack.sh
 sed -i "s/OFFLINE=False/OFFLINE=True/g" ~/devstack/local.conf 
 
+cd network
+./deploy.sh
+cd ..
+
 # install dashboard customizations
 cd dashboard-theme
 ./deploy.sh

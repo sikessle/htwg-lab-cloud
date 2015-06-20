@@ -21,3 +21,4 @@ Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (whic
 - VirtualBox
 
 Run `vagrant up` in this folder
+`vagrant ssh` to ssh in machine
