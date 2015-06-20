@@ -15,4 +15,9 @@ Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (whic
 
 # Deployment with VirtualBox
 
-run `vagrant up` 
+## Requirements
+
+- Vagrant
+- VirtualBox
+
+Run `vagrant up` in this folder
