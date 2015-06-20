@@ -15,7 +15,7 @@ cd devstack
 cd ..
 
 cd instance
-./deploy.sh || echo "failed. Stopping."
+./deploy.sh || echo "failed. Stopping."
 cd ..
 
 echo "**********************************"
