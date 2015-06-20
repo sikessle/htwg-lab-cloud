@@ -3,7 +3,7 @@
 # Deploys devstack
 
 # setup network adapters
-cd nova-network
+cd network
 ./deploy.sh
 cd ..
 
