@@ -33,6 +33,6 @@ Vagrant.configure(2) do |config|
         echo "***************************"
     SHELL
 
-    #config.vm.provision "shell", inline: $script, privileged: false
+    config.vm.provision "shell", inline: $script, privileged: false
 
 end
