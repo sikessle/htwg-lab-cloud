@@ -19,6 +19,6 @@ Vagrant.configure(2) do |config|
         ./deploy.sh
     SHELL
 
-    config.vm.provision "file", inline: $script, privileged: false
+    config.vm.provision "shell", inline: $script, privileged: false
 
 end
