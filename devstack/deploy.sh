@@ -12,13 +12,16 @@ cd network
 ./deploy.sh
 cd ..
 
+# wait a few seconds because of possible apache restarts
+sleep 10
+
 # install dashboard customizations
 cd dashboard-theme
 ./deploy.sh
 cd ..
 
 # wait a few seconds because of possible apache restarts
-sleep 3
+sleep 10
 
 cd dashboard-panel-extension
 ./deploy.sh
