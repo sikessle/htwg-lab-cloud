@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
     config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = "htwglabcloud"
     config.vm.synced_folder ".", "/vagrant", disabled: true
-
+    
     # VM will have 
     #
     # eth0: nat                 host access to internet (default from vagrant)
@@ -31,7 +31,7 @@ Vagrant.configure(2) do |config|
         cd ~
         pwd
         sudo apt-get install -y git
-        git clone https://github.com/sikessle/htwg-lab-cloud.git 
+        git clone https://github.com/sikessle/htwg-lab-cloud.git
         cd htwg-lab-cloud
         ./deploy.sh
         echo "****************************************************************"
@@ -40,6 +40,6 @@ Vagrant.configure(2) do |config|
         echo "****************************************************************"
     SHELL
 
-    config.vm.provision "shell", inline: $script, privileged: false
+    #config.vm.provision "shell", inline: $script, privileged: false
 
 end
