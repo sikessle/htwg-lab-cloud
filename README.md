@@ -30,8 +30,8 @@ Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (whic
 
 Configuration:
 
-- Vagrantfile adjust eth2 IP
-- devstack/local.conf adjust FLOATING_RANGE 
+- Vagrantfile adjust eth2 IP, so that it is an IP in your local real network.
+- devstack/local.conf adjust FLOATING_RANGE, subnet of eth2 (mostly it is sufficient to change the ip to the ip of eth2)
 - devstack/local.conf adjust LAB_CLOUD_PUBLIC_IP (should match eth2 of Vagrantfile)
 
 Running: 
