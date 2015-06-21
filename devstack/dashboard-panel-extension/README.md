@@ -18,7 +18,7 @@ In order to make the extension show up, you need to create a file called "_50_pr
 	]
 
 Now stop and restart the web server:
-    sudo service apache2 stop
+	sudo service apache2 stop
 	sudo service apache2 restart
 
 # Using the extension
@@ -33,12 +33,12 @@ If you start instances for a course, the HTWG Cloud will send an email to each m
 of that course.
 This email contain the link to access the virtual machine.
 Emails will be send to the console by default.
-To configure the email host, go to
-/opt/stack/horizon/openstack_dashboard/local/local_settings.py
+To configure the email host, go to /opt/stack/horizon/openstack_dashboard/local/local_settings.py
 
 We can configure an outgoing email host with SMTP or redirect emails to a file (for test purpose).
 To find the configuration section, search for EMAIL_BACKEND in local_settings.py
 Note : local_settings.py will be overwritten if you execute stack.sh
+
 If you like to use another EMAIL_BACKEND do these steps
 - ./stack.sh
 - sudo service apache2 stop
@@ -46,8 +46,8 @@ If you like to use another EMAIL_BACKEND do these steps
 - sudo service apache2 restart
 
 To write each send mail to a file use for example this configuration
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = '/tmp/app-messages' 
+	EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+	EMAIL_FILE_PATH = '/tmp/app-messages' 
 Each message will now be stored in a file which is located in the above folder.
 
 Fore more information about possible configurations [this](https://docs.djangoproject.com/en/1.8/topics/email/) link might be helpful.
