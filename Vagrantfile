@@ -27,10 +27,10 @@ Vagrant.configure(2) do |config|
         git clone https://github.com/sikessle/htwg-lab-cloud.git 
         cd htwg-lab-cloud
         ./deploy.sh
-        echo "***************************"
+        echo "****************************************************************"
         ip=$(ifconfig | grep eth1 -A 1 | grep "inet addr:[0-9|\.]*" -o | grep "[0-9|\.]*" -o)
         echo "HTWG Lab Cloud Dashboard running at: http://$ip"
-        echo "***************************"
+        echo "****************************************************************"
     SHELL
 
     config.vm.provision "shell", inline: $script, privileged: false
