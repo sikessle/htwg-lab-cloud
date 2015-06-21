@@ -11,6 +11,12 @@ OpenStack based cloud platform for the HTWG Laboraties.
 
 # Deployment on Ubuntu 14.04
 
+## Requirements
+
+See Vagrantfile for network config.
+
+## Running
+
 Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (which will be the HTWG Cloud Lab Host).
 
 # Deployment with VirtualBox
@@ -33,4 +39,17 @@ Running:
 - Run `vagrant up` in this folder to bring the machine up
 - `vagrant ssh` to ssh in machine
 - `vagrant destroy` to clean up everything and delete all traces
+
+## Without Vagrant
+
+Manually configure VirtualBox VM:
+
+- eth0: NAT
+- eth1: Host-Only, no DHCP, static ip: 192.168.35.129
+- eth2: Bridged, ip: 192.168.1.111
+
+IP of eth2 can be changed, then you have to change it as well in devstack/local.conf.
+Look out for LAB_CLOUD_PUBLIC_IP and FLOATING_RANGE. They should match your local network.
+For example: If you have the IP 192.168.0.20, then your router probably is in 192.168.0.1/24 subnet. Then configure the LAB_CLOUD_PUBLIC_IP=192.168.0.111 and FLOATING_RANGE=192.168.0.128/25.
+
 
