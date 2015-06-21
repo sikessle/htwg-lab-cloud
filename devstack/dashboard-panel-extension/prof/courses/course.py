@@ -43,10 +43,12 @@ class CourseHelper:
     # get all courses by loading moodle courses and creating a tenant for each non existing course.
     def getCourses(self):
         moodleCourses = self.__getMoodleCourses()
+        tenants = self.__getTenants()
 
         # create a course for each
         for course in moodleCourses:
-            self.__addCourse(course)
+            if course.id not in tenants:
+                self.__addCourse(course)
         return moodleCourses
     
     # load moodle courses and return all of them in a list.
@@ -69,24 +71,34 @@ class CourseHelper:
 
     # add a course
     def __addCourse(self, course):
-        tenants = self.__getTenants()
-        # check if the tenant already exist.
-        if course.id in tenants:
-            return False
-
         # Create the course
         tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
-        # if something goes wrong on setting the owner of the tenant, we do not throw an exception.
-        try:
-            # get the Member role.
-            role = self.keystone.roles.find(name="admin")
-            # get the owner of the course
-            user = self.keystone.users.find(id=self.user.id)
-            # add the course owner to the tenant      
-            self.keystone.roles.add_user_role(user, role, tenant)
-        except:
-            print "Unable to set owner of tenant."
-        return True
+        # get the Member role.
+        role = self.keystone.roles.find(name="admin")
+
+        # TODO : enable if LDAP is running. add the course owner to the tenant  
+        # user = self.keystone.users.find(id=self.user.id)
+        # self.keystone.roles.add_user_role(user, role, tenant)
+        # Add the admin to the role.
+        admin = self.keystone.users.find(id=self.keystone.session.get_user_id())
+        self.keystone.roles.add_user_role(admin, role, tenant)
+
+        # now the tenant exist, we need to switch to the new created tenant. Otherwise we would add security settings to
+        # another active tenant.        
+        self.switchTenant(course.name)
+        # Add the security group rules for the created tenant to the default security group
+        # Therefore we need the default one.
+        group = None
+
+        for groups in self.nova.security_groups.list():
+            if groups.tenant_id == tenant.id and groups.name == "default":
+                group = groups
+                break
+        if not group:
+            group = self.nova.security_groups.create(name="default", description="default")
+        self.nova.security_group_rules.create(parent_group_id=group.id, ip_protocol="tcp", from_port=1, to_port=65535, cidr="0.0.0.0/0")
+        self.nova.security_group_rules.create(parent_group_id=group.id, ip_protocol="udp", from_port=1, to_port=65535, cidr="0.0.0.0/0")
+        self.nova.security_group_rules.create(parent_group_id=group.id, ip_protocol="icmp", from_port=-1, to_port=-1, cidr="0.0.0.0/0")
 
     def stopInstances(self, courseId=None):
         course = self.getCourse(courseId)
@@ -154,3 +166,6 @@ class CourseHelper:
             status = instance.status
             print "status: %s" % status
 
+#import inspect
+#client = Admin()
+#nova = client.nova("MDSD")
