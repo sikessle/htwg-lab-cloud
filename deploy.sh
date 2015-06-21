@@ -15,6 +15,13 @@ cd instance
 ./deploy.sh || echo "failed. Stopping."
 cd ..
 
-echo "**********************************"
-echo "HTWG Lab Cloud installed."
-echo "**********************************"
+ip=$(ifconfig | grep eth2 -A 1 | grep "inet addr:[0-9|\.]*" -o | grep "[0-9|\.]*" -o)
+
+echo "+----------------------------+"
+echo "|                            |"
+echo "|  HTWG Lab Cloud installed  |"
+echo "|                            |"
+echo "|          Dashboard         |"
+echo "|    http://$ip              |"
+echo "|                            |"
+echo "+----------------------------+"
