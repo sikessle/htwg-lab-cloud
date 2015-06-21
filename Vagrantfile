@@ -3,8 +3,11 @@
 
 Vagrant.configure(2) do |config|
 
+    # Download if not existing from vagrantcloud latest Ubuntu 14.04 LTS
     config.vm.box = "ubuntu/trusty64"
+
     config.vm.hostname = "htwglabcloud"
+
     # Disable default synced folder
     config.vm.synced_folder ".", "/vagrant", disabled: true
 
@@ -24,14 +27,25 @@ Vagrant.configure(2) do |config|
     # eth2: Bridged     access from outside of VM and floating IPs -> internet
     config.vm.network :public_network
 
+    # VirtualBox specific
     config.vm.provider :virtualbox do |vb|
-        vb.customize ["modifyvm", :id, "--memory", "4096"]
+
         vb.name = "htwg-lab-cloud"
+
+        # Give some more memory to VM
+        vb.customize ["modifyvm", :id, "--memory", "4096"]
+
         # Promiscous mode
         # allow openstack guests to talk to each other
         vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
         vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+        
+        # Use VPN
+        #vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        
+        # Headless or GUI
         #vb.gui = true
+
     end
 
     # Install HTWG Lab Cloud on first boot
@@ -44,6 +58,7 @@ Vagrant.configure(2) do |config|
         ./deploy.sh
     SHELL
 
+    # Use script as provisioner
     config.vm.provision "shell", inline: $script, privileged: false
 
 end
