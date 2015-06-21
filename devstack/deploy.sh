@@ -17,6 +17,9 @@ cd dashboard-theme
 ./deploy.sh
 cd ..
 
+# wait a few seconds because of possible apache restarts
+sleep 3
+
 cd dashboard-panel-extension
 ./deploy.sh
 cd ..
