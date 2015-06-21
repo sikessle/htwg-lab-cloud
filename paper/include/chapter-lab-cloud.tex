@@ -115,6 +115,7 @@ Zusätzlich wird automatisch eine Bridge erstellt welche die Instanzen (an den A
 Bei Installation außerhalb einer Virtuellen Maschine, kann der Adapter eth2 und eth0 zusammengelegt werden. 
 Diese Trennung ist lediglich in einer Virtuellen Maschine erforderlich, um von außerhalb auf die HTWG Lab Cloud bzw. die Instanzen zugreifen zu können.
 Denn der Adapter eth2 stellt den Zugang von außerhalb über den bridged Modus zur Verfügung.
+Des Weiteren muss auf dem Host noch mittels \code{iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE} Source-NAT aktiviert werden, sodass die Instanzen Internetzugriff haben.
 
 \section{Compute Image}
 
