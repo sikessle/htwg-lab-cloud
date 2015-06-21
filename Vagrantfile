@@ -32,8 +32,9 @@ Vagrant.configure(2) do |config|
 
         vb.name = "htwg-lab-cloud"
 
-        # Give some more memory to VM
-        vb.customize ["modifyvm", :id, "--memory", "4096"]
+        # Hardware specs of VM
+        vb.memory = 4096
+        vb.cpus = 1
 
         # Promiscous mode
         # allow openstack guests to talk to each other on eth1, eth2
