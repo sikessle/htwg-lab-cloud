@@ -21,6 +21,15 @@ Run `deploy.sh` in this folder as normal user in your Ubuntu 14.04 machine (whic
 - VirtualBox
 
 ## Running
+
+Configuration:
+
+- Vagrantfile adjust eth2 IP
+- devstack/local.conf adjust FLOATING_RANGE 
+- devstack/local.conf adjust LAB_CLOUD_PUBLIC_IP (should match eth2 of Vagrantfile)
+
+Running: 
+
 - Run `vagrant up` in this folder to bring the machine up
 - `vagrant ssh` to ssh in machine
 - `vagrant destroy` to clean up everything and delete all traces

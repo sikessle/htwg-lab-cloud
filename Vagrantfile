@@ -25,7 +25,7 @@ Vagrant.configure(2) do |config|
     # eth1: Host-Only   internal management network (good: has no dhcp from VM)
     config.vm.network :private_network, ip: "192.168.35.129"
     # eth2: Bridged     access from outside of VM and floating IPs from -> internet
-    config.vm.network :public_network, ip: "192.168.1.55"
+    config.vm.network :public_network, ip: "192.168.1.111"
 
     # VirtualBox specific
     config.vm.provider :virtualbox do |vb|
