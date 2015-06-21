@@ -14,9 +14,19 @@ Rechtemanagement etc.
 
 \section{Dashboard}
 
-\subsection{Unterpunkt 1}
+Das unter dem Codenamen Horizon entwickelte webbasierte Dashboard dient der vereinfachten Verwaltung der OpenStack-Umgebung. Die Komponente wurde in der Programmiersprache Python implementiert und nutzt neben dem Django-Framework für Webapplikationen auch Apache 2.0 als Webserver. Gegenüber der Kommandozeilen-Variante besitzt das Dashboard zwar einen beschränkten Funktionsumfang, jedoch können die wichtigsten administrativen Verwaltungsaufgaben durchgeführt werden. Dazu zählen unter anderem:
+\begin{itemize}
+\item Integration von Images
+\item Management der Instanzen
+\item Verwaltung der Volumes
+\item Einrichtung von Security Rules
+\item Logs und Reports
+\item VNC
+\item etc.
+\end{itemize}
+Aufgrund des modularen Aufbaus von OpenStack kann das Dashboard individuell angepasst und erweitert werden. Die zugehörigen Schritte zur Anpassung des Frontends und Umsetzung einer funktionellen Erweiterung sind nachfolgend beschrieben.
 
-\subsection{HTWG Design}
+\subsection{Anpassung von Horizon}
 
 Zur Vereinheitlichung des Designs wurde das Dashboard an das HTWG-Design angepasst. Somit fügt sich die HTWG Lab Cloud nahtlos in das offizielle HTWG Design ein.
 
@@ -41,6 +51,18 @@ Ebenso wurden die anderen Ansichten im Dashboard alle an das HTWG Design angepas
 Realisiert wurde die Anpassung mittels SCSS\footnote{Sass-CSS, eine erweiterte CSS Sprache.} und dem Theme-Mechanismus von Horizon.
 Dabei müssen lediglich eine Datei und der \code{lab-cloud} Theme-Ordner in das Horizon Verzeichnis kopiert werden.
 Ein anschließendes \code{python manage.py collectstatic --noinput --clear && python manage.py compress --force && sudo service apache2 restart} im Horizon Ordner kompiliert die Themes und starten den Webserver neu.
+
+\subsection{Erweiterung von Horizon}
+
+\begin{description}
+\item[Dashboard und Panels: ]
+\item[TabGroups und Tabs: ]
+\item[DataTables: ] 
+\item[Workflows: ] 
+\item[Actions: ] 
+\item[URLs: ] 
+\item[Views: ] 
+\end{description}
 
 \section{OpenStack LDAP-Authentifizierung}
 
