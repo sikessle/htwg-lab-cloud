@@ -58,7 +58,7 @@ Vagrant.configure(2) do |config|
         ./deploy.sh
     SHELL
 
-    # Use script as provisioner
+    # Use script as provisioner, run as non-root (required by devstack)
     config.vm.provision "shell", inline: $script, privileged: false
 
 end
