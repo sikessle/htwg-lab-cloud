@@ -102,8 +102,19 @@ Anschließend wird das Image beim Start der Instanzen ausgewählt.
 
 \section{Netzwerk}
 
-TODO Simon
+Die Netzwerkstruktur basiert auf der \emph{FlatDHCP} Struktur von nova-network. 
+Dabei werden drei Netzwerkadapter mit folgender Konfiguration verwendet:
 
+\begin{itemize}
+\item eth0: NAT Interface, welches den Internetzugriff bereitstellt. Auf diesem Adapter läuft auch ein DHCP Server.
+\item eth1: Interface ohne DHCP und Internetzugriff. Wird als Management-Netzwerk bzw. internes Netzwerk verwendet, über das die einzelnen Instanzen miteinander kommunizieren können. Muss sich im Promiscous Modus befinden, damit die Netzwerkpakete korrekt weitergereicht werden. Bei Installation in einer Virtuellen Maschine ist dieser Adapter auf \emph{host-only} geschaltet.
+\item eth2: Interface auf dem öffentliche IP-Adressen der Instanzen allokiert werden und das HTWG Lab Cloud Dashboard erreichbar ist. Bei Installation in einer Virtuellen Maschine ist dieser Adapter mit dem Modus \emph{bridged}  mit einem lokalen, öffentlich zugänglichen Adapter verbunden.
+\end{itemize}
+
+Zusätzlich wird automatisch eine Bridge erstellt welche die Instanzen (an den Adaptern vnetX) mit dem Adapter eth1 verbindet.
+Bei Installation außerhalb einer Virtuellen Maschine, kann der Adapter eth2 und eth0 zusammengelegt werden. 
+Diese Trennung ist lediglich in einer Virtuellen Maschine erforderlich, um von außerhalb auf die HTWG Lab Cloud bzw. die Instanzen zugreifen zu können.
+Denn der Adapter eth2 stellt den Zugang von außerhalb über den bridged Modus zur Verfügung.
 
 \section{Compute Image}
 
