@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 
 # Before running this script, replace ##INSERT_USERNAME## through the real username.
