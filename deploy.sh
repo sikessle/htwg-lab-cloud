@@ -16,12 +16,14 @@ cd instance
 cd ..
 
 ip=$(ifconfig | grep eth2 -A 1 | grep "inet addr:[0-9|\.]*" -o | grep "[0-9|\.]*" -o)
+iplength=${#ip} 
+let padding=(17-iplength)
 
 echo "+----------------------------+"
 echo "|                            |"
 echo "|  HTWG Lab Cloud installed  |"
 echo "|                            |"
 echo "|          Dashboard         |"
-echo "     http://$ip      			"
+printf "|   http://$ip %${padding}s|\n"
 echo "|                            |"
 echo "+----------------------------+"
