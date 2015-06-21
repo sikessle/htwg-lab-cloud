@@ -3,6 +3,7 @@ import inspect
 from client import Admin
 from moodle import get_user_courses
 from moodle import get_enrolled_students
+from django.core.mail import send_mail
 
 class Course:
     """
@@ -130,6 +131,7 @@ class CourseHelper:
             name = courseId + "-" + member
             if not self.nova.servers.list(search_opts={'name': name}):
                 self.__startInstance(instanceName=name, imageId=imageId, flavorId=flavorId)
+                self.__sendVncConsole(course, student=member, instanceName=name)
             if not self.cinder.volumes.list(search_opts={'name': name}):
                 self.cinder.volumes.create(name=name, size=1)
             # from this point instance and volume should exist
@@ -144,12 +146,24 @@ class CourseHelper:
                 # We just use the first one.
                 attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdb", mode="rw")
 
+    def __sendVncConsole(self, course=None, student="studentEmail", instanceName="courseId-studentEmail"):
+        print "Try to send vnc for " + instanceName
+        #get the instance
+        servers = self.nova.servers.list(search_opts={'name': instanceName})
+        if servers:
+            sender = 'cloud@htwg-konstanz.de'
+            receiver = student
+            message = ""
+            message += "Welcome to HTWG Cloud.\n"
+            message += "This is your link to access your virtual machine\n"
+            message += "Course : " + course.name + " - " + course.description + "\n"
+            message += "Link : " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"] + "\n"
+            print "SendMail " + receiver
+            send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
+            
+            
+
     def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
-        print "start instance"
-        #if not self.nova.keypairs.findall(name="mykey"):
-        #    with open(os.path.expanduser('~/.ssh/id_rsa.pub')) as fpubkey:
-        #        nova.keypairs.create(name="mykey", public_key=fpubkey.read())
-        
         # find the image we like to use
         image = self.nova.images.find(id=imageId)
         # find the flavor we like to use
@@ -166,6 +180,24 @@ class CourseHelper:
             status = instance.status
             print "status: %s" % status
 
-#import inspect
-#client = Admin()
-#nova = client.nova("MDSD")
+'''
+import inspect
+client = Admin()
+nova = client.nova("Concurrent Programming")
+servers = nova.servers.list(search_opts={'name': "2166-studentA"})
+course = Course(name="Concurrent Programming", id="2166", description="Concurrent Programming course description")
+if servers:
+    print servers
+    print servers[0].get_vnc_console(console_type="novnc")["console"]["url"]
+    sender = 'cloud@htwg-konstanz.de'
+    receiver = 'studentA'
+    message = ""
+    message += "Welcome to HTWG Cloud.\n"
+    message += "This is your link to access your virtual machine"
+    message += "Course : " + course.name + " - " + course.description
+    message += "Link : " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"]          
+
+    send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
+'''
+
+
