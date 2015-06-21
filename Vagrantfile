@@ -6,7 +6,7 @@ Vagrant.configure(2) do |config|
     config.vm.box = "ubuntu/trusty64"
     config.vm.hostname = "htwglabcloud"
     config.vm.synced_folder ".", "/vagrant", disabled: true
-    
+
     # VM will have 
     #
     # eth0: nat                 host access to internet (default from vagrant)
@@ -40,6 +40,6 @@ Vagrant.configure(2) do |config|
         echo "****************************************************************"
     SHELL
 
-    #config.vm.provision "shell", inline: $script, privileged: false
+    config.vm.provision "shell", inline: $script, privileged: false
 
 end
