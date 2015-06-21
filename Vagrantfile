@@ -8,8 +8,8 @@ Vagrant.configure(2) do |config|
 
     config.vm.hostname = "htwglabcloud"
 
-    # Disable default synced folder
-    config.vm.synced_folder ".", "/vagrant", disabled: true
+    # Sync this project folder to host @ /vagrant
+    config.vm.synced_folder ".", "/vagrant"
 
     # Networking
     #
