@@ -40,10 +40,10 @@ We can configure an outgoing email host with SMTP or redirect emails to a file (
 To find the configuration section, search for EMAIL_BACKEND in local_settings.py
 Note : local_settings.py will be overwritten if you execute stack.sh
 If you like to use another EMAIL_BACKEND do these steps
-1. ./stack.sh
-2. sudo service apache2 stop
-3. modify local_settings.py
-4. sudo service apache2 restart
+- ./stack.sh
+- sudo service apache2 stop
+- modify local_settings.py
+- sudo service apache2 restart
 
 To write each send mail to a file use for example this configuration
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
