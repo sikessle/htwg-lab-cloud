@@ -36,12 +36,12 @@ Vagrant.configure(2) do |config|
         vb.customize ["modifyvm", :id, "--memory", "4096"]
 
         # Promiscous mode
-        # allow openstack guests to talk to each other
+        # allow openstack guests to talk to each other on eth1, eth2
         vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
         vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
         
-        # Use VPN
-        #vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        # Use VPN of Host for eth0
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
         
         # Headless or GUI
         #vb.gui = true
