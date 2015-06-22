@@ -8,8 +8,8 @@ Vagrant.configure(2) do |config|
 
     config.vm.hostname = "htwglabcloud"
 
-    # Sync this project folder to host @ /vagrant
-    config.vm.synced_folder ".", "/vagrant"
+    # Sync this project folder to host @ /htwg-lab-cloud
+    config.vm.synced_folder ".", "/htwg-lab-cloud"
 
     # Networking
     #
@@ -51,11 +51,7 @@ Vagrant.configure(2) do |config|
 
     # Install HTWG Lab Cloud on first boot
     $script = <<-SHELL
-        cd ~
-        pwd
-        sudo apt-get install -y git
-        git clone https://github.com/sikessle/htwg-lab-cloud.git
-        cd htwg-lab-cloud
+        cd /htwg-lab-cloud
         ./deploy.sh
     SHELL
 
