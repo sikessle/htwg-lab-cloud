@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require 'fileutils'
+
 Vagrant.configure(2) do |config|
 
     # Download if not existing from vagrantcloud latest Ubuntu 14.04 LTS
@@ -10,7 +12,10 @@ Vagrant.configure(2) do |config|
 
     # Sync this project folder to host @ /htwg-lab-cloud
     config.vm.synced_folder ".", "/htwg-lab-cloud"
-    config.vm.synced_folder "vm-devstack", "/home/vagrant/devstack", :create => true
+    # Clear it locally before syncing
+    local_devstack = "vm-devstack"
+    FileUtils.rm_r local_devstack if Dir.exist?(local_devstack)
+    config.vm.synced_folder local_devstack, "/home/vagrant/devstack", :create => true
 
     # Networking
     #
@@ -51,12 +56,12 @@ Vagrant.configure(2) do |config|
     end
 
     # Install HTWG Lab Cloud on first boot
-    $script = <<-SHELL
+    script = <<-SHELL
         cd /htwg-lab-cloud
         ./deploy.sh
     SHELL
 
     # Use script as provisioner, run as non-root (required by devstack)
-    config.vm.provision "shell", inline: $script, privileged: false
+    config.vm.provision "shell", inline: script, privileged: false
 
 end
