@@ -89,12 +89,6 @@ class SetInstanceDetailsAction(workflows.Action):
     flavor = forms.ChoiceField(label=_("Flavor"),
                                help_text=_("Size of image to launch."))
 
-    count = forms.IntegerField(label=_("Instance Count"),
-                               min_value=1,
-			       max_value=1,
-                               initial=1,
-                               help_text=_("Number of instances to launch."))
-
     source_type = forms.ChoiceField(label=_("Instance Boot Source"),
                                     help_text=_("Choose Your Boot Source "
                                                 "Type."))
@@ -139,7 +133,7 @@ class SetInstanceDetailsAction(workflows.Action):
     
     class Meta(object):
         name = _("Details")
-        help_text_template = ("project/instances/"
+        help_text_template = ("prof/courses/"
                               "_launch_details_help.html")
 
     def __init__(self, request, context, *args, **kwargs):
@@ -209,62 +203,6 @@ class SetInstanceDetailsAction(workflows.Action):
         except IndexError:
             image = None
         return image
-
-    def _check_quotas(self, cleaned_data):
-        count = cleaned_data.get('count', 1)
-
-        # Prevent launching more instances than the quota allows
-        usages = quotas.tenant_quota_usages(self.request)
-        available_count = usages['instances']['available']
-        if available_count < count:
-            error_message = ungettext_lazy(
-                'The requested instance cannot be launched as you only '
-                'have %(avail)i of your quota available. ',
-                'The requested %(req)i instances cannot be launched as you '
-                'only have %(avail)i of your quota available.',
-                count)
-            params = {'req': count,
-                      'avail': available_count}
-            raise forms.ValidationError(error_message % params)
-
-        source_type = cleaned_data.get('source_type')
-        if source_type in ('volume_image_id', 'volume_snapshot_id'):
-            available_volume = usages['volumes']['available']
-            if available_volume < count:
-                msg = (_('The requested instance cannot be launched. '
-                         'Requested volume exceeds quota: Available: '
-                         '%(avail)s, Requested: %(req)s.')
-                       % {'avail': available_volume, 'req': count})
-                raise forms.ValidationError(msg)
-
-        flavor_id = cleaned_data.get('flavor')
-        flavor = self._get_flavor(flavor_id)
-
-        count_error = []
-        # Validate cores and ram.
-        available_cores = usages['cores']['available']
-        if flavor and available_cores < count * flavor.vcpus:
-            count_error.append(_("Cores(Available: %(avail)s, "
-                                 "Requested: %(req)s)")
-                               % {'avail': available_cores,
-                                  'req': count * flavor.vcpus})
-
-        available_ram = usages['ram']['available']
-        if flavor and available_ram < count * flavor.ram:
-            count_error.append(_("RAM(Available: %(avail)s, "
-                                 "Requested: %(req)s)")
-                               % {'avail': available_ram,
-                                  'req': count * flavor.ram})
-
-        if count_error:
-            value_str = ", ".join(count_error)
-            msg = (_('The requested instance cannot be launched. '
-                     'The following requested resource(s) exceed '
-                     'quota(s): %s.') % value_str)
-            if count == 1:
-                self._errors['flavor'] = self.error_class([msg])
-            else:
-                self._errors['count'] = self.error_class([msg])
 
     def _check_flavor_for_image(self, cleaned_data):
         # Prevents trying to launch an image needing more resources.
@@ -341,14 +279,6 @@ class SetInstanceDetailsAction(workflows.Action):
         if not cleaned_data.get('volume_id'):
             msg = _("You must select a volume.")
             self._errors['volume_id'] = self.error_class([msg])
-        # Prevent launching multiple instances with the same volume.
-        # TODO(gabriel): is it safe to launch multiple instances with
-        # a snapshot since it should be cloned to new volumes?
-        count = cleaned_data.get('count', 1)
-        if count > 1:
-            msg = _('Launching multiple instances is only supported for '
-                    'images and instance snapshots.')
-            raise forms.ValidationError(msg)
 
     def _check_source_volume_snapshot(self, cleaned_data):
         if not cleaned_data.get('volume_snapshot_id'):
@@ -372,7 +302,6 @@ class SetInstanceDetailsAction(workflows.Action):
     def clean(self):
         cleaned_data = super(SetInstanceDetailsAction, self).clean()
 
-        self._check_quotas(cleaned_data)
         self._check_source(cleaned_data)
 
         return cleaned_data
@@ -619,23 +548,13 @@ class LaunchInstance(workflows.Workflow):
     slug = "launch_instance"
     name = _("Launch Instance")
     finalize_button_name = _("Launch")
-    success_message = _('Launched %(count)s named "%(name)s".')
-    failure_message = _('Unable to launch %(count)s named "%(name)s".')
+    success_message = _('Launched instances.')
+    failure_message = _('Unable to launch instances.')
     success_url = "horizon:project:instances:index"
     multipart = True
     default_steps = (SelectProjectUser,
                      SetInstanceDetails,
-                     SetNetwork) 
-
-
-    def format_status_message(self, message):
-        name = self.context.get('name', 'unknown instance')
-        count = self.context.get('count', 1)
-        if int(count) > 1:
-            return message % {"count": _("%s instances") % count,
-                              "name": name}
-        else:
-            return message % {"count": _("instance"), "name": name}
+                     SetNetwork)
 
     @sensitive_variables('context')
     def handle(self, request, context):
@@ -692,22 +611,6 @@ class LaunchInstance(workflows.Workflow):
             
             return True
 
-            api.nova.server_create(request,
-                                   context['name'],
-                                   image_id,
-                                   context['flavor'],
-                                   context['keypair_id'],
-                                   normalize_newlines(custom_script),
-                                   context['security_group_ids'],
-                                   block_device_mapping=dev_mapping_1,
-                                   block_device_mapping_v2=dev_mapping_2,
-                                   nics=nics,
-                                   availability_zone=avail_zone,
-                                   instance_count=int(context['count']),
-                                   admin_pass=context['admin_pass'],
-                                   disk_config=context.get('disk_config'),
-                                   config_drive=context.get('config_drive'))
-            return True
         except Exception:
             exceptions.handle(request)
             return False

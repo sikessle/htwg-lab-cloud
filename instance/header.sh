@@ -5,6 +5,10 @@
 # USE Linux tools: sed -i '' 's/##INSERT_USERNAME##/exampleuser/g' instance-setup.sh
 #
 
+echo "------------------------------------"
+echo "----------START OF SETUP------------"
+echo "------------------------------------"
+
 USER="##INSERT_USERNAME##"
 
 if [ "${USER:0:2}" == "##" ]; then
@@ -20,6 +24,15 @@ fi
 
 echo "updating apt-get"
 apt-get update 
+# give some cooldown time because of locks
+# especially in slow qemu environment
+sleep 15
+
+# debugging
+echo "running processes:"
+echo "--------------------"
+ps -a
+echo "--------------------"
 
 #######################
 
