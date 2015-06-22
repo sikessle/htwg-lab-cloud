@@ -41,8 +41,6 @@ echo "$USER:x:2000:" >> /etc/group
 echo "configuring graphical login (greeter)"
 rm -f $LDM_CONF
 echo "[SeatDefaults]" >> $LDM_CONF
-echo "greeter-show-manual-login=true" >> $LDM_CONF
-echo "greeter-hide-users=true" >> $LDM_CONF
 echo "allow-guest=false" >> $LDM_CONF
 echo "user-session=ubuntu" >> $LDM_CONF
 
