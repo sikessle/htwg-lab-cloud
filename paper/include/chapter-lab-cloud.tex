@@ -61,6 +61,8 @@ In den nachfolgenden Grafiken wird zur Übersicht auf die Darstellung von
 Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung vorzufinden sind.
 Weitere Informationen über die Authentifizierung über LDAP sind in den nachfolgenden
 Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
+
+
 \newpage
 \subsection{Anzeigen von Vorlesungen}
 Betrachten wir das Anzeigen der Vorlesungen eines Professors im Horizon Dashboard.
@@ -75,7 +77,8 @@ Um nun virtuelle Maschinen verwalten zu können muss also ein Tenant existieren.
 Damit die HTWG Lab Cloud in die vorhandenen Systeme integriert wird, werden zunächst
 alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
 Daraufhin wird für jede Vorlesung ein gleichnamiges Tenant erstellt. Zuletzt wird das Tenant
-mit Zugriffsrechten entsprechend konfiguriert.
+mit Zugriffsrechten entsprechend konfiguriert. Die beschriebenen Schritte sind unter der folgenden
+Abbildung \ref{createTenants} dargestellt.
 
 \begin{figure}[H]
 	\centering
@@ -86,6 +89,49 @@ mit Zugriffsrechten entsprechend konfiguriert.
 \end{figure}
 
 
+\subsection{Starten von Instanzen}
+Beim Starten der virtuellen Maschinen Instanzen einer Vorlesung 
+(siehe Abbildung \ref{startInstances}) setzten wir voraus das für
+die jeweiligen Vorlesungen bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
+(siehe hierzu auch Kapitel TODO), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
+angefragt. Dabei enthält die Teilnehmerliste die Namen und Email Adressen der Studenten.
+Nun wird für jeden Teilnehmer eine Instanz gestartet. Die Instanz wird dabei für das jeweilige
+Tenant gestartet und folgt einem vorgegebenen Namensschema. Das Schema ist eine Kombination
+aus der Email Adresse des Teilnehmers und dem Namen des Tenants. Durch die eindeutige Namensvergabe
+wird sichergestellt das nicht mehrere Instanzen für einen Studenten in einem Tenant gestartet
+werden können.
+Die Instanz wird dabei über Nova gestartet. Nach dem Starten der Instanz wird noch ein Blockgerät
+über Cinder angelegt, welches daraufhin mit der jeweiligen Instanz verbunden wird. Dadurch können
+Studenten ihre Daten ablegen.
+Zuletzt wird dem Studenten eine Email mittels dem HTWG SMTP Server übermittelt, welche einen
+Link für den Zugriff auf seine virtuelle Maschine über VNC enthält.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{img/startInstances.pdf}
+\caption{Instanzen für eine Vorlesung starten}
+\label{startInstances}
+\FloatBarrier
+\end{figure}
+
+\subsection{Stoppen von Instanzen}
+Das Stoppen der virtuellen Maschinen, welches unter Abbildung \ref{stopInstances} dargestellt ist,
+soll hiermit auch erwähnt werden.
+Beim Stoppen wird kein nicht zuerst eine Teilnehmerliste vom HTWG Moodle Server angefragt, wie
+wir es noch beim Starten der Instanzen gesehen haben. Stattdessen wird über Nova eine Anfrage
+gestellt um alle Instanzen des jeweiligen Tenants zu erhalten. Die so erhaltenen Instanzen werden
+daraufhin gelöscht. Das selbe wird mit den Blockgeräten gemacht, welche beim starten einer
+Instanz erstellt wurden. Für die Blockgeräte Verwaltung ist Cinder zuständig.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{img/stopInstances.pdf}
+\caption{Instanzen einer Vorlesung stoppen}
+\label{stopInstances}
+\FloatBarrier
+\end{figure}
+
+\subsection{Aktualisieren einer Vorlesung}
 
 
 \section{Dashboard}
