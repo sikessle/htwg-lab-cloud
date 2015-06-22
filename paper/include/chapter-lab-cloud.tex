@@ -62,6 +62,7 @@ Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung 
 Weitere Informationen über die Authentifizierung über LDAP sind in den nachfolgenden
 Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
 
+TODO : allgemein über Clients.
 
 \newpage
 \subsection{Anzeigen von Vorlesungen}
@@ -131,8 +132,13 @@ Instanz erstellt wurden. Für die Blockgeräte Verwaltung ist Cinder zuständig.
 \FloatBarrier
 \end{figure}
 
-\subsection{Aktualisieren einer Vorlesung}
-
+\subsection{Aktualisieren von Instanzen}
+Treten einem Moodle Kurs Studenten bei, nachdem die virtuellen Maschinen für die
+Teilnehmer des Kurses bereits gestartet wurden, so besitzen die neu hinzugekommenen Studenten noch
+keine Instanz. Aus diesem Grund kann für einen Kurs die aktualisieren Funktion aufgerufen werden,
+welche für jeden neu hinzugekommen Studenten eine Instanz startet. 
+Dabei ist der Arbeitsablauf analog zum Starten von Instanzen wie unter Abbildung 
+\ref{startInstances} bereits beschrieben.
 
 \section{Dashboard}
 
@@ -201,12 +207,13 @@ Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnt
 Da VNC ein unsicheres Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
 
 Der OpenStack VNC Console Proxy bietet diese Funktionen an.
-Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id novnc}.
-Schließlich ist für den Zugriff lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
+Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id xvpvnc}.
+Mit einem angepassten Java VNC Client \cite{vncJava} kann auf die jeweilige Instanz per VNC zugegriffen werden. 
+Dazu ist lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
+
+Alternativ ist auch der Zugriff per Web-VNC möglich. 
+Dazu muss lediglich beim Erstellen der URL der Parameter \code{novnc} angegeben werden. 
 Anschließend kann auf die Instanz über den Browser zugegriffen werden.
-Mobile Browser werden unterstützt, jedoch benötigen manche Browser eine virtuelle Tastatur. 
-Dies kann erreicht werden, in dem die \code{vnc_auto.html} Datei noch angepasst wird.
-NoVNC bringt die Funktionalität grundsätzlich mit.
 
 \section{Snapshots}
 
