@@ -83,9 +83,6 @@ class SetInstanceDetailsAction(workflows.Action):
     availability_zone = forms.ChoiceField(label=_("Availability Zone"),
                                           required=False)
 
-    name = forms.CharField(label=_("Instance Name"),
-                           max_length=255)
-
     flavor = forms.ChoiceField(label=_("Flavor"),
                                help_text=_("Size of image to launch."))
 
@@ -548,8 +545,8 @@ class LaunchInstance(workflows.Workflow):
     slug = "launch_instance"
     name = _("Launch Instance")
     finalize_button_name = _("Launch")
-    success_message = _('Launched instances.')
-    failure_message = _('Unable to launch instances.')
+    success_message = _('Instanzen gestartet.')
+    failure_message = _('Beim Starten der Instanzen ist ein Fehler aufgetreten.')
     success_url = "horizon:project:instances:index"
     multipart = True
     default_steps = (SelectProjectUser,
