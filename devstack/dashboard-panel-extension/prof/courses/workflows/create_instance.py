@@ -139,7 +139,7 @@ class SetInstanceDetailsAction(workflows.Action):
     
     class Meta(object):
         name = _("Details")
-        help_text_template = ("project/instances/"
+        help_text_template = ("prof/courses/"
                               "_launch_details_help.html")
 
     def __init__(self, request, context, *args, **kwargs):
