@@ -5,6 +5,10 @@
 # USE Linux tools: sed -i '' 's/##INSERT_USERNAME##/exampleuser/g' instance-setup.sh
 #
 
+echo "------------------------------------"
+echo "----------START OF SETUP------------"
+echo "------------------------------------"
+
 USER="##INSERT_USERNAME##"
 
 if [ "${USER:0:2}" == "##" ]; then
