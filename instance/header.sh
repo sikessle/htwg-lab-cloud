@@ -28,11 +28,5 @@ apt-get update
 # especially in slow qemu environment
 sleep 15
 
-# debugging
-echo "running processes:"
-echo "--------------------"
-ps -a
-echo "--------------------"
-
 #######################
 
