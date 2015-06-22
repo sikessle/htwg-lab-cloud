@@ -3,4 +3,5 @@
 .vagrant
 *.pyc
 *.img
+vm-devstack
 
