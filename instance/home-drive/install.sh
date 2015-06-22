@@ -1,7 +1,7 @@
 # This script is only a part of a the main script in the superfolder!
 
-HOME_MNT_POINT=/media/home-drive
-PAM_GLOBAL_CONF=/etc/security/pam_mount.conf.xml
+HOME_MNT_POINT="/media/home-drive"
+PAM_GLOBAL_CONF="/etc/security/pam_mount.conf.xml"
 
 echo "installing required packages"
 apt-get install -y libpam-mount cifs-utils
@@ -9,7 +9,9 @@ apt-get install -y libpam-mount cifs-utils
 echo "configuring auto-mounting of home-drive"
 mkdir $HOME_MNT_POINT
 
+sleep 2
 rm -f $PAM_GLOBAL_CONF
+sleep 2
 echo "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" >> $PAM_GLOBAL_CONF
 echo "<!DOCTYPE pam_mount SYSTEM \"pam_mount.conf.xml.dtd\">" >> $PAM_GLOBAL_CONF
 echo "<pam_mount>" >> $PAM_GLOBAL_CONF
