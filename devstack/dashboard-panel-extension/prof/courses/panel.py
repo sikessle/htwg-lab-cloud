@@ -4,7 +4,7 @@ import horizon
 from openstack_dashboard.dashboards.prof import dashboard
 
 class Courses(horizon.Panel):
-    name = _("Courses")
+    name = _("Kurse")
     slug = "courses"
 
 
