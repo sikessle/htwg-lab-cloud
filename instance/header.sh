@@ -20,6 +20,15 @@ fi
 
 echo "updating apt-get"
 apt-get update 
+# give some cooldown time because of locks
+# especially in slow qemu environment
+sleep 15
+
+# debugging
+echo "running processes:"
+echo "--------------------"
+ps -a
+echo "--------------------"
 
 #######################
 
