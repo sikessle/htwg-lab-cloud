@@ -5,12 +5,140 @@ Nachfolgend werden die Ziele, Anwendungsfälle und die eigentliche Implementieru
 Der Quellcode ist öffentlich auf GitHub \cite{git-source} verfügbar. Weitere Entwicklungen finden stets in diesem Repository statt. Etwaige Pull-Request werden gerne angenommen.
 
 \section{Zielsetzung}
+Erfahrungsgemäß jeder Student kennt das folgende Problem. Eine Vorlesung wird
+besucht, in welcher neue Technologien kennengelernt werden. Folglich werden neue Anwendungen
+eingesetzt, die zunächst installiert werden müssen. 
+Findet die Vorlesung in einem Laborraum statt, 
+so ist die notwendige Software meist schon installiert.
+Dabei sind spezielle Anwendungen häufig nicht in allen Laboren vorzufinden. Folglich müsste
+eine Vorlesung in einem entsprechenden Raum stattfinden.
+Das Installieren der Software ist zudem ein umständlicher Prozess. Ein Dozent muss hierfür
+das Rechenzentrum beauftragen, welches dann die notwendige Software installiert.
+Folglich wäre es viel einfacher wenn ein Professor die für seine Vorlesung erforderliche Software
+eigens zusammenstellen könnte.
+Zudem wäre es für einen Studenten wünschenswert, den Zugriff auf die Software einer Vorlesung,
+von jedem beliebigen Laborrechner zu erhalten.
+Die HTWG Lab Cloud will die so eben beschriebenen Probleme lösen und einen Cloud Dienst zur
+Verfügung stellen. Dieser Dienst soll das einfache Erstellen von virtuellen Maschinen für
+Vorlesungen zur Verfügung stellen. Die somit erstellten virtuellen Maschinen sollen dann für
+einen Studenten über eine entsprechende Remote Verbindung zugreifbar sein.
 
-\section{Use Cases}
+Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
+\begin{itemize}
+\item Bereitstellen einer Konfiguration von virtuellen Maschinen für Professoren.
+\item Starten von virtuellen Maschinen für die Teilnehmer einer Vorlesung.
+\item Ein vom Laborraum unabhängiger Zugriff auf virtuelle Maschinen durch Studenten.
+\item Die Nutzung der vorhandenen Authentifizierungsmethoden der Hochschule.
+\end{itemize}
+
+Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
+die vorhandenen Komponenten der HTWG Lab Cloud geben. Ein Professor kann über einen
+Webbrowser auf das Dashboard der Cloud zugreifen. Dabei zeigt das Dashboard die Vorlesungen
+eines Professors an. Für die Teilnehmer einer Vorlesung kann daraufhin eine virtuelle Maschine
+mit einem ausgewählten Image gestartet werden. Dabei stehen dem Professor eine Reihe von Basis
+Images bereit, welche er beliebig erweitern kann.
+Nachdem die virtuellen Maschinen für die Studenten gestartet wurden, kann auf diese mittels
+VNC zugegriffen werden.
+Die Details zum eben genannten groben Überblick sind in den nachfolgenden 
+Unterkapiteln nachzulesen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/overview.pdf}
+\caption{Überblick HTWG Lab Cloud}
+\label{overview}
+\FloatBarrier
+\end{figure}
 
 \section{Workflow und Organisation}
+In diesem Abschnitt werden die internen Abläufe der HTWG Lab Cloud erläutert. Die folgenden
+Vorgänge sind völlig transparent für einen Professor und Studenten und dienen lediglich zum
+Verständnis der technischen Umsetzung.
+Dabei soll die Kommunikation mit den notwendigen Openstack Komponenten verdeutlicht werden.
+Also beispielsweise welche Komponenten für das Starten von virtuellen Maschinen Instanzen 
+für eine Vorlesung notwendig sind.
+In den nachfolgenden Grafiken wird zur Übersicht auf die Darstellung von
+Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung vorzufinden sind.
+Weitere Informationen über die Authentifizierung über LDAP sind in den nachfolgenden
+Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
 
-Rechtemanagement etc.
+TODO : allgemein über Clients.
+
+\newpage
+\subsection{Anzeigen von Vorlesungen}
+Betrachten wir das Anzeigen der Vorlesungen eines Professors im Horizon Dashboard.
+Hierfür wählt ein Professor zunächst die Übersichtssichtseite auf dem Dashboard aus.
+Das Verwalten von virtuellen Maschinen geschieht in Openstack auf Basis eines
+Tenants. Der Begriff Tenant ist dabei äquivalent zu einem Projekt. 
+Auf ein Tenant können Openstack Nutzer Zugriff erhalten, um virtuelle Maschinen starten
+zu können. Dabei können Tenants von einem Administrator entsprechend konfiguriert werden, damit
+beispielsweise nur eine festgelegte Anzahl von Ressourcen verwendet werden kann.
+
+Um nun virtuelle Maschinen verwalten zu können muss also ein Tenant existieren.
+Damit die HTWG Lab Cloud in die vorhandenen Systeme integriert wird, werden zunächst
+alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
+Daraufhin wird für jede Vorlesung ein gleichnamiges Tenant erstellt. Zuletzt wird das Tenant
+mit Zugriffsrechten entsprechend konfiguriert. Die beschriebenen Schritte sind unter der folgenden
+Abbildung \ref{createTenants} dargestellt.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.7]{img/createTenants.pdf}
+\caption{Vorlesungen in der Cloud}
+\label{createTenants}
+\FloatBarrier
+\end{figure}
+
+
+\subsection{Starten von Instanzen}
+Beim Starten der virtuellen Maschinen Instanzen einer Vorlesung 
+(siehe Abbildung \ref{startInstances}) setzten wir voraus das für
+die jeweiligen Vorlesungen bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
+(siehe hierzu auch Kapitel TODO), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
+angefragt. Dabei enthält die Teilnehmerliste die Namen und Email Adressen der Studenten.
+Nun wird für jeden Teilnehmer eine Instanz gestartet. Die Instanz wird dabei für das jeweilige
+Tenant gestartet und folgt einem vorgegebenen Namensschema. Das Schema ist eine Kombination
+aus der Email Adresse des Teilnehmers und dem Namen des Tenants. Durch die eindeutige Namensvergabe
+wird sichergestellt das nicht mehrere Instanzen für einen Studenten in einem Tenant gestartet
+werden können.
+Die Instanz wird dabei über Nova gestartet. Nach dem Starten der Instanz wird noch ein Blockgerät
+über Cinder angelegt, welches daraufhin mit der jeweiligen Instanz verbunden wird. Dadurch können
+Studenten ihre Daten ablegen.
+Zuletzt wird dem Studenten eine Email mittels dem HTWG SMTP Server übermittelt, welche einen
+Link für den Zugriff auf seine virtuelle Maschine über VNC enthält.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{img/startInstances.pdf}
+\caption{Instanzen für eine Vorlesung starten}
+\label{startInstances}
+\FloatBarrier
+\end{figure}
+
+\subsection{Stoppen von Instanzen}
+Das Stoppen der virtuellen Maschinen, welches unter Abbildung \ref{stopInstances} dargestellt ist,
+soll hiermit auch erwähnt werden.
+Beim Stoppen wird kein nicht zuerst eine Teilnehmerliste vom HTWG Moodle Server angefragt, wie
+wir es noch beim Starten der Instanzen gesehen haben. Stattdessen wird über Nova eine Anfrage
+gestellt um alle Instanzen des jeweiligen Tenants zu erhalten. Die so erhaltenen Instanzen werden
+daraufhin gelöscht. Das selbe wird mit den Blockgeräten gemacht, welche beim starten einer
+Instanz erstellt wurden. Für die Blockgeräte Verwaltung ist Cinder zuständig.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.6]{img/stopInstances.pdf}
+\caption{Instanzen einer Vorlesung stoppen}
+\label{stopInstances}
+\FloatBarrier
+\end{figure}
+
+\subsection{Aktualisieren von Instanzen}
+Treten einem Moodle Kurs Studenten bei, nachdem die virtuellen Maschinen für die
+Teilnehmer des Kurses bereits gestartet wurden, so besitzen die neu hinzugekommenen Studenten noch
+keine Instanz. Aus diesem Grund kann für einen Kurs die aktualisieren Funktion aufgerufen werden,
+welche für jeden neu hinzugekommen Studenten eine Instanz startet. 
+Dabei ist der Arbeitsablauf analog zum Starten von Instanzen wie unter Abbildung 
+\ref{startInstances} bereits beschrieben.
 
 \section{Dashboard}
 
@@ -64,7 +192,7 @@ Ein anschließendes \code{python manage.py collectstatic --noinput --clear && py
 \item[Views: ] 
 \end{description}
 
-\section{OpenStack LDAP-Authentifizierung}
+\section{OpenStack LDAP-Authentifizierung}\label{ldap_auth1}
 
 \section{Anbindung an Moodle}
 
@@ -79,12 +207,13 @@ Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnt
 Da VNC ein unsicheres Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
 
 Der OpenStack VNC Console Proxy bietet diese Funktionen an.
-Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id novnc}.
-Schließlich ist für den Zugriff lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
+Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id xvpvnc}.
+Mit einem angepassten Java VNC Client \cite{vncJava} kann auf die jeweilige Instanz per VNC zugegriffen werden. 
+Dazu ist lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
+
+Alternativ ist auch der Zugriff per Web-VNC möglich. 
+Dazu muss lediglich beim Erstellen der URL der Parameter \code{novnc} angegeben werden. 
 Anschließend kann auf die Instanz über den Browser zugegriffen werden.
-Mobile Browser werden unterstützt, jedoch benötigen manche Browser eine virtuelle Tastatur. 
-Dies kann erreicht werden, in dem die \code{vnc_auto.html} Datei noch angepasst wird.
-NoVNC bringt die Funktionalität grundsätzlich mit.
 
 \section{Snapshots}
 
@@ -189,7 +318,7 @@ Das entwickelte Skript \code{image-virtualbox-to-openstack.sh} führt diese Umwa
 Die Benutzung erfolgt mit folgendem Aufruf: \code{./image-virtualbox-to-openstack.sh <Pfad zum gewünschten VirtualBox Image Snapshot>}.
 Im Wesentlichen wird dabei mittels \code{VBoxManage} das Image in ein \code{raw} Format gewandelt und anschließend mit \code{qemu-img} nach \code{qcow2} überführt.
 
-\subsection{LDAP-Authentifizierung}
+\subsection{LDAP-Authentifizierung}\label{ldap_auth2}
 
 Studenten sollen sich mit ihren gewohnten HTWG Zugangsdaten bei den Instanzen anmelden können. 
 Deshalb wird auf den LDAP-Server der HTWG zugegriffen, um den Benutzer beim Login in das Betriebssystem zu authentisieren. 

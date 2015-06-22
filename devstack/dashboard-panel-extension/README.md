@@ -46,8 +46,10 @@ If you like to use another EMAIL_BACKEND do these steps
 - sudo service apache2 restart
 
 To write each send mail to a file use for example this configuration
+
 	EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 	EMAIL_FILE_PATH = '/tmp/app-messages' 
+
 Each message will now be stored in a file which is located in the above folder.
 
 Fore more information about possible configurations [this](https://docs.djangoproject.com/en/1.8/topics/email/) link might be helpful.
