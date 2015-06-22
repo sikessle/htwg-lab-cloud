@@ -27,12 +27,16 @@ echo "setup auth services to look in ldap"
 auth-client-config -t nss -p lac_ldap
 
 echo "configure to create home folder on login"
-echo "\nsession required\tpam_mkhomedir.so skel=/etc/skel umask=0022" >> /etc/pam.d/common-session
+echo "" >> /etc/pam.d/common-session
+echo "session required	pam_mkhomedir.so skel=/etc/skel umask=0022" >> /etc/pam.d/common-session
 
 echo "assigning ldap users to local groups"
-echo "\n*;*;*;Al0000-2400;adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare" >> /etc/security/group.conf 
-echo "\n\nauth\trequired\tpam_group.so use_first_pass" >> /etc/pam.d/common-auth
-echo "\n$USER:x:2000:" >> /etc/group
+echo "" >> /etc/security/group.conf 
+echo "*;*;*;Al0000-2400;adm,cdrom,sudo,dip,plugdev,lpadmin,sambashare" >> /etc/security/group.conf 
+echo "" >> /etc/pam.d/common-auth
+echo "auth 	required 	pam_group.so use_first_pass" >> /etc/pam.d/common-auth
+echo "" >> /etc/group
+echo "$USER:x:2000:" >> /etc/group
 
 echo "configuring graphical login (greeter)"
 rm -f $LDM_CONF
