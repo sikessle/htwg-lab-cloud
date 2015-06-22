@@ -1,8 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require 'fileutils'
-
 Vagrant.configure(2) do |config|
 
     # Download if not existing from vagrantcloud latest Ubuntu 14.04 LTS
@@ -12,10 +10,6 @@ Vagrant.configure(2) do |config|
 
     # Sync this project folder to host @ /htwg-lab-cloud
     config.vm.synced_folder ".", "/htwg-lab-cloud"
-    # Clear it locally before syncing
-    local_devstack = "vm-devstack"
-    FileUtils.rm_r local_devstack if Dir.exist?(local_devstack)
-    config.vm.synced_folder local_devstack, "/home/vagrant/devstack", :create => true
 
     # Networking
     #
