@@ -1,8 +1,8 @@
 # This script is only a part of a the main script in the superfolder!
 
 BASEDN="ou=users,dc=fh-konstanz,dc=de"
-LDAP_CONF=/etc/ldap.conf
-LDM_CONF=/etc/lightdm/lightdm.conf
+LDAP_CONF="/etc/ldap.conf"
+LDM_CONF="/etc/lightdm/lightdm.conf"
 
 echo "configuring ldap for user: $USER"
 
