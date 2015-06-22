@@ -35,6 +35,7 @@ Vagrant.configure(2) do |config|
         # Hardware specs of VM
         vb.memory = 4096
         vb.cpus = 1
+        vb.customize ["modifyvm", :id, "--vram", "64"]
 
         # Promiscous mode
         # allow openstack guests to talk to each other on eth1, eth2
