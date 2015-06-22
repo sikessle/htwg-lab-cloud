@@ -2,7 +2,7 @@
 
 LAB_DRIVE_SCRIPT="/usr/local/bin/mount-lab-drive.sh"
 LAB_DRIVE_MNT_POINT="/media/lab-drive"
-LAB_DRIVE_MNT_FSTAB="/dev/vdb	$LAB_DRIVE_MNT_POINT	ext4	rw,suid,dev,exec,auto,users,async	0	0"
+LAB_DRIVE_MNT_FSTAB="/dev/vdb	$LAB_DRIVE_MNT_POINT	ext4	rw,suid,dev,exec,auto,users,async,nobootwait	0	0"
 
 echo "creating mount script"
 
