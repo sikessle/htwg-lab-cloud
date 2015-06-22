@@ -192,10 +192,14 @@ if servers:
     sender = 'cloud@htwg-konstanz.de'
     receiver = 'studentA'
     message = ""
-    message += "Welcome to HTWG Cloud.\n"
-    message += "This is your link to access your virtual machine"
-    message += "Course : " + course.name + " - " + course.description
-    message += "Link : " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"]          
+    message += "Willkommen bei der HTWG Lab Cloud.\n"
+    message += "Hier ist Ihr Zugang zur Ihrer virtuellen Maschine:"
+    message += "Kurs: " + course.name + " - " + course.description
+    message += "Link: " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"]          
+    message += ""
+    message += "--"
+    message += "HTWG Lab Cloud"
+    message += "www.htwg-konstanz.de"
 
     send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
 '''
