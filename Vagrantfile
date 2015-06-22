@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
 
     # Sync this project folder to host @ /htwg-lab-cloud
     config.vm.synced_folder ".", "/htwg-lab-cloud"
+    config.vm.synced_folder "vm-devstack", "/home/vagrant/devstack", :create => true
 
     # Networking
     #
