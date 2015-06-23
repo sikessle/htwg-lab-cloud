@@ -543,8 +543,8 @@ class SetNetwork(workflows.Step):
 
 class LaunchInstance(workflows.Workflow):
     slug = "launch_instance"
-    name = _("Launch Instance")
-    finalize_button_name = _("Launch")
+    name = _("Instanzen starten")
+    finalize_button_name = _("Starten")
     success_message = _('Instanzen gestartet.')
     failure_message = _('Beim Starten der Instanzen ist ein Fehler aufgetreten.')
     success_url = "horizon:project:instances:index"
