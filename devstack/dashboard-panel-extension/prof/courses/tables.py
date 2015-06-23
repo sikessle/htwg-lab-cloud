@@ -9,7 +9,7 @@ from .course import CourseHelper
 # action to start instances
 class StartInstancesAction(tables.LinkAction):
     name = "start instance"
-    verbose_name = _("Start Instances")
+    verbose_name = _("Instanzen starten")
     url = "horizon:prof:courses:start_instances"
     classes = ("ajax-modal", "btn-launch")
 
@@ -26,9 +26,22 @@ class StartInstancesAction(tables.LinkAction):
 # action to stop instances
 class StopInstancesAction(tables.BatchAction):
     name = "stop instance"
-    action_present = _("Stop")
-    action_past = _("Stopped")
-    data_type_singular = _("Instance")
+
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Instanzen stoppen",
+            u"Instanzen stoppen",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Instanzen gestoppt",
+            u"Instanzen gestoppt",
+            count
+        )
 
     def allowed(self, request, instance=None):
        return True
@@ -48,6 +61,32 @@ class StopInstancesAction(tables.BatchAction):
         helper.stopInstances(courseId=obj_id)
         return True
 
+# action to refresh course
+class RefreshCourseAction(tables.BatchAction):
+    name = "refresh course"
+
+    @staticmethod
+    def action_present(count):
+        return ungettext_lazy(
+            u"Kurs aktualisieren",
+            u"Kurs aktualisieren",
+            count
+        )
+
+    @staticmethod
+    def action_past(count):
+        return ungettext_lazy(
+            u"Kurs aktualisiert",
+            u"Kurs aktualisiert",
+            count
+        )
+
+    def allowed(self, request, instance=None):
+       return True
+
+    def action(self, request, obj_id):
+        return True
+
 # default row filter
 class FilterAction(tables.FilterAction):
     name = "filter"
@@ -64,6 +103,6 @@ class CoursesTable(tables.DataTable):
 
     class Meta:
         name = "coursesTbl"
-        verbose_name = _("Courses")
+        verbose_name = _("Kurse")
 	table_actions = (FilterAction,)
-	row_actions = (StartInstancesAction, StopInstancesAction,)
+	row_actions = (StartInstancesAction, StopInstancesAction, RefreshCourseAction,)
