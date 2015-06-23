@@ -99,7 +99,7 @@ class SetInstanceDetailsAction(workflows.Action):
                                            required=False)
 
     image_id = forms.ChoiceField(
-        label=_("Pipapo"),
+        label=_("Image Name"),
         required=False,
         widget=forms.SelectWidget(
             data_attrs=('volume_size',),
