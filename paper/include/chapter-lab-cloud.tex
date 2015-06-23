@@ -147,7 +147,7 @@ Dabei ist der Arbeitsablauf analog zum Starten von Instanzen wie unter Abbildung
 
 \section{Dashboard}
 
-Das unter dem Codenamen Horizon entwickelte webbasierte Dashboard dient der vereinfachten Verwaltung der OpenStack-Umgebung. Die Komponente wurde in der Programmiersprache Python implementiert und nutzt neben dem Django-Framework für Webapplikationen auch Apache 2.0 als Webserver. Gegenüber der Kommandozeilen-Variante besitzt das Dashboard zwar einen beschränkten Funktionsumfang, jedoch können die wichtigsten administrativen Verwaltungsaufgaben durchgeführt werden. Dazu zählen unter anderem:
+Das unter dem Codenamen Horizon entwickelte webbasierte Dashboard vereint alle OpenStack-Komponenten, die zur Erstellung und Verwaltung einer Cloud-Umgebung erforderlich sind. Gegenüber der Kommandozeilen-Variante bietet Horizon eine komfortable Verwaltung der Cloud-Ressourcen und unterstützt die Durchführung der wichtigsten administrativen Verwaltungsaufgaben. Dazu zählen unter anderem:
 \begin{itemize}
 \item Integration von Images
 \item Management der Instanzen
@@ -157,15 +157,15 @@ Das unter dem Codenamen Horizon entwickelte webbasierte Dashboard dient der vere
 \item VNC
 \item etc.
 \end{itemize}
-Aufgrund des modularen Aufbaus von OpenStack kann das Dashboard individuell angepasst und erweitert werden. Die zugehörigen Schritte zur Anpassung des Frontends und Umsetzung einer funktionellen Erweiterung sind nachfolgend beschrieben.
+Das Dashboard wurde in der Programmiersprache Python implementiert und nutzt neben dem Django-Framework für Webapplikationen auch Apache 2.0 als Webserver. Aufgrund des modularen Aufbaus von OpenStack kann Horizon individuell angepasst und erweitert werden. Die zugehörigen Schritte zur Anpassung des Frontends und Umsetzung einer funktionellen Erweiterung sind nachfolgend beschrieben.
 
 \subsection{Anpassung von Horizon}
 
 Zur Vereinheitlichung des Designs wurde das Dashboard an das HTWG-Design angepasst. Somit fügt sich die HTWG Lab Cloud nahtlos in das offizielle HTWG Design ein.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
-\includegraphics[scale=0.4]{img/dashboard-login.png}
+\includegraphics[scale=0.38]{img/dashboard-login.png}
 \caption{HTWG Lab Cloud Dashboard Login}
 \label{dashboard-login}
 \end{figure}
@@ -174,28 +174,41 @@ Der Anmeldebildschirm zeigt das HTWG Lab Cloud Logo (vgl. \autoref{dashboard-log
 Die Blautöne entsprechen denen der HTWG.
 Ebenso wurden die anderen Ansichten im Dashboard alle an das HTWG Design angepasst (vgl. \autoref{dashboard-overview}).
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
-\includegraphics[scale=0.6]{img/dashboard-overview.png}
+\includegraphics[scale=0.43]{img/dashboard-overview.png}
 \caption{Übersichtsseite HTWG Lab Cloud Dashboard}
 \label{dashboard-overview}
 \end{figure}
 
 Realisiert wurde die Anpassung mittels SCSS\footnote{Sass-CSS, eine erweiterte CSS Sprache.} und dem Theme-Mechanismus von Horizon.
 Dabei müssen lediglich eine Datei und der \code{lab-cloud} Theme-Ordner in das Horizon Verzeichnis kopiert werden.
-Ein anschließendes \code{python manage.py collectstatic --noinput --clear && python manage.py compress --force && sudo service apache2 restart} im Horizon Ordner kompiliert die Themes und starten den Webserver neu.
+Ein anschließendes \code{python manage.py collectstatic --noinput --clear && python manage.py compress --force && sudo service apache2 restart} im Horizon Ordner kompiliert die Themes und startet den Webserver neu.
 
 \subsection{Erweiterung von Horizon}
+Zur vereinfachten Erstellung der virtuellen Maschinen für entsprechende Vorlesungen wurde Horizon um zusätzliche Funktionalität erweitert. Dazu zählt sowohl das Anzeigen aller Moodle-Kurse, in denen der Professor angemeldet ist, als auch die webbasierte Visualisierung zum Starten und Stoppen der entsprechenden Instanzen. Bevor auf die Herangehensweise zur Implementierung der Funktionalität eingangen wird, sollen zunächst die einzelnen Komponenten des Dashboards, die für das weitere Verständnis grundlegend sind, kurz erläutert werden. 
 
-\begin{description}
-\item[Dashboard und Panels: ]
-\item[TabGroups und Tabs: ]
-\item[DataTables: ] 
-\item[Workflows: ] 
-\item[Actions: ] 
-\item[URLs: ] 
-\item[Views: ] 
-\end{description}
+Als Dashboard wird sowohl das gesamte Webinterface von Horizon als auch die Top-Level-Komponente bezeichnet, die PanelGroups und Panels beinhaltet. Sogenannte PanelGroups dienen wiederum zur Gruppierung einzelner Panels. Während es sich bei Dashboards und PanelGroups ausschließlich um Navigationselemente handelt, bildet ein Panel die Grundlage einer Seite. Mit Hilfe von TabGroups und Tabs kann der Inhalt eines Panels kategorisch unterteilt werden. In Horizon wird ein wesentlicher Teil der Daten durch DataTables übersichtlich in Tabellenform dargestellt. Diese werden dynamisch in der Weboberfläche aufgebaut und automatisch gerendert. Neben dem Filtern der Tabellendaten nach bestimmten Kriterien bietet die Komponente eine Vielzahl von Actions, wie beispielsweise Lösch- und Update-Mechanismen sowie Batch-Actions, die auf die Tabelle angewandt werden können. Einige dieser Actions ermöglichen das Ausführen von Dialogfeldern, sogenannten Workflows, die durch Benutzereingaben komplexe Prozesse abbilden. Zusätzlich zu den bereits beschriebenen Komponenten gibt es noch Templates, die für das Rendern der Seiten zuständig sind.
+
+Da Horizon eine strikte Einhaltung der Namenskonventionen verfolgt, bestand der erste Schritt bei der Erstellung eines Dashboards sowie eines Panels in der Generierung einer Horizon-konformen Ordnerstruktur. Die Entwicklungsumgebung Devstack liefert standardmäßig ein Skript mit, das diese Problematik automatisch erledigt. Mit Hilfe der beiden Befehle \code{./run_tests.sh -m startdash prof --target openstack_dashboard/dashboards/prof} und \code{./run_tests.sh -m startpanel courses  --dashboard=openstack_dashboard.dashboards.prof  \ --target=openstack_dashboard/dashboards/prof/courses} erfolgte die Generierung der Ordnerstruktur für ein Dashboard \textit{Professor} und ein Panel \textit{Kurse}. Um das Dashboard anschließend anzuzeigen, musste es über die Datei \code{openstack_dashboard/enabled/_50_prof.py} anhand entsprechender Konfiguationsparameter aktiviert und Horizon zugänglich gemacht werden.
+
+Für das Anzeigen der Moodle-Kurse, in denen ein Professor angemeldet ist, wurde eine DataTable erstellt, die sämtliche Informationen der zugehörigen Vorlesungen übersichtlich darstellt. Auf dieser Übersichtsseite wird dem Professor anhand unterschiedlicher Aktionen die Möglichkeit geboten, Instanzen zu starten und zu stoppen, Vorlesungen zu filtern sowie Kurse zu aktualisieren. Bedingt dadurch, dass sich entsprechende Kursteilnehmer erst im Nachhinein in dem entsprechenden Moodle-Kurs angemeldet haben und dementsprechend keiner Instanz zugewiesen sind, dient letztere Aktion dazu, die fehlenden Instanzen nachträglich zu starten. Abbildung \ref{dashboard-courses} zeigt die Übersichtsseite der aus Moodle aufgelisteten Kurse.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.18]{img/dashboard-courses.png}
+\caption{Übersichtsseite Kurse}
+\label{dashboard-courses}
+\end{figure}
+
+Das Starten der Instanzen wurde mittels eines Workflows realisiert, das unterschiedliche Auswahlmöglichkeiten für den Professor beinhaltet (Abbildung \ref{dashboard-start-instances}). Neben der Verfügbarkeitszone und der Variante ist vorallem die Boot-Quelle essentiell, um die Instanzen entweder von einem Abbild oder einem Snapshot zu starten. Nach dem Bestätigen des Starten-Buttons werden in Abhängigkeit der Anzahl der Kursteilnehmer die Instanzen gestartet und entsprechend zugewiesen.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.25]{img/dashboard-start-instances.png}
+\caption{Workflow zum Starten der Instanzen}
+\label{dashboard-start-instances}
+\end{figure}
 
 \section{OpenStack LDAP-Authentifizierung}\label{ldap_auth1}
 
