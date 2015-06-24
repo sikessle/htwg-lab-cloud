@@ -85,6 +85,9 @@ class RefreshCourseAction(tables.BatchAction):
        return True
 
     def action(self, request, obj_id):
+        helper = CourseHelper(request.user)
+        # refresh all instances of the course.
+        helper.refreshInstances(courseId=obj_id)
         return True
 
 # default row filter
