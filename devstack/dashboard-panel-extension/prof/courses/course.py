@@ -191,33 +191,3 @@ class CourseHelper:
             instance = self.nova.servers.get(instance.id)
             status = instance.status
             print "status: %s" % status
-
-import inspect
-client = Admin()
-keystone = client.keystone("Umfrage")
-
-for a in inspect.getmembers(keystone):
-    print a
-print keystone.password
-
-'''
-course = Course(name="Concurrent Programming", id="2166", description="Concurrent Programming course description")
-if servers:
-    print servers
-    print servers[0].get_vnc_console(console_type="novnc")["console"]["url"]
-    sender = 'cloud@htwg-konstanz.de'
-    receiver = 'studentA'
-    message = ""
-    message += "Willkommen bei der HTWG Lab Cloud.\n"
-    message += "Hier ist Ihr Zugang zur Ihrer virtuellen Maschine:"
-    message += "Kurs: " + course.name + " - " + course.description
-    message += "Link: " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"]          
-    message += ""
-    message += "--"
-    message += "HTWG Lab Cloud"
-    message += "www.htwg-konstanz.de"
-
-    send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
-'''
-
-
