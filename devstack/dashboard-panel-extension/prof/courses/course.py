@@ -101,6 +101,15 @@ class CourseHelper:
         self.nova.security_group_rules.create(parent_group_id=group.id, ip_protocol="udp", from_port=1, to_port=65535, cidr="0.0.0.0/0")
         self.nova.security_group_rules.create(parent_group_id=group.id, ip_protocol="icmp", from_port=-1, to_port=-1, cidr="0.0.0.0/0")
 
+    # refresh will execute startInstances again. startInstance will only start an instance for users which doesn't already have one.
+    # method is useful if the moodle course get some new members which require a maschine with the same image of the course.
+    def refreshInstances(self, courseId=None):
+        course = self.getCourse(courseId)
+        self.switchTenant(course.name)
+        servers = self.nova.servers.list()
+        if servers:
+            self.startInstances(courseId, imageId=servers[0].image["id"], flavorId=servers[0].flavor["id"])
+
     def stopInstances(self, courseId=None):
         course = self.getCourse(courseId)
         self.switchTenant(course.name)
@@ -182,11 +191,16 @@ class CourseHelper:
             instance = self.nova.servers.get(instance.id)
             status = instance.status
             print "status: %s" % status
-'''
+
 import inspect
 client = Admin()
-nova = client.nova("Concurrent Programming")
-servers = nova.servers.list(search_opts={'name': "2166-studentA"})
+keystone = client.keystone("Umfrage")
+
+for a in inspect.getmembers(keystone):
+    print a
+print keystone.password
+
+'''
 course = Course(name="Concurrent Programming", id="2166", description="Concurrent Programming course description")
 if servers:
     print servers
