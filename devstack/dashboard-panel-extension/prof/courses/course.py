@@ -151,16 +151,19 @@ class CourseHelper:
         #get the instance
         servers = self.nova.servers.list(search_opts={'name': instanceName})
         if servers:
-            sender = 'cloud@htwg-konstanz.de'
-            receiver = student
-            message = ""
-            message += "Welcome to HTWG Cloud.\n"
-            message += "This is your link to access your virtual machine\n"
-            message += "Course : " + course.name + " - " + course.description + "\n"
-            message += "Link : " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"] + "\n"
-            print "SendMail " + receiver
-            send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
-            
+            try:
+                sender = 'cloud@htwg-konstanz.de'
+                receiver = student
+                message = ""
+                message += "Welcome to HTWG Cloud.\n"
+                message += "This is your link to access your virtual machine\n"
+                message += "Course : " + course.name + " - " + course.description + "\n"
+                message += "Link : " + servers[0].get_vnc_console(console_type="novnc")["console"]["url"] + "\n"
+                print "SendMail " + receiver
+                send_mail('HTWG Cloud - ' + course.name, message, sender, [receiver], fail_silently=False)
+            except:
+                print 'sendVncConsole failed'
+                
             
 
     def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
@@ -179,7 +182,6 @@ class CourseHelper:
             instance = self.nova.servers.get(instance.id)
             status = instance.status
             print "status: %s" % status
-
 '''
 import inspect
 client = Admin()
