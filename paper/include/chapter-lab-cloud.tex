@@ -21,7 +21,10 @@ von jedem beliebigen Laborrechner zu erhalten.
 Die HTWG Lab Cloud will die so eben beschriebenen Probleme lösen und einen Cloud Dienst zur
 Verfügung stellen. Dieser Dienst soll das einfache Erstellen von virtuellen Maschinen für
 Vorlesungen zur Verfügung stellen. Die somit erstellten virtuellen Maschinen sollen dann für
-einen Studenten über eine entsprechende Remote Verbindung zugreifbar sein.
+einen Studenten über eine entsprechende Remote Verbindung zugreifbar sein. Der Cloud Dienst soll
+sich zudem in die vorhandenen Systeme integrieren. Damit ist gemeint, dass vorhandene
+Dienste genutzt werden sollen wie beispielsweise Authentifizierungsmechanismen der Hochschule
+oder auch die Verwaltung von Vorlesungen durch Moodle.
 
 Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
 \begin{itemize}
@@ -29,26 +32,8 @@ Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
 \item Starten von virtuellen Maschinen für die Teilnehmer einer Vorlesung.
 \item Ein vom Laborraum unabhängiger Zugriff auf virtuelle Maschinen durch Studenten.
 \item Die Nutzung der vorhandenen Authentifizierungsmethoden der Hochschule.
+\item Integration von Moodle um vorhandene Informationen zu nutzen.
 \end{itemize}
-
-Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
-die vorhandenen Komponenten der HTWG Lab Cloud geben. Ein Professor kann über einen
-Webbrowser auf das Dashboard der Cloud zugreifen. Dabei zeigt das Dashboard die Vorlesungen
-eines Professors an. Für die Teilnehmer einer Vorlesung kann daraufhin eine virtuelle Maschine
-mit einem ausgewählten Image gestartet werden. Dabei stehen dem Professor eine Reihe von Basis
-Images bereit, welche er beliebig erweitern kann.
-Nachdem die virtuellen Maschinen für die Studenten gestartet wurden, kann auf diese mittels
-VNC zugegriffen werden.
-Die Details zum eben genannten groben Überblick sind in den nachfolgenden 
-Unterkapiteln nachzulesen.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.4]{img/overview.pdf}
-\caption{Überblick HTWG Lab Cloud}
-\label{overview}
-\FloatBarrier
-\end{figure}
 
 \section{Workflow und Organisation}
 In diesem Abschnitt werden die internen Abläufe der HTWG Lab Cloud erläutert. Die folgenden
@@ -66,6 +51,30 @@ Die in den folgenden Unterkapiteln angegebenen Arbeitsschritte wurden vollständ
 integriert, in Form einer Dashboard Erweiterung.
 Zur Kommunikation mit den einzelnen Komponenten, wie beispielsweise Nova oder auch Cinder, wurden
 die jeweiligen Python API's verwendet.
+
+Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
+die vorhandenen Komponenten der HTWG Lab Cloud geben. Ein Professor kann über einen
+Webbrowser auf das Dashboard der Cloud zugreifen. Dabei zeigt das Dashboard die Vorlesungen
+eines Professors an. Nähere Informationen über das Dashboard sind im folgenden Kapitel
+\ref{horizon} zu finden. 
+Für die Teilnehmer einer Vorlesung kann daraufhin eine virtuelle Maschine
+mit einem ausgewählten Image gestartet werden. Dabei stehen dem Professor eine Reihe von Basis
+Images bereit, welche er beliebig erweitern kann.
+Nachdem die virtuellen Maschinen für die Studenten gestartet wurden, kann auf diese mittels
+VNC zugegriffen werden.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{img/overview.pdf}
+\caption{Überblick HTWG Lab Cloud}
+\label{overview}
+\FloatBarrier
+\end{figure}
+
+Die Details zum soeben genannten Überblick sind in den nachfolgenden 
+Unterkapiteln nachzulesen. 
+Dabei werden die internen Abläufe beim Anzeigen von Vorlesungen in Openstack, dem Starten, Stoppen
+und Aktualisieren von virtuellen Maschinen Instanzen beschrieben.
 
 
 
@@ -99,7 +108,7 @@ Abbildung \ref{createTenants} dargestellt.
 Beim Starten der virtuellen Maschinen Instanzen einer Vorlesung 
 (siehe Abbildung \ref{startInstances}) setzten wir voraus das für
 die jeweiligen Vorlesungen bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
-(siehe hierzu auch Kapitel TODO), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
+(siehe hierzu auch Kapitel \ref{horizon}), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
 angefragt. Dabei enthält die Teilnehmerliste die Namen und Email Adressen der Studenten.
 Nun wird für jeden Teilnehmer eine Instanz gestartet. Die Instanz wird dabei für das jeweilige
 Tenant gestartet und folgt einem vorgegebenen Namensschema. Das Schema ist eine Kombination
@@ -185,7 +194,7 @@ Realisiert wurde die Anpassung mittels SCSS\footnote{Sass-CSS, eine erweiterte C
 Dabei müssen lediglich eine Datei und der \code{lab-cloud} Theme-Ordner in das Horizon Verzeichnis kopiert werden.
 Ein anschließendes \code{python manage.py collectstatic --noinput --clear && python manage.py compress --force && sudo service apache2 restart} im Horizon Ordner kompiliert die Themes und startet den Webserver neu.
 
-\subsection{Erweiterung von Horizon}
+\subsection{Erweiterung von Horizon}\label{horizon}
 Zur vereinfachten Erstellung der virtuellen Maschinen für entsprechende Vorlesungen wurde Horizon um zusätzliche Funktionalität erweitert. Dazu zählt sowohl das Anzeigen aller Moodle-Kurse, in denen der Professor angemeldet ist, als auch die webbasierte Visualisierung zum Starten und Stoppen der entsprechenden Instanzen. Bevor auf die Herangehensweise zur Implementierung der Funktionalität eingangen wird, sollen zunächst die einzelnen Komponenten des Dashboards, die für das weitere Verständnis grundlegend sind, kurz erläutert werden. 
 
 Als Dashboard wird sowohl das gesamte Webinterface von Horizon als auch die Top-Level-Komponente bezeichnet, die PanelGroups und Panels beinhaltet. Sogenannte PanelGroups dienen wiederum zur Gruppierung einzelner Panels. Während es sich bei Dashboards und PanelGroups ausschließlich um Navigationselemente handelt, bildet ein Panel die Grundlage einer Seite. Mit Hilfe von TabGroups und Tabs kann der Inhalt eines Panels kategorisch unterteilt werden. In Horizon wird ein wesentlicher Teil der Daten durch DataTables übersichtlich in Tabellenform dargestellt. Diese werden dynamisch in der Weboberfläche aufgebaut und automatisch gerendert. Neben dem Filtern der Tabellendaten nach bestimmten Kriterien bietet die Komponente eine Vielzahl von Actions, wie beispielsweise Lösch- und Update-Mechanismen sowie Batch-Actions, die auf die Tabelle angewandt werden können. Einige dieser Actions ermöglichen das Ausführen von Dialogfeldern, sogenannten Workflows, die durch Benutzereingaben komplexe Prozesse abbilden. Zusätzlich zu den bereits beschriebenen Komponenten gibt es noch Templates, die für das Rendern der Seiten zuständig sind.
