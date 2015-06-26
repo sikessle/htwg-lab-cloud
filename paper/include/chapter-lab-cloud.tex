@@ -35,32 +35,23 @@ Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
 \end{itemize}
 
 \section{Workflow und Organisation}
-In diesem Abschnitt werden die internen Abläufe der HTWG Lab Cloud erläutert. Die folgenden
-Vorgänge sind völlig transparent für einen Professor und Studenten und dienen lediglich zum
-Verständnis der technischen Umsetzung.
-Dabei soll die Kommunikation mit den notwendigen Openstack Komponenten verdeutlicht werden.
-Also beispielsweise welche Komponenten für das Starten von virtuellen Maschinen Instanzen 
-für eine Vorlesung notwendig sind.
-In den nachfolgenden Grafiken wird zur Übersicht auf die Darstellung von
-Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung vorzufinden sind.
+Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
+die vorhandenen Komponenten der HTWG Lab Cloud geben.
+Ein Professor kann über einen
+Webbrowser auf das Dashboard der Cloud zugreifen. Der Zugriff auf das Dashboard wird dabei
+über den LDAP Server der HTWG Konstanz geregelt. Nach erfolgreicher Authentifizierung 
+zeigt das Dashboard die Vorlesungen eines Professors an. Die hierfür notwendigen Informationen
+werden vom Moodle Server der Fachhochschule bezogen. 
+Es besteht nun die Möglichkeit virtuelle Maschinen für eine Vorlesung zu starten.
+Dabei stehen dem Professor eine Reihe von Basis Images bereit, welche er beliebig erweitern kann.
+Nach erfolgreichem Start der Instanzen werden die
+Studenten, welche in der Vorlesung angemeldet sind, über den HTWG Mail Server mit den
+Zugriffsdaten ihrer virtuellen Maschine informiert. Der Zugriff auf die Maschine erfolgt dann mit
+einem Browser über VNC. Zur Authentifizierung eines Nutzers auf einer virtuellen Maschine wird
+dann wieder der LDAP Server der HTWG verwendet.
 Weitere Informationen über die Authentifizierung über LDAP sind in den nachfolgenden
 Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
 
-Die in den folgenden Unterkapiteln angegebenen Arbeitsschritte wurden vollständig in Horizon
-integriert, in Form einer Dashboard Erweiterung.
-Zur Kommunikation mit den einzelnen Komponenten, wie beispielsweise Nova oder auch Cinder, wurden
-die jeweiligen Python API's verwendet.
-
-Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
-die vorhandenen Komponenten der HTWG Lab Cloud geben. Ein Professor kann über einen
-Webbrowser auf das Dashboard der Cloud zugreifen. Dabei zeigt das Dashboard die Vorlesungen
-eines Professors an. Nähere Informationen über das Dashboard sind im folgenden Kapitel
-\ref{horizon} zu finden. 
-Für die Teilnehmer einer Vorlesung kann daraufhin eine virtuelle Maschine
-mit einem ausgewählten Image gestartet werden. Dabei stehen dem Professor eine Reihe von Basis
-Images bereit, welche er beliebig erweitern kann.
-Nachdem die virtuellen Maschinen für die Studenten gestartet wurden, kann auf diese mittels
-VNC zugegriffen werden.
 
 \begin{figure}[H]
 	\centering
@@ -70,10 +61,23 @@ VNC zugegriffen werden.
 \FloatBarrier
 \end{figure}
 
-Die Details zum soeben genannten Überblick sind in den nachfolgenden 
-Unterkapiteln nachzulesen. 
-Dabei werden die internen Abläufe beim Anzeigen von Vorlesungen in Openstack, dem Starten, Stoppen
-und Aktualisieren von virtuellen Maschinen Instanzen beschrieben.
+Nachdem wir einen Überblick des Systems betrachtet haben sollen nun 
+die internen Abläufe der HTWG Lab Cloud erläutert. Die folgenden
+Vorgänge sind völlig transparent für einen Professor und Studenten und dienen lediglich zum
+Verständnis der technischen Umsetzung.
+Dabei soll die Kommunikation mit den notwendigen Openstack Komponenten verdeutlicht werden.
+Also beispielsweise welche Komponenten für das Starten von virtuellen Maschinen Instanzen 
+für eine Vorlesung notwendig sind.
+In den nachfolgenden Grafiken wird zur Übersicht auf die Darstellung von
+Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung vorzufinden sind.
+
+Die in den folgenden Unterkapiteln angegebenen Arbeitsschritte wurden vollständig in Horizon
+integriert, in Form einer Dashboard Erweiterung.
+Zur Kommunikation mit den einzelnen Komponenten, wie beispielsweise Nova oder auch Cinder, wurden
+die jeweiligen Python API's verwendet.
+
+
+
 
 
 
@@ -223,7 +227,7 @@ Das Starten der Instanzen wurde mittels eines Workflows realisiert, das untersch
 \section{Anbindung an Moodle}
 
 
-\section{Fernzugriff (VNC)}
+\section{Fernzugriff (VNC)}\label{vnc}
 
 Meist wird in OpenStack Umgebungen lediglich von Instanzen ohne graphische Oberfläche ausgegangen, auf denen beliebige Serveranwendungen laufen. 
 Der dadurch oft genannte SSH-Zugang ist dafür vollkommen ausreichend.
