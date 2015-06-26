@@ -1,11 +1,10 @@
 \chapter{HTWG Lab Cloud}
 
 Nachfolgend werden die Ziele, Anwendungsfälle und die eigentliche Implementierung des Projekts erläutert.
-
 Der Quellcode ist öffentlich auf GitHub \cite{git-source} verfügbar. Weitere Entwicklungen finden stets in diesem Repository statt. Etwaige Pull-Request werden gerne angenommen.
 
 \section{Zielsetzung}
-Erfahrungsgemäß jeder Student kennt das folgende Problem. Eine Vorlesung wird
+Erfahrungsgemäß kennt jeder Student das folgende Problem. Eine Vorlesung wird
 besucht, in welcher neue Technologien kennengelernt werden. Folglich werden neue Anwendungen
 eingesetzt, die zunächst installiert werden müssen. 
 Findet die Vorlesung in einem Laborraum statt, 
@@ -232,27 +231,22 @@ Die HTWG Lab Cloud stellt jedoch eher eine \emph{Virtual Desktop Infrastructure}
 Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnte graphische Desktopumgebung (z. B. Unity oder KDE) in dieser Cloud-Lösung.
 
 Da VNC ein unsicheres Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
-
 Der OpenStack VNC Console Proxy bietet diese Funktionen an.
-Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id xvpvnc}.
-Mit einem angepassten Java VNC Client \cite{vncJava} kann auf die jeweilige Instanz per VNC zugegriffen werden. 
-Dazu ist lediglich die URL mit dem Access-Token notwendig, welche der Benutzer per E-Mail nach Start seiner Instanz erhält.
-
-Alternativ ist auch der Zugriff per Web-VNC möglich. 
-Dazu muss lediglich beim Erstellen der URL der Parameter \code{novnc} angegeben werden. 
+Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id novnc}.
 Anschließend kann auf die Instanz über den Browser zugegriffen werden.
+Dieser Browser-basierte VNC Zugang ist schneller als herkömmliche VNC Clients.
 
-\section{Snapshots}
+\section{Schattenkopie}
 
 Das hier vorgestellte Basis-Image stellt lediglich die Grundfunktionalitäten bereit. 
 Um maximalen Nutzen aus der HTWG Lab Cloud zu ziehen, ist es elementar das Image an die jeweilige Übung möglichst genau anzupassen.
 
 Hierbei wurden die Boardmittel von OpenStack evaluiert.
-Wie sich herausgestellt hat, bietet OpenStack mit der \emph{Snapshot} Funktionalität genau dieses Feature an.
-Von einer erstellten Instanz kann jederzeit ein Snapshot angefertigt werden.
+Wie sich herausgestellt hat, bietet OpenStack mit der \emph{Schattenkopie} Funktionalität genau dieses Feature an.
+Von einer erstellten Instanz kann jederzeit eine Schattenkopie angefertigt werden.
 Dieser entspricht exakt einem neuen herkömmlichen Image.
 
-Also kann ein Professor das Basis-Image in einer Instanz starten, an die Übungsstunde anpassen und über \emph{Snapshot} ein neues Image erstellen.
+Also kann ein Professor das Basis-Image in einer Instanz starten, an die Übungsstunde anpassen und über \emph{Schattenkopie erstellen} ein neues Image erstellen.
 Anschließend wird das Image beim Start der Instanzen ausgewählt.
 
 \section{Netzwerk}
@@ -262,13 +256,13 @@ Dabei werden drei Netzwerkadapter mit folgender Konfiguration verwendet:
 
 \begin{itemize}
 \item eth0: NAT Interface, welches den Internetzugriff bereitstellt. Auf diesem Adapter läuft auch ein DHCP Server.
-\item eth1: Interface ohne DHCP und Internetzugriff. Wird als Management-Netzwerk bzw. internes Netzwerk verwendet, über das die einzelnen Instanzen miteinander kommunizieren können. Muss sich im Promiscous Modus befinden, damit die Netzwerkpakete korrekt weitergereicht werden. Bei Installation in einer Virtuellen Maschine ist dieser Adapter auf \emph{host-only} geschaltet.
-\item eth2: Interface auf dem öffentliche IP-Adressen der Instanzen allokiert werden und das HTWG Lab Cloud Dashboard erreichbar ist. Bei Installation in einer Virtuellen Maschine ist dieser Adapter mit dem Modus \emph{bridged}  mit einem lokalen, öffentlich zugänglichen Adapter verbunden.
+\item eth1: Interface ohne DHCP und Internetzugriff. Wird als Management-Netzwerk bzw. internes Netzwerk verwendet, über das die einzelnen Instanzen miteinander kommunizieren können. Muss sich im Promiscous Modus befinden, damit die Netzwerkpakete korrekt weitergereicht werden. Bei Installation in einer virtuellen Maschine ist dieser Adapter auf \emph{host-only} geschaltet.
+\item eth2: Interface auf dem öffentliche IP-Adressen der Instanzen allokiert werden und das HTWG Lab Cloud Dashboard erreichbar ist. Bei Installation in einer virtuellen Maschine ist dieser Adapter mit dem Modus \emph{bridged}  mit einem lokalen, öffentlich zugänglichen Adapter verbunden.
 \end{itemize}
 
 Zusätzlich wird automatisch eine Bridge erstellt welche die Instanzen (an den Adaptern vnetX) mit dem Adapter eth1 verbindet.
-Bei Installation außerhalb einer Virtuellen Maschine, kann der Adapter eth2 und eth0 zusammengelegt werden. 
-Diese Trennung ist lediglich in einer Virtuellen Maschine erforderlich, um von außerhalb auf die HTWG Lab Cloud bzw. die Instanzen zugreifen zu können.
+Bei Installation außerhalb einer virtuellen Maschine, kann der Adapter eth2 und eth0 zusammengelegt werden. 
+Diese Trennung ist lediglich in einer virtuellen Maschine erforderlich, um von außerhalb auf die HTWG Lab Cloud bzw. die Instanzen zugreifen zu können.
 Denn der Adapter eth2 stellt den Zugang von außerhalb über den bridged Modus zur Verfügung.
 Des Weiteren muss auf dem Host noch mittels \code{iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE} Source-NAT aktiviert werden, sodass die Instanzen Internetzugriff haben.
 
@@ -285,13 +279,13 @@ Der Workflow, um ein Image anzupassen und nachfolgend Instanzen mit diesem den S
 \begin{enumerate}
 \item Starten des Basis-Images in einer Instanz durch den Professor.
 \item Installation von Programmen, Konfiguration der Instanz und andere Anpassungen.
-\item Erstellen eines Snapshots, um die Änderungen festzuhalten. Dies erzeugt ein neues Image.
+\item Erstellen einer Schattenkopie, um die Änderungen festzuhalten. Dies erzeugt ein neues Image.
 \item Starten der einzelnen Instanzen für die Studenten. Dabei wird die Instanz automatisch an den Student angepasst, sodass nur dieser Zugriff mittels seiner im LDAP hinterlegten Zugangsdaten hat.
 \end{enumerate}
 
 Im Folgenden wird auf die einzelnen Komponenten, die im Zuge dieser Projektarbeit erarbeitet wurden, eingegangen. 
 
-\subsection{Details}
+\subsection{Betriebssystem Details}
 
 Als Betriebssystem wurde Ubuntu 14.04 Desktop LTS ausgewählt. 
 Dieses ist zwar nicht die neuste Ubuntu-Version, bietet jedoch aufgrund des \emph{Long Term Support} Updates und relevante Sicherheitsfixes für 5 Jahre. 
@@ -330,7 +324,7 @@ Durch Installation einiger Pakete und Anpassung von Konfigurationsdateien, wurde
 
 \begin{itemize}
 \item Installation von \code{cloud-init}, \code{cloud-utils} und \code{cloud-initramfs-growroot} *
-\item Anpassen der Kernel-Boot-Parameter in der Datei \code{/etc/default/grub}. Dort wurde der Parameter \code{console=tty,ttyS0} ergänzt. Ein anschließendes \code{update-grub} aktualisert den Grub-Bootloader. Diese Änderung aktiviert die Ausgabe der Log-Meldungen im Horizon-Dashboard.
+\item Anpassen der Kernel-Boot-Parameter in der Datei \code{/etc/default/grub}. Dort wurde der Parameter \code{console=tty0,ttyS0} ergänzt. Ein anschließendes \code{update-grub} aktualisert den Grub-Bootloader. Diese Änderung aktiviert die Ausgabe der Log-Meldungen im Horizon-Dashboard.
 \item Anpassen von \code{cloud.cfg} des Pakets \code{cloud-init}. Dieses deaktiviert standardmäßig den Passwort-Login des Images. Da sich Nutzer jedoch per LDAP bzw. mit dem Standardbenutzername anmelden können sollen, muss dies aktiviert werden. *
 \end{itemize}
 
@@ -408,13 +402,13 @@ Alle vorhergehenden Konfigurationen werden in den folgenden Dateien durchgeführ
 Die genauen Details finden sich in den Readme und Skript Dateien bei den Projektquellen.
 
 \begin{itemize}
-\item \code{/etc/nsswitch.conf}: LDAP als PAM Authentifizierungsmodul
-\item \code{/etc/ldap.conf}: LDAP Konfiguration inkl. Attributmapping und -überschreiben
-\item \code{/etc/pam.d/common-session}: Erstellen des lokalen home Verzeichnisses beim erstmaligen Login
-\item \code{/etc/security/group.conf}: Zuweisung von lokalen Systemgruppen an LDAP Benutzer
-\item \code{/etc/pam.d/common-auth}: Hinzufügen des PAM Gruppenmoduls
-\item \code{/etc/group}: Definition der Systemgruppen für den jeweiligen LDAP-Benutzer
-\item \code{/etc/lightdm/lightdm.conf}: LDAP Login über den graphischen Login-Manager ermöglichen
+\item \code{/etc/nsswitch.conf}: LDAP als PAM Authentifizierungsmodul.
+\item \code{/etc/ldap.conf}: LDAP Konfiguration inkl. Attributmapping und -überschreiben.
+\item \code{/etc/pam.d/common-session}: Erstellen des lokalen home Verzeichnisses beim erstmaligen Login.
+\item \code{/etc/security/group.conf}: Zuweisung von lokalen Systemgruppen an LDAP Benutzer.
+\item \code{/etc/pam.d/common-auth}: Hinzufügen des PAM Gruppenmoduls.
+\item \code{/etc/group}: Definition der Systemgruppen für den jeweiligen LDAP-Benutzer.
+\item \code{/etc/lightdm/lightdm.conf}: LDAP Login über den graphischen Login-Manager ermöglichen.
 \end{itemize}
 
 \subsection{HTWG home-Laufwerk}
@@ -444,7 +438,7 @@ Eine Herausforderung stellt die Hotplug-Fähigkeit dar.
 Das Laufwerk könnte zu jeder Zeit an die Instanz an- und abgeschlossen werden.
 Des Weiteren muss beim ersten Anbinden das Laufwerk als ext4 formatiert werden.
 
-Die Linux Systemdienste \code{mount mit fstab} und \code{udev} bieten die nötige Infrastruktur zur Realisierung.
+Die Linux Systemdienste \code{mount (fstab)} und \code{udev} bieten die nötige Infrastruktur zur Realisierung.
 Nachfolgen ist der Ablauf beschrieben, wie mit dem Laufwerk umgegangen wird bzw. die Tools installiert und konfiguriert werden.
 
 \begin{itemize}
@@ -485,7 +479,7 @@ Die Netzwerkfunktionalität von OpenStack ist einerseits extrem flexibel, zuglei
 Eine lauffähige Netzwerkumgebung aufzusetzen, erforderte ebenfalls großen Aufwand.
 
 Ein weiteres Problem bestand in der Erstellung des Basis-Image aufgrund von Performance Problemen.
-Auf einem handelsüblichen Notebook eine Virtuelle Maschine mit DevStack zu starten und in dieser dann nochmals ein komplettes Betriebssystem wie Ubuntu zu virtualisieren, zeigte der Hardware die Grenzen auf.
+Auf einem handelsüblichen Notebook eine virtuelle Maschine mit DevStack zu starten und in dieser dann nochmals ein komplettes Betriebssystem wie Ubuntu zu virtualisieren, zeigte der Hardware die Grenzen auf.
 Deshalb musste zuerst ein VirtualBox Image konfiguriert und Skripte zur Umwandlung nach OpenStack entwickelt werden.
 
 Insgesamt lässt sich mit einem so komplexen System wie OpenStack kein schneller Program-Compile-Execute Zyklus durchführen.

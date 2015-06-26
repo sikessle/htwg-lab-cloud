@@ -1,6 +1,6 @@
 \chapter{Deployment}
 
-Um die HTWG Lab Cloud in einer Testumgebung auf einer einzelnen virtuellen Maschine aufzusetzen wurden mehrere \code{deploy.sh} Skripte entwickelt.
+Um die HTWG Lab Cloud in einer Testumgebung auf einer einzelnen Maschine aufzusetzen wurden mehrere \code{deploy.sh} Skripte entwickelt.
 Dabei werden mittels DevStack \cite{devstack} alle nötigen OpenStack Komponenten des \enquote{stable/kilo} Zweiges aufgesetzt.
 DevStack basiert dabei auf vielen Shell-Skripten, die jeweils die Komponenten herunterladen und konfigurieren.
 Durch den gleichen Ansatz, fügt sich der HTWG Lab Cloud Deployment Prozess sehr gut in dieses Schema ein:
@@ -13,7 +13,7 @@ Durch den gleichen Ansatz, fügt sich der HTWG Lab Cloud Deployment Prozess sehr
 \item Das deploy.sh Skript führt rekursiv alle weiteren Skripte in den Unterordnern der einzelnen Erweiterungen aus.
 \item Daraufhin werden alle nötigen Anpassungen am Hostbetriebssystem durchgeführt.  Des Weiteren werden alle OpenStack Komponenten heruntergeladen und installiert. Schlussendlich werden die Erweiterungen in OpenStack installiert. Als Installationsort wird \code{/opt/stack} und \code{/opt/stack/htwg} verwendet.
 \item Das Basis-Image für die Instanzen steht im home-Verzeichnis des Hosts zur Verfügung.
-\item Das Dashboard steht unter \code{http://localhost} zur Verfügung. Als Zugangsdaten werden die gewohnten HTWG Zugangsdaten der Professoren verwendet.
+\item Das Dashboard steht unter der vom Skript angegeben IP zur Verfügung. Als Zugangsdaten werden die gewohnten HTWG Zugangsdaten der Professoren verwendet.
 \end{enumerate}
 
 Zudem wurde mittels Vagrant \cite{Vagrant} eine schnelle Möglichkeit geschaffen mit wenigen Befehlen die HTWG Lab Cloud in einer virtuellen Maschine (VirtualBox) zu starten. 
