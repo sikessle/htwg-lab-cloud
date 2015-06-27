@@ -31,7 +31,7 @@ Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
 \item Starten von virtuellen Maschinen für die Teilnehmer einer Vorlesung.
 \item Ein vom Laborraum unabhängiger Zugriff auf virtuelle Maschinen durch Studenten.
 \item Die Nutzung der vorhandenen Authentifizierungsmethoden der Hochschule.
-\item Integration von Moodle um vorhandene Informationen zu nutzen.
+\item Integration von Moodle, um vorhandene Informationen zu nutzen.
 \end{itemize}
 
 \section{Workflow und Organisation}
@@ -42,8 +42,8 @@ Webbrowser auf das Dashboard der Cloud zugreifen. Der Zugriff auf das Dashboard 
 über den LDAP Server der HTWG Konstanz geregelt. Nach erfolgreicher Authentifizierung 
 zeigt das Dashboard die Vorlesungen eines Professors an. Die hierfür notwendigen Informationen
 werden vom Moodle Server der Fachhochschule bezogen. 
-Es besteht nun die Möglichkeit virtuelle Maschinen für eine Vorlesung zu starten.
-Dabei stehen dem Professor eine Reihe von Basis Images bereit, welche er beliebig erweitern kann.
+Es besteht nun die Möglichkeit, virtuelle Maschinen für eine Vorlesung zu starten.
+Dabei stehen dem Professor eine Reihe von Basis-Images bereit, welche er beliebig erweitern kann.
 Nach erfolgreichem Start der Instanzen werden die
 Studenten, welche in der Vorlesung angemeldet sind, über den HTWG Mail Server mit den
 Zugriffsdaten ihrer virtuellen Maschine informiert. Der Zugriff auf die Maschine erfolgt dann mit
@@ -61,8 +61,8 @@ Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
 \FloatBarrier
 \end{figure}
 
-Nachdem wir einen Überblick des Systems betrachtet haben sollen nun 
-die internen Abläufe der HTWG Lab Cloud erläutert. Die folgenden
+Nachdem wir einen Überblick des Systems betrachtet haben, sollen nun 
+die internen Abläufe der HTWG Lab Cloud erläutert werden. Die folgenden
 Vorgänge sind völlig transparent für einen Professor und Studenten und dienen lediglich zum
 Verständnis der technischen Umsetzung.
 Dabei soll die Kommunikation mit den notwendigen Openstack Komponenten verdeutlicht werden.
@@ -91,7 +91,7 @@ Auf ein Tenant können Openstack Nutzer Zugriff erhalten, um virtuelle Maschinen
 zu können. Dabei können Tenants von einem Administrator entsprechend konfiguriert werden, damit
 beispielsweise nur eine festgelegte Anzahl von Ressourcen verwendet werden kann.
 
-Um nun virtuelle Maschinen verwalten zu können muss also ein Tenant existieren.
+Um nun virtuelle Maschinen verwalten zu können, muss also ein Tenant existieren.
 Damit die HTWG Lab Cloud in die vorhandenen Systeme integriert wird, werden zunächst
 alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
 Daraufhin wird für jede Vorlesung ein gleichnamiges Tenant erstellt. Zuletzt wird das Tenant
@@ -135,10 +135,10 @@ Link für den Zugriff auf seine virtuelle Maschine über VNC enthält.
 \subsection{Stoppen von Instanzen}
 Das Stoppen der virtuellen Maschinen, welches unter Abbildung \ref{stopInstances} dargestellt ist,
 soll hiermit auch erwähnt werden.
-Beim Stoppen wird kein nicht zuerst eine Teilnehmerliste vom HTWG Moodle Server angefragt, wie
+Beim Stoppen wird nicht zuerst eine Teilnehmerliste vom HTWG Moodle Server angefragt, wie
 wir es noch beim Starten der Instanzen gesehen haben. Stattdessen wird über Nova eine Anfrage
-gestellt um alle Instanzen des jeweiligen Tenants zu erhalten. Die so erhaltenen Instanzen werden
-daraufhin gelöscht. Das selbe wird mit den Blockgeräten gemacht, welche beim starten einer
+gestellt, um alle Instanzen des jeweiligen Tenants zu erhalten. Die so erhaltenen Instanzen werden
+daraufhin gelöscht. Dasselbe wird mit den Blockgeräten gemacht, welche beim Starten einer
 Instanz erstellt wurden. Für die Blockgeräte Verwaltung ist Cinder zuständig.
 
 \begin{figure}[H]
@@ -152,7 +152,7 @@ Instanz erstellt wurden. Für die Blockgeräte Verwaltung ist Cinder zuständig.
 \subsection{Aktualisieren von Instanzen}
 Treten einem Moodle Kurs Studenten bei, nachdem die virtuellen Maschinen für die
 Teilnehmer des Kurses bereits gestartet wurden, so besitzen die neu hinzugekommenen Studenten noch
-keine Instanz. Aus diesem Grund kann für einen Kurs die aktualisieren Funktion aufgerufen werden,
+keine Instanz. Aus diesem Grund kann für einen Kurs die Aktualisieren-Funktion aufgerufen werden,
 welche für jeden neu hinzugekommen Studenten eine Instanz startet. 
 Dabei ist der Arbeitsablauf analog zum Starten von Instanzen wie unter Abbildung 
 \ref{startInstances} bereits beschrieben.
@@ -236,7 +236,7 @@ Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnt
 
 Da VNC ein unsicheres Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
 Der OpenStack VNC Console Proxy bietet diese Funktionen an.
-Um die URL für den VNC Server zu erhalten erfolgt der Aufruf \code{nova get-vnc-console server_id novnc}.
+Um die URL für den VNC Server zu erhalten, erfolgt der Aufruf \code{nova get-vnc-console server_id novnc}.
 Anschließend kann auf die Instanz über den Browser zugegriffen werden.
 Dieser Browser-basierte VNC Zugang ist schneller als herkömmliche VNC Clients.
 
@@ -248,7 +248,7 @@ Um maximalen Nutzen aus der HTWG Lab Cloud zu ziehen, ist es elementar das Image
 Hierbei wurden die Boardmittel von OpenStack evaluiert.
 Wie sich herausgestellt hat, bietet OpenStack mit der \emph{Schattenkopie} Funktionalität genau dieses Feature an.
 Von einer erstellten Instanz kann jederzeit eine Schattenkopie angefertigt werden.
-Dieser entspricht exakt einem neuen herkömmlichen Image.
+Diese entspricht exakt einem neuen herkömmlichen Image.
 
 Also kann ein Professor das Basis-Image in einer Instanz starten, an die Übungsstunde anpassen und über \emph{Schattenkopie erstellen} ein neues Image erstellen.
 Anschließend wird das Image beim Start der Instanzen ausgewählt.
@@ -264,7 +264,7 @@ Dabei werden drei Netzwerkadapter mit folgender Konfiguration verwendet:
 \item eth2: Interface auf dem öffentliche IP-Adressen der Instanzen allokiert werden und das HTWG Lab Cloud Dashboard erreichbar ist. Bei Installation in einer virtuellen Maschine ist dieser Adapter mit dem Modus \emph{bridged}  mit einem lokalen, öffentlich zugänglichen Adapter verbunden.
 \end{itemize}
 
-Zusätzlich wird automatisch eine Bridge erstellt welche die Instanzen (an den Adaptern vnetX) mit dem Adapter eth1 verbindet.
+Zusätzlich wird automatisch eine Bridge erstellt, welche die Instanzen (an den Adaptern vnetX) mit dem Adapter eth1 verbindet.
 Bei Installation außerhalb einer virtuellen Maschine, kann der Adapter eth2 und eth0 zusammengelegt werden. 
 Diese Trennung ist lediglich in einer virtuellen Maschine erforderlich, um von außerhalb auf die HTWG Lab Cloud bzw. die Instanzen zugreifen zu können.
 Denn der Adapter eth2 stellt den Zugang von außerhalb über den bridged Modus zur Verfügung.
@@ -278,7 +278,7 @@ Grundsätzlich sind in OpenStack Windows XP, 7, 8 und Linux-basierte Betriebssys
 Aus lizenzrechtlichen Gründen wurde die Entscheidung für das Linux-basierte Betriebssystem \emph{Ubuntu} getroffen. 
 Prinzipiell lassen sich die hier durchgeführten Anpassungen auch auf Windows übertragen, wobei die konkrete Konfiguration abweicht.
 
-Der Workflow, um ein Image anzupassen und nachfolgend Instanzen mit diesem den Studenten bereitzustellen ergibt sich wie folgt:
+Der Workflow, um ein Image anzupassen und nachfolgend Instanzen mit diesem den Studenten bereitzustellen, ergibt sich wie folgt:
 
 \begin{enumerate}
 \item Starten des Basis-Images in einer Instanz durch den Professor.
@@ -334,11 +334,11 @@ Durch Installation einiger Pakete und Anpassung von Konfigurationsdateien, wurde
 
 Die mit * gekennzeichneten Punkte werden von dem entworfenen Skript \code{cloud-init-script.sh} automatisch ausgeführt. 
 Anschließend löscht sich das Skript und fährt das Betriebssystem herunter.
-Da nach Ausführung des \code{cloud-init-script.sh} Skripts das Image in VirtualBox nicht mehr ohne weiteres gestartet werden kann, sollte das Skript am Ende der Konfiguration ausgeführt werden.
+Da nach Ausführung des \code{cloud-init-script.sh} Skripts das Image in VirtualBox nicht mehr ohne Weiteres gestartet werden kann, sollte das Skript am Ende der Konfiguration ausgeführt werden.
 
 \subsection{Konvertierung von VirtualBox nach OpenStack}
 
-Nachdem das Basis-Image konfiguriert und kompatibel zu OpenStack gemacht wurde muss das Image noch in ein Format gewandelt werden, das OpenStack versteht.
+Nachdem das Basis-Image konfiguriert und kompatibel zu OpenStack gemacht wurde, muss das Image noch in ein Format gewandelt werden, das OpenStack versteht.
 Das entwickelte Skript \code{image-virtualbox-to-openstack.sh} führt diese Umwandlung aus. 
 Die Benutzung erfolgt mit folgendem Aufruf: \code{./image-virtualbox-to-openstack.sh <Pfad zum gewünschten VirtualBox Image Snapshot>}.
 Im Wesentlichen wird dabei mittels \code{VBoxManage} das Image in ein \code{raw} Format gewandelt und anschließend mit \code{qemu-img} nach \code{qcow2} überführt.
@@ -443,7 +443,7 @@ Das Laufwerk könnte zu jeder Zeit an die Instanz an- und abgeschlossen werden.
 Des Weiteren muss beim ersten Anbinden das Laufwerk als ext4 formatiert werden.
 
 Die Linux Systemdienste \code{mount (fstab)} und \code{udev} bieten die nötige Infrastruktur zur Realisierung.
-Nachfolgen ist der Ablauf beschrieben, wie mit dem Laufwerk umgegangen wird bzw. die Tools installiert und konfiguriert werden.
+Nachfolgend ist der Ablauf beschrieben, wie mit dem Laufwerk umgegangen wird bzw. die Tools installiert und konfiguriert werden.
 
 \begin{itemize}
 \item Einmaliges Erstellen des Mountpunktes \code{/media/lab-drive}.
@@ -461,15 +461,15 @@ Das \code{cloud-init} Paket bietet die Möglichkeit mittels dem Parameter \code{
 
 Zur Installation der vorhergehend genannten Funktionen (LDAP-Authentifizierung etc.) wird ein generisches Skript generiert, welches nur noch minimal pro Student angepasst werden muss.
 Dieses Skript \code{setup-instance.sh} wird durch ein Makefile erstellt, in dem alle \code{install.sh} Skripte der einzelnen Features aneinander gehängt und durch einen Header und Footer Teil ergänzt werden.
-Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \code{USER} Variable gesetzt wurde und \code{apt-get} aktualisiert. 
-Der Footer ist dafür zuständig, nach dem Ausführen aller Teilskripte den Rechner neuzustarten.
+Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \code{USER} Variable gesetzt und \code{apt-get} aktualisiert wurde. 
+Der Footer ist dafür zuständig, nach dem Ausführen aller Teilskripte, den Rechner neuzustarten.
 Die \code{USER} Variable muss vor dem Ausführen durch den tatsächlichen Rechenzentrum Benutzernamen des Studenten ersetzt werden.
 Im Dashboard wird mittels Python das Skript angepasst und als \code{user-data} Parameter gesetzt.
 
 \section{Probleme bei der Implementierung}
 
 Da OpenStack rasant weiter entwickelt wird, bleibt an einigen Stellen die Dokumentation auf der Strecke bzw. ist veraltet. 
-Herauszufinden, wie die Dienste konfiguriert werden müssen war mit oftmals stundenlangen Recherchen verbunden.
+Herauszufinden, wie die Dienste konfiguriert werden müssen, war mit oftmals stundenlangen Recherchen verbunden.
 Auch die Linux Module PAM mit LDAP sind sehr lückenhaft und veraltet dokumentiert.
 Dies hat unweigerlich zu unzähligen Trial and Error Sitzungen geführt.
 Meist resultiert die Lösung in nur wenigen Zeilen Code, diese jedoch mangels Dokumentation zu erstellen hat die Geschwindigkeit der Entwicklung stark gebremst.
