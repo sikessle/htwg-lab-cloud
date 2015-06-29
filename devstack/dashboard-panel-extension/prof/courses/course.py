@@ -56,7 +56,7 @@ class CourseHelper:
     def __getMoodleCourses(self):
         list = []        
         # TODO : replace token with token=self.user.token.id
-        moodleCourses = get_user_courses(ldap_userid=3701, token="32c2fad270a6ca8ff1d712c62e37822c")
+        moodleCourses = get_user_courses(moodle_userid=3701, token="32c2fad270a6ca8ff1d712c62e37822c")
         for moodleId in moodleCourses:
             list.append(Course(name=moodleCourses[moodleId]['shortname'], id=moodleId, description=moodleCourses[moodleId]['fullname']))
         return list
