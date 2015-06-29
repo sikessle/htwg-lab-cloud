@@ -17,7 +17,7 @@ def main():
 
 def get_user_token():
 	ldap_userid = 'htwgapp'
-	password = 'eboleeri'
+	password = ''
 	moodle_url = "https://moodle.htwg-konstanz.de/moodle/login/token.php"
 	parameter = {'username':ldap_userid, 'password':password, 'service':'htwgapp'}
 	response = requests.post(moodle_url, params=parameter)
