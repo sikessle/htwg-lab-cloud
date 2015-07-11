@@ -223,9 +223,97 @@ Das Starten der Instanzen wurde mittels eines Workflows realisiert, das untersch
 \end{figure}
 
 \section{OpenStack LDAP-Authentifizierung}\label{ldap_auth1}
+Funktionalität wie beispielsweise Authentifizierung werden in OpenStack durch den Keystone Service bereitgestellt.
+Keystone besteht intern aus mehreren internen Services. Bei diesen Services handelt es sich um den Identity Service, welcher für die Authentifizierung zuständig ist. Benutzer melden sich hierbei mit Name und Passwort an und erhalten nach erfolgreicher Authentifizierung ein Token, mit dem sie sich bei Aufrufen anderer Dienste authentifizieren können. Ebenso nutzen Services über eigene Service Benutzer den Identity Service, um aufrufende Benutzer zu authentifizieren. Token werden vom Token Service verwaltet und vergeben. Dieser Service ist ebenso für die Validierung von Token zuständig.
+
+Des Weiteren verfügt Keystone über den Assignment Service. Dieser verwaltet Rollen und deren Mapping auf Benutzer, Projekte und Domänen. Projekte und Domänen werden wiederum durch den Resource Service verwaltet.
+
+Darüber hinaus beinhaltet Keystone noch den Catalog Service, welcher ein Endpoint Register verwaltet, über das verwendete Endpoints gefunden und auf diese zugegriffen werden kann. Die Authentisierung wird wiederum durch den Policy Service verwaltet. Hierbei können Regeln entweder global, oder auf Ebene von einzelnen Services definiert werden.
+
+Keystone bildet für diese internen Service eine Abstraktionsschicht. Diese bietet nach außen hin ein Interface, über das die Funktionen aufgerufen werden können und leitet die eingehenden Aufrufe zu den eigentlichen Services weiter. Diese Services können wiederum ein oder mehrere Backends besitzen, die die eigentliche Ausführung tätigen. Initial handelt es sich hierbei um SQL Datenbanken, in denen die entsprechenden Daten gespeichert werden.
+
+Da der Kreis der Benutzer der HTWG Lab Cloud auf die Professoren der HTWG Konstanz beschränkt sein soll und die Benutzung des Systems mit möglichst wenig Aufwand verbunden sein soll, wird der an der Hochschule bereits vorhandene LDAP Server zum Zwecke der Authentifizierung als Backend für den Keystone Identity Service verwendet.
+Es besteht auch die Möglichkeit, einen LDAP Server als Backend sowohl für den Identity, als auch für den Assignment Service zu verwenden. Allerdings besteht diese Möglichkeit an der HTWG nicht, da auf den Server nur lesend zugegriffen werden kann. Daher verbleibt dieser Service in seiner ursprünglichen Konfiguration mit einer SQL Datenbank als Backend.
+
+Um einen LDAP Server als Backend des Identity Services zu verwenden, muss lediglich die Keystone Konfiguration (\emph{keystone.conf}) angepasst werden. Hierbei muss der SQL Treiber durch den LDAP Treiber ersetzt werden:
+
+\code{[identity]}\\
+\code{driver = keystone.identity.backends.sql.Identity}\\
+\code{driver = keystone.identity.backends.ldap.Identity}
+
+Zudem müssen die URL des HTWG LDAP Servers, die BaseDN und die Suchpfade für Benutzer und Gruppen angegeben werden:
+
+\code{[ldap]}\\
+\code{url = ldap://ldap.htwg-konstanz.de:389}\\
+\code{suffix = dc=fh-konstanz,dc=de}\\
+\code{user\_tree\_dn = ou=users,dc=fh-konstanz,dc=de}\\
+\code{group\_tree\_dn = ou=groups,dc=fh-konstanz,dc=de}
+
+Um Keystone eine korrekte Verarbeitung von Anfragen zu ermöglichen, müssen die Attribute des HTWG LDAP Servers auf die entsprechenden Attribute aus Keystone gemapped werden:
+
+\code{user\_objectclass = FHKNPERSON}\\
+\code{user\_id\_attribute = uidNumber}\\
+\code{user\_name\_attribute = uid}\\
+\code{user\_mail\_attribute = mail}\\
+\code{group\_id\_attribute = gidNumber}
+
+Bedingt durch den lediglich lesenden Zugriff auf den LDAP Server, müssen zudem die Optionen zum Erstellen, Aktualisieren und Löschen von Benutzern und Gruppen deaktiviert werden:
+
+\code{user\_allow\_create = false}\\
+\code{user\_allow\_update = false}\\
+\code{user\_allow\_delete = false}
+
+\code{group\_allow\_create = false}\\
+\code{group\_allow\_update = false}\\
+\code{group\_allow\_delete = false}
+
+Teil der OpenStack seitigen Installation ist die Erstellungen von bestimmten Service Benutzern. Dies sind Benutzer, die von den Services wie beispielsweise Swift, Cinder, oder Neutron für Anfragen an andere Services genutzt werden. Da dies vor dem Wechsel des Identity Backends geschieht und auch keine Schreibrechte für den HTWG LDAP Server vorhanden sind, existieren diese Service Benutzer im späteren System nicht. Daher wurden diese Service Benutzer im LDAP der HTWG durch das Rechenzentrum angelegt. Diese Benutzer existieren dort vorerst bis zum 30.07.2016. Es handelt sich hierbei um folgende Benutzer:
+\emph{glance, nova, cinder, neutron, swift, heat, heat-cfn, opnstadm}. (Hinweis des Rechenzentrums: Falls sich eine andere Möglichkeit der Verwaltung dieser Service Benutzer ergibt, sollten die Service Benutzer an das Rechenzentrum zu deren Verfügung zurückgegeben werden.)
 
 \section{Anbindung an Moodle}
+Bei der Entwicklung der HTWG Lab Cloud wurde großer Wert auf eine möglichst einfache Benutzung gelegt. Um dies zu gewährleisten, wurde das System so entworfen, dass die Professoren lediglich wenige Mausklicks benötigen um ihre Kurse im System zu erstellen.
 
+An der HTWG Konstanz wird das E-Learning System Moodle zur Verwaltung und Durchführung von Veranstaltungen eingesetzt. Bei Moodle handelt es sich um ein Open-Source Projekt, welches durch die australischen Firma Moodle HQ verwaltet und geführt wird. Entwickelt wird dieses System von einer weltweiten Community.
+
+Moodle bietet verschiedene Schnittstellen in Form von Web Services zum Zugriff und zur Bearbeitung von Daten an. Der Zugriff durch die HTWG Lab Cloud erfolgt über die REST Schnittstelle. Diese liefert die Ergebnisse der Anfrage in einem generischen XML Format zurück.
+Um die bereits erwähnte möglichst einfache Benutzung umzusetzen, werden die Kurse des jeweils eingeloggten Professors, sowie deren Teilnehmer abgefragt. Somit können die entsprechende Projekte in OpenStack automatisch angelegt und die an den Kursen teilnehmenden Studierende benachrichtigt werden.
+
+Anfragen über die REST Schnittstelle Moodles erfordern wiederum eine Authentifizierung des anfragenden Benutzers durch Moodle. Die einfachste Lösung wäre es, diese Anfrage im Namen des eingeloggten Professors durchzuführen, da dieser zudem über ausreichende Berechtigungen hierfür verfügt. Da durch Keystone lediglich der Benutzername und nicht das Passwort verfügbar sind, werden diese Anfragen stattdessen von einem speziellen Moodle Benutzer durchgeführt.
+
+Moodle verwendet zwar, ebenso wie die HTWG Lab Cloud, den HTWG LDAP Server zur Authentifizierung der Benutzer, nimmt aber intern ein weiteres Mapping von Benutzernamen auf Moodle eigene IDs vor. Da die Anfragen über die REST Schnittstelle lediglich mit der Moodle ID des Professors und nicht mit dessen LDAP Benutzernamen möglich ist, muss diese Moodle ID in einem vorherigen Schritt per Suchanfrage über dessen E-Mail Adresse ermittelt werden. Daraufhin können dann die Kurse des eingeloggten Professors und deren jeweilige Teilnehmer ermittelt werden. Es werden hierbei lediglich die Kurse berücksichtigt, in denen der Professor tatsächlich der Leiter des Kurses ist. Dies ergibt folgenden Ablauf der Anfragen:
+
+URL für den Login des Moodle Users:\\
+\code{https://moodle.htwg-konstanz.de/moodle/login/token.php}
+
+Parameter für den Login des speziellen Moodle Users (liefert Token für folgende Anfragen):\\
+\code{username:ldap_userid}
+\code{password:password}
+\code{service:htwgapp}
+
+Die Anfragen werden alle an folgende URL gesendet:\\
+\code{https://moodle.htwg-konstanz.de/moodle/webservice/rest/server.php}
+
+Parameter für die Suchanfrage zur Ermittlung der Moodle ID des eingeloggten Professors:\\
+\code{stoken:token}\\
+\code{wsfunction:core_user_get_users}\\
+\code{criteria[0][key]:email}\\
+\code{criteria[0][value]:ldap_user_email}
+
+Parameter für die Abfrage der Kurse des eingeloggten Professors:\\
+\code{wstoken:token}\\
+\code{wsfunction:core_enrol_get_users_courses}\\
+\code{userid:moodle_userid}
+
+Parameter für die Abfrage der Teilnehmer eines Kurses:\\
+\code{wstoken:token}\\
+\code{wsfunction:core_enrol_get_enrolled_users}\\
+\code{courseid:course_id}
+
+Bedingt durch die Architektur von Horizon und Keystone muss einem Benutzer beim Login in Horizon mindestens ein Projekt zugeordnet sein. Das ist im Standard Anwendungsfall problemlos möglich, da die Benutzer in OpenStack erstellt werden und somit die Zuordnung eines Projekts erzwungen wird.
+
+Kommt, wie im Falle der HTWG Lab Cloud, allerdings eine bereits vorhandene Menge von Benutzern zum Einsatz, so muss diese Zuordnung anderweitig vorgenommen werden. Dies kann nicht vom Benutzer selbst durchgeführt werden, da dieser sich, um ein Projekt zu erstellen und sich selbst zuzuordnen, einloggen müssten, was aber ohne zugeordnetes Projekt nicht möglich ist. Daher werden alle vorhandenen Professoren während der Installation der HTWG Lab Cloud über den LDAP Server ermittelt und einem Standard Projekt zugeordnet.
+
+Um zu gewährleisten, dass auch während der Benutzung neu hinzugekommene Professoren berücksichtigt werden, wird dieser Schritt in regelmäßigen Zeitabständen für diese Untermenge wiederholt.
 
 \section{Fernzugriff (VNC)}\label{vnc}
 
