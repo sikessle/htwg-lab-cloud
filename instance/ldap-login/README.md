@@ -1,6 +1,7 @@
 # LDAP Login in Instances
 
 A user must be able to log into the instance (ubuntu) with his LDAP credentials.
+
 The required configuration for Ubuntu can be found in this directory.
 
 - The client (Ubuntu instance) always contacts the LDAP server to authenticate the user.
@@ -23,11 +24,11 @@ URL: `ldap.htwg-konstanz.de`
 
 BaseDN: dc=fh-konstanz,dc=de
 
-Nutzer: ou=users,dc=fh-konstanz,dc=de
+User: ou=users,dc=fh-konstanz,dc=de
 
 ## Script notes
 
-Run the script `install.sh` to configure the system for LDAP. Before you have to replace the username in the script. 
+Run the script `install.sh` to configure the system for LDAP. 
 
 ### Relevant files
 
@@ -41,13 +42,13 @@ Run the script `install.sh` to configure the system for LDAP. Before you have to
 
 ldap.conf can be customized to map the login attribute (default: uid) and groups from ldap. Overriding of values (home dir etc.) via `nss_override_attribute_value`.
 
-We may need to override uidNumber, gidNumber and homeDirectory.
+We need to override uidNumber, gidNumber, homeDirectory and loginShell.
 
 Default groups on Ubuntu 14.04: $username adm cdrom sudo dip plugdev lpadmin sambashare
 
 ## Testing
 
-Use Apache Directory Studio to browser any directory.
+Use Apache Directory Studio to browse any directory.
 
 ## References
 

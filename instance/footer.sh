@@ -11,6 +11,7 @@ echo "------------------------------------"
 
 sleep 15
 
+# Some installation script may need a reboot (especially the ldap-login)
 reboot
 
 #######################

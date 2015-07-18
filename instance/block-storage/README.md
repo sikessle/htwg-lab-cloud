@@ -1,17 +1,17 @@
 # Mount Cinder block storage on instance
 
-Mounts an attached block storage from Cinder as Ext4.
+Mounts an attached block storage from Cinder as ext4.
 
-- Mount attached block storage, if available, as Ext4 and name it "lab-drive"
+- Mount attached block storage, if available, as ext4 and name it "lab-drive"
 - Add directory to sidebar in nautilus
 
 ## Requirements
 
-The `lab-drive` must be the **first** attached volume, as it is assumed to be mapped under /dev/vdb.
+The `lab-drive` must be the **first** attached volume, as it is assumed to be mapped under /dev/vd**b**.
 
 ## Script notes
 
-As the volumne (block storage) is not always available or may be available after the /etc/fstab file got processed. The drive will be formatted as ext4. Therefore we have to deploy this mount strategy:
+The volume (block storage) is not always available or may be available after the /etc/fstab file got processed. The drive will be formatted as ext4. Therefore we have to deploy this mount strategy:
 
 - Create mount point /media/lab-drive
 - Create entry in /etc/fstab

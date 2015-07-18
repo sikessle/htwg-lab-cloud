@@ -28,3 +28,8 @@ sleep 10
 cd dashboard-panel-extension
 ./deploy.sh
 cd ..
+
+
+# sleep 10
+
+# ADD HERE YOUR FEATURES. DON'T FORGET TO SWITCH DIR BACK TO THIS DIR.
