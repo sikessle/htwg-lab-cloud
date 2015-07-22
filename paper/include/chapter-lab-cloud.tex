@@ -76,7 +76,7 @@ Authentifizierungsschritten verzichtet, wenngleich diese in der Implementierung 
 Die in den folgenden Unterkapiteln angegebenen Arbeitsschritte wurden vollständig in Horizon
 integriert, in Form einer Dashboard Erweiterung.
 Zur Kommunikation mit den einzelnen Komponenten, wie beispielsweise Nova oder auch Cinder, wurden
-die jeweiligen Python API's verwendet.
+die jeweiligen Python APIs verwendet.
 
 
 
@@ -96,7 +96,7 @@ beispielsweise nur eine festgelegte Anzahl von Ressourcen verwendet werden kann.
 Um nun virtuelle Maschinen verwalten zu können, muss also ein Tenant existieren.
 Damit die HTWG Lab Cloud in die vorhandenen Systeme integriert wird, werden zunächst
 alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
-Daraufhin wird für jede Vorlesung ein gleichnamiges Tenant erstellt. Zuletzt wird das Tenant
+Daraufhin wird für jede Vorlesung ein gleichnamiger Tenant erstellt. Zuletzt wird der Tenant
 mit Zugriffsrechten entsprechend konfiguriert. Die beschriebenen Schritte sind unter der folgenden
 Abbildung \ref{createTenants} dargestellt.
 
@@ -110,7 +110,7 @@ Abbildung \ref{createTenants} dargestellt.
 
 
 \subsection{Starten von Instanzen}
-Beim Starten der virtuellen Maschinen Instanzen einer Vorlesung 
+Beim Starten der Instanzen einer Vorlesung 
 (siehe Abbildung \ref{startInstances}) setzten wir voraus das für
 die jeweiligen Vorlesungen bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
 (siehe hierzu auch Kapitel \ref{horizon}), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
@@ -204,7 +204,7 @@ Zur vereinfachten Erstellung der virtuellen Maschinen für entsprechende Vorlesu
 
 Als Dashboard wird sowohl das gesamte Webinterface von Horizon als auch die Top-Level-Komponente bezeichnet, die PanelGroups und Panels beinhaltet. Sogenannte PanelGroups dienen wiederum zur Gruppierung einzelner Panels. Während es sich bei Dashboards und PanelGroups ausschließlich um Navigationselemente handelt, bildet ein Panel die Grundlage einer Seite. Mit Hilfe von TabGroups und Tabs kann der Inhalt eines Panels kategorisch unterteilt werden. In Horizon wird ein wesentlicher Teil der Daten durch DataTables übersichtlich in Tabellenform dargestellt. Diese werden dynamisch in der Weboberfläche aufgebaut und automatisch gerendert. Neben dem Filtern der Tabellendaten nach bestimmten Kriterien bietet die Komponente eine Vielzahl von Actions, wie beispielsweise Lösch- und Update-Mechanismen sowie Batch-Actions, die auf die Tabelle angewandt werden können. Einige dieser Actions ermöglichen das Ausführen von Dialogfeldern, sogenannten Workflows, die durch Benutzereingaben komplexe Prozesse abbilden. Zusätzlich zu den bereits beschriebenen Komponenten gibt es noch Templates, die für das Rendern der Seiten zuständig sind.
 
-Da Horizon eine strikte Einhaltung der Namenskonventionen verfolgt, bestand der erste Schritt bei der Erstellung eines Dashboards sowie eines Panels in der Generierung einer Horizon-konformen Ordnerstruktur. Die Entwicklungsumgebung Devstack liefert standardmäßig ein Skript mit, das diese Problematik automatisch erledigt. Mit Hilfe der beiden Befehle \code{./run_tests.sh -m startdash prof --target openstack_dashboard/dashboards/prof} und \code{./run_tests.sh -m startpanel courses  --dashboard=openstack_dashboard.dashboards.prof  \ --target=openstack_dashboard/dashboards/prof/courses} erfolgte die Generierung der Ordnerstruktur für ein Dashboard \textit{Professor} und ein Panel \textit{Kurse}. Um das Dashboard anschließend anzuzeigen, musste es über die Datei \code{openstack_dashboard/enabled/_50_prof.py} anhand entsprechender Konfiguationsparameter aktiviert und Horizon zugänglich gemacht werden.
+Da Horizon eine strikte Einhaltung der Namenskonventionen verfolgt, bestand der erste Schritt bei der Erstellung eines Dashboards sowie eines Panels in der Generierung einer Horizon-konformen Ordnerstruktur. Die Entwicklungsumgebung Devstack liefert standardmäßig ein Skript mit, das diese Problematik automatisch erledigt. Mit Hilfe der beiden Befehle \code{./run_tests.sh -m startdash prof --target openstack_dashboard/dashboards/prof} und \code{./run_tests.sh -m startpanel courses } \\ \code{--dashboard=openstack_dashboard.dashboards.prof  --target=openstack_dashboard/dashboards/prof/courses} erfolgte die Generierung der Ordnerstruktur für ein Dashboard \textit{Professor} und ein Panel \textit{Kurse}. Um das Dashboard anschließend anzuzeigen, musste es über die Datei \code{openstack_dashboard/enabled/_50_prof.py} anhand entsprechender Konfiguationsparameter aktiviert und Horizon zugänglich gemacht werden.
 
 Für das Anzeigen der Moodle-Kurse, in denen ein Professor angemeldet ist, wurde eine DataTable erstellt, die sämtliche Informationen der zugehörigen Vorlesungen übersichtlich darstellt. Auf dieser Übersichtsseite wird dem Professor anhand unterschiedlicher Aktionen die Möglichkeit geboten, Instanzen zu starten und zu stoppen, Vorlesungen zu filtern sowie Kurse zu aktualisieren. Bedingt dadurch, dass sich entsprechende Kursteilnehmer erst im Nachhinein in dem entsprechenden Moodle-Kurs angemeldet haben und dementsprechend keiner Instanz zugewiesen sind, dient letztere Aktion dazu, die fehlenden Instanzen nachträglich zu starten. Abbildung \ref{dashboard-courses} zeigt die Übersichtsseite der aus Moodle aufgelisteten Kurse.
 
@@ -563,11 +563,6 @@ Herauszufinden, wie die Dienste konfiguriert werden müssen, war mit oftmals stu
 Auch die Linux Module PAM mit LDAP sind sehr lückenhaft und veraltet dokumentiert.
 Dies hat unweigerlich zu unzähligen Trial and Error Sitzungen geführt.
 Meist resultiert die Lösung in nur wenigen Zeilen Code, diese jedoch mangels Dokumentation zu erstellen hat die Geschwindigkeit der Entwicklung stark gebremst.
-
-
-
-WEITERES VON DEN ANDEREN SECTIONS
-
 
 Die Netzwerkfunktionalität von OpenStack ist einerseits extrem flexibel, zugleich aber auch extrem kompliziert und nur schwer zu durchdringen.
 Eine lauffähige Netzwerkumgebung aufzusetzen, erforderte ebenfalls großen Aufwand.
