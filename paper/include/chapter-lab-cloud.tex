@@ -13,7 +13,7 @@ Findet die Vorlesung in einem Laborraum statt,
 so ist die notwendige Software meist schon installiert.
 Dabei sind spezielle Anwendungen häufig nicht in allen Laboren vorzufinden. Folglich müsste
 eine Vorlesung in einem entsprechenden Raum stattfinden.
-Das Installieren der Software ist zudem ein umständlicher Prozess. Ein Dozent muss hierfür
+Das Installieren der Software ist zudem ein umständlicher Prozess. Ein Professor muss hierfür
 das Rechenzentrum beauftragen, welches dann die notwendige Software installiert.
 Folglich wäre es viel einfacher wenn ein Professor die für seine Vorlesung erforderliche Software
 eigens zusammenstellen könnte.
@@ -29,15 +29,15 @@ oder auch die Verwaltung von Vorlesungen durch Moodle.
 
 Die Ziele der HTWG Lab Cloud sind wie folgt definiert:
 \begin{itemize}
-\item Bereitstellen einer Konfiguration von virtuellen Maschinen für Professoren.
-\item Starten von virtuellen Maschinen für die Teilnehmer einer Vorlesung.
+\item Eine einfache Konfiguration von virtuellen Maschinen für Professoren.
+\item Verwaltung von virtuellen Maschinen für die Teilnehmer einer Vorlesung.
 \item Ein vom Laborraum unabhängiger Zugriff auf virtuelle Maschinen durch Studenten.
 \item Die Nutzung der vorhandenen Authentifizierungsmethoden der Hochschule.
 \item Integration von Moodle, um vorhandene Informationen zu nutzen.
 \end{itemize}
 
 \section{Workflow und Organisation}
-Die nachfolgende Abbildung \autoref{overview} soll einen Überblick über 
+Die nachfolgende Abbildung \ref{overview} soll einen Überblick über 
 die vorhandenen Komponenten der HTWG Lab Cloud geben.
 Ein Professor kann über einen
 Webbrowser auf das Dashboard der Cloud zugreifen. Der Zugriff auf das Dashboard wird dabei
@@ -63,7 +63,7 @@ Kapiteln \ref{ldap_auth1} und \ref{ldap_auth2} zu finden.
 \FloatBarrier
 \end{figure}
 
-Nachdem wir einen Überblick des Systems betrachtet haben, sollen nun 
+Nachdem wir einen Überblick über das Systems erhalten haben, sollen nun 
 die internen Abläufe der HTWG Lab Cloud erläutert werden. Die folgenden
 Vorgänge sind völlig transparent für einen Professor und Studenten und dienen lediglich zum
 Verständnis der technischen Umsetzung.
@@ -91,14 +91,13 @@ Das Verwalten von virtuellen Maschinen geschieht in Openstack auf Basis eines
 Tenants. Der Begriff Tenant ist dabei äquivalent zu einem Projekt. 
 Auf ein Tenant können Openstack Nutzer Zugriff erhalten, um virtuelle Maschinen starten
 zu können. Dabei können Tenants von einem Administrator entsprechend konfiguriert werden, damit
-beispielsweise nur eine festgelegte Anzahl von Ressourcen verwendet werden kann.
+beispielsweise nur eine festgelegte Anzahl von Ressourcen verwendet werden kann. Um virtuelle 
+Maschinen verwalten zu können, muss also ein Tenant existieren.
 
-Um nun virtuelle Maschinen verwalten zu können, muss also ein Tenant existieren.
-Damit die HTWG Lab Cloud in die vorhandenen Systeme integriert wird, werden zunächst
-alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
-Daraufhin wird für jede Vorlesung ein gleichnamiger Tenant erstellt. Zuletzt wird der Tenant
-mit Zugriffsrechten entsprechend konfiguriert. Die beschriebenen Schritte sind unter der folgenden
-Abbildung \ref{createTenants} dargestellt.
+Als nächstes werden nun alle Vorlesungen des angemeldeten Professors vom HTWG Moodle Server geladen.
+Daraufhin wird für jede Vorlesung ein gleichnamiges Tenant erstellt, falls dieses nicht bereits
+existiert. Zuletzt werden die Tenants mit Zugriffsrechten entsprechend konfiguriert. 
+Die beschriebenen Schritte sind unter der folgenden Abbildung \ref{createTenants} dargestellt.
 
 \begin{figure}[H]
 	\centering
@@ -112,8 +111,8 @@ Abbildung \ref{createTenants} dargestellt.
 \subsection{Starten von Instanzen}
 Beim Starten der Instanzen einer Vorlesung 
 (siehe Abbildung \ref{startInstances}) setzten wir voraus das für
-die jeweiligen Vorlesungen bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
-(siehe hierzu auch Kapitel \ref{horizon}), so wird zuerst eine Teilnehmerliste vom HTWG Moodle Server
+die jeweilige Vorlesung bereits ein Tenant existiert. Wählen wir nun eine Vorlesung aus
+(siehe hierzu auch Kapitel \ref{horizon}), so wird zunächst eine Teilnehmerliste vom HTWG Moodle Server
 angefragt. Dabei enthält die Teilnehmerliste die Namen und Email Adressen der Studenten.
 Nun wird für jeden Teilnehmer eine Instanz gestartet. Die Instanz wird dabei für das jeweilige
 Tenant gestartet und folgt einem vorgegebenen Namensschema. Das Schema ist eine Kombination
@@ -224,6 +223,12 @@ Das Starten der Instanzen wurde mittels eines Workflows realisiert, das untersch
 \label{dashboard-start-instances}
 \end{figure}
 
+Zu den bereits vorgestellten Erweiterungen des Dashboards bietet Horizon zudem einige bereits 
+verfügbare Funktionalitäten. So können alle Ressourcen eines Tenants, egal ob gestartete virtuelle
+Maschine oder erzeugter Blockstorage, über das Dashboard verwaltet werden. Somit ist es  
+beispielsweise möglich eine einzelne virtuelle Maschine, welche einem Studenten zugeordnet ist,
+neu zu starten.
+
 \section{OpenStack LDAP-Authentifizierung}\label{ldap_auth1}
 Funktionalität wie beispielsweise Authentifizierung werden in OpenStack durch den Keystone Service bereitgestellt.
 Keystone besteht intern aus mehreren internen Services. Bei diesen Services handelt es sich um den Identity Service, welcher für die Authentifizierung zuständig ist. Benutzer melden sich hierbei mit Name und Passwort an und erhalten nach erfolgreicher Authentifizierung ein Token, mit dem sie sich bei Aufrufen anderer Dienste authentifizieren können. Ebenso nutzen Services über eigene Service Benutzer den Identity Service, um aufrufende Benutzer zu authentifizieren. Token werden vom Token Service verwaltet und vergeben. Dieser Service ist ebenso für die Validierung von Token zuständig.
@@ -234,7 +239,7 @@ Darüber hinaus beinhaltet Keystone noch den Catalog Service, welcher ein Endpoi
 
 Keystone bildet für diese internen Service eine Abstraktionsschicht. Diese bietet nach außen hin ein Interface, über das die Funktionen aufgerufen werden können und leitet die eingehenden Aufrufe zu den eigentlichen Services weiter. Diese Services können wiederum ein oder mehrere Backends besitzen, die die eigentliche Ausführung tätigen. Initial handelt es sich hierbei um SQL Datenbanken, in denen die entsprechenden Daten gespeichert werden.
 
-Da der Kreis der Benutzer der HTWG Lab Cloud auf die Professoren der HTWG Konstanz beschränkt sein soll und die Benutzung des Systems mit möglichst wenig Aufwand verbunden sein soll, wird der an der Hochschule bereits vorhandene LDAP Server zum Zwecke der Authentifizierung als Backend für den Keystone Identity Service verwendet.
+Da der Kreis der Benutzer des Dashboards der HTWG Lab Cloud auf die Professoren der HTWG Konstanz beschränkt sein soll und die Benutzung des Systems mit möglichst wenig Aufwand verbunden sein soll, wird der an der Hochschule bereits vorhandene LDAP Server zum Zwecke der Authentifizierung als Backend für den Keystone Identity Service verwendet.
 Es besteht auch die Möglichkeit, einen LDAP Server als Backend sowohl für den Identity, als auch für den Assignment Service zu verwenden. Allerdings besteht diese Möglichkeit an der HTWG nicht, da auf den Server nur lesend zugegriffen werden kann. Daher verbleibt dieser Service in seiner ursprünglichen Konfiguration mit einer SQL Datenbank als Backend.
 
 Um einen LDAP Server als Backend des Identity Services zu verwenden, muss lediglich die Keystone Konfiguration (\emph{keystone.conf}) angepasst werden. Hierbei muss der SQL Treiber durch den LDAP Treiber ersetzt werden:
@@ -269,13 +274,13 @@ Bedingt durch den lediglich lesenden Zugriff auf den LDAP Server, müssen zudem 
 \code{group\_allow\_update = false}\\
 \code{group\_allow\_delete = false}
 
-Teil der OpenStack seitigen Installation ist die Erstellungen von bestimmten Service Benutzern. Dies sind Benutzer, die von den Services wie beispielsweise Swift, Cinder, oder Neutron für Anfragen an andere Services genutzt werden. Da dies vor dem Wechsel des Identity Backends geschieht und auch keine Schreibrechte für den HTWG LDAP Server vorhanden sind, existieren diese Service Benutzer im späteren System nicht. Daher wurden diese Service Benutzer im LDAP der HTWG durch das Rechenzentrum angelegt. Diese Benutzer existieren dort vorerst bis zum 30.07.2016. Es handelt sich hierbei um folgende Benutzer:
+Teil der OpenStack seitigen Installation ist die Erstellung von bestimmten Service Benutzern. Dies sind Benutzer, die von den Services wie beispielsweise Swift, Cinder, oder Neutron für Anfragen an andere Services genutzt werden. Da dies vor dem Wechsel des Identity Backends geschieht und auch keine Schreibrechte für den HTWG LDAP Server vorhanden sind, existieren diese Service Benutzer im späteren System nicht. Daher wurden diese Service Benutzer im LDAP der HTWG durch das Rechenzentrum angelegt. Diese Benutzer existieren dort vorerst bis zum 30.07.2016. Es handelt sich hierbei um folgende Benutzer:
 \emph{glance, nova, cinder, neutron, swift, heat, heat-cfn, opnstadm}. (Hinweis des Rechenzentrums: Falls sich eine andere Möglichkeit der Verwaltung dieser Service Benutzer ergibt, sollten die Service Benutzer an das Rechenzentrum zu deren Verfügung zurückgegeben werden.)
 
 \section{Anbindung an Moodle}
 Bei der Entwicklung der HTWG Lab Cloud wurde großer Wert auf eine möglichst einfache Benutzung gelegt. Um dies zu gewährleisten, wurde das System so entworfen, dass die Professoren lediglich wenige Mausklicks benötigen um ihre Kurse im System zu erstellen.
 
-An der HTWG Konstanz wird das E-Learning System Moodle zur Verwaltung und Durchführung von Veranstaltungen eingesetzt. Bei Moodle handelt es sich um ein Open-Source Projekt, welches durch die australischen Firma Moodle HQ verwaltet und geführt wird. Entwickelt wird dieses System von einer weltweiten Community.
+An der HTWG Konstanz wird das E-Learning System Moodle zur Verwaltung und Durchführung von Veranstaltungen eingesetzt. Bei Moodle handelt es sich um ein Open-Source Projekt, welches durch die australische Firma Moodle HQ verwaltet und geführt wird. Entwickelt wird dieses System von einer weltweiten Community.
 
 Moodle bietet verschiedene Schnittstellen in Form von Web Services zum Zugriff und zur Bearbeitung von Daten an. Der Zugriff durch die HTWG Lab Cloud erfolgt über die REST Schnittstelle. Diese liefert die Ergebnisse der Anfrage in einem generischen XML Format zurück.
 Um die bereits erwähnte möglichst einfache Benutzung umzusetzen, werden die Kurse des jeweils eingeloggten Professors, sowie deren Teilnehmer abgefragt. Somit können die entsprechende Projekte in OpenStack automatisch angelegt und die an den Kursen teilnehmenden Studierende benachrichtigt werden.
@@ -321,7 +326,7 @@ Um zu gewährleisten, dass auch während der Benutzung neu hinzugekommene Profes
 
 Meist wird in OpenStack Umgebungen lediglich von Instanzen ohne graphische Oberfläche ausgegangen, auf denen beliebige Serveranwendungen laufen. 
 Der dadurch oft genannte SSH-Zugang ist dafür vollkommen ausreichend.
-Die HTWG Lab Cloud stellt jedoch eher eine \emph{Virtual Desktop Infrastructure} bereit.
+Die HTWG Lab Cloud stellt jedoch eine \emph{Virtual Desktop Infrastructure} bereit.
 Benutzer, insbesondere von nicht-technischen Studiengängen erwarten die gewohnte graphische Desktopumgebung (z. B. Unity oder KDE) in dieser Cloud-Lösung.
 
 Da VNC ein unsicheres Protokoll ist, sollte es stets durch einen gesicherten Tunnel hindurch verwendet werden.
@@ -554,7 +559,8 @@ Dieses Skript \code{setup-instance.sh} wird durch ein Makefile erstellt, in dem 
 Im Header-Skript wird geprüft, ob root Rechte vorliegen und die \code{USER} Variable gesetzt und \code{apt-get} aktualisiert wurde. 
 Der Footer ist dafür zuständig, nach dem Ausführen aller Teilskripte, den Rechner neuzustarten.
 Die \code{USER} Variable muss vor dem Ausführen durch den tatsächlichen Rechenzentrum Benutzernamen des Studenten ersetzt werden.
-Im Dashboard wird mittels Python das Skript angepasst und als \code{user-data} Parameter gesetzt.
+In der Dashboard Erweiterung wird das Skript automatisch mittels Python angepasst und 
+als \code{user-data} Parameter der jeweiligen Instanz übergeben.
 
 \section{Probleme bei der Implementierung}
 
