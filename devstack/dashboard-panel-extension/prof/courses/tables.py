@@ -92,8 +92,6 @@ class CoursesTable(tables.DataTable):
                            verbose_name=_("Description"))
     id = tables.Column('id', \
                          verbose_name=_("ID"))
-    enabled = tables.Column('enabled', \
-                               verbose_name=_("Enabled"))
 
     class Meta:
         name = "coursesTbl"

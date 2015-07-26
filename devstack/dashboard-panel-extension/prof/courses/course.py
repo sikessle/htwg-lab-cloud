@@ -13,7 +13,6 @@ class Course:
         self.name = name
         self.id = id
         self.description = description
-        self.enabled = True
 
 class CourseHelper:
     """
@@ -73,7 +72,7 @@ class CourseHelper:
     # add a course
     def __addCourse(self, course):
         # Create the course
-        tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description, enabled=True)
+        tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description)
         # get the Member role.
         role = self.keystone.roles.find(name="admin")
 

@@ -4,10 +4,10 @@ import horizon
 
 
 class Prof(horizon.Dashboard):
-    name = _("Professor")	# name in the navigation
-    slug = "prof"		# url
-    panels = ('courses',)  	# Add your panels here.
-    default_panel = 'courses'  	# Specify the slug of the dashboard's default panel.
+    name = _("Professor")	# Name in the navigation
+    slug = "prof"		# URL
+    panels = ('courses',)  	# Add the panels
+    default_panel = 'courses'  	# Specify the slug of the dashboard's default panel
 
 
 horizon.register(Prof)
