@@ -24,6 +24,8 @@ class CourseHelper:
         self.actualTenant = None
         self.switchTenant('demo')
 
+    # helper method to switch the tenant. Instances will be started for a tenant. 
+    # To start or stop instances we need to switch to the tenant
     def switchTenant(self, name=None):
         if self.actualTenant != name:
             self.actualTenant = name
@@ -109,6 +111,8 @@ class CourseHelper:
         if servers:
             self.startInstances(courseId, imageId=servers[0].image["id"], flavorId=servers[0].flavor["id"])
 
+    # stop all instances for a specific course. 
+    # This method will terminate each instance and delete each blockstorage for the provided course.
     def stopInstances(self, courseId=None):
         course = self.getCourse(courseId)
         self.switchTenant(course.name)
@@ -129,6 +133,8 @@ class CourseHelper:
                     volume.detach()
                 volume.delete()
 
+    # start all instances for a specific course. 
+    # This method will start one instance and create one blockstorage for each member of the course
     def startInstances(self, courseId=None, imageId=None, flavorId=None):
         course = self.getCourse(courseId)
         self.switchTenant(course.name)
@@ -154,6 +160,7 @@ class CourseHelper:
                 # We just use the first one.
                 attached = self.cinder.volumes.attach(volume[0], instance[0].id, "/dev/vdb", mode="rw")
 
+    # helper method to send the VNC Access credentials to each student.
     def __sendVncConsole(self, course=None, student="studentEmail", instanceName="courseId-studentEmail"):
         print "Try to send vnc for " + instanceName
         #get the instance
@@ -172,8 +179,7 @@ class CourseHelper:
             except:
                 print 'sendVncConsole failed'
                 
-            
-
+    # helper method to start a single instance
     def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
         # find the image we like to use
         image = self.nova.images.find(id=imageId)
