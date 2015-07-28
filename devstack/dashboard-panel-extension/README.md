@@ -2,9 +2,13 @@
 
 Horizon must be installed.
 
-First copy the folder named **prof** to **opt/stack/horizon/openstack_dashboard/dashboards**.
+First execute the deploy script **deploy.sh** to setup the dashboard extension.
 
-In order to make the extension show up, you need to create a file called **_50_prof.py** under **/opt/stack/horizon/openstack_dashboard/enabled** and add the following:
+The deploy script will copy the extension folder to horizon. The script will
+also copy a file for the setup of an instance. For more information check out
+the deploy script.
+
+In order to make the extension show up the deploy script will create a file called  **_50_prof.py** under **/opt/stack/horizon/openstack_dashboard/enabled** with the following content:
 
 ```python
 # The name of the dashboard to be added to HORIZON['dashboards']. Required.
@@ -19,7 +23,7 @@ ADD_INSTALLED_APPS = [
 ]
 ```
 
-Now stop and restart the web server:
+At the end the deploy script will restart horizon:
 ```
 sudo service apache2 stop
 sudo service apache2 restart
