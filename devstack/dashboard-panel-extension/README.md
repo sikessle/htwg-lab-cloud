@@ -62,3 +62,17 @@ To write each send mail to a file use for example this configuration
 Each message will now be stored in a file which is located in the above folder.
 
 Fore more information about possible configurations [this](https://docs.djangoproject.com/en/1.8/topics/email/) link might be helpful.
+
+# Uploading an Image
+Horizon provide some default images which can be used. To use our own image we
+need to upload one.
+We could upload the image from the **instance** folder from the root directory of this project.
+Therefore download the image as described in the **instance** README and execute the
+commands from below. Note that the tenant if should be replaced by a valid tenant id.
+```
+export OS_USERNAME=admin
+export OS_PASSWORD=adminpw
+export OS_TENANT_ID=1
+export OS_AUTH_URL="http://192.168.35.128:35357/v2.0"
+glance image-create --name='base' --is-public=true --container-format=bare --disk-format=qcow2 < ubuntu-14.04-openstack-qcow2.img
+```
