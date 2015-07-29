@@ -4,6 +4,19 @@ from client import Admin
 from moodle import get_user_courses
 from moodle import get_enrolled_students
 from django.core.mail import send_mail
+import os
+
+# init script for instances.
+initScript = ''
+
+try:
+	__location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+	# first load the file instance-setup.sh, which is required to init an instance.
+	with open (os.path.join(__location__, 'instance-setup.sh'), 'r') as setupFile:
+		initScript=setupFile.read()
+except:
+    print "Unexpected error:", sys.exc_info()[0]
+
 
 class Course:
     """
@@ -60,6 +73,8 @@ class CourseHelper:
         moodleCourses = get_user_courses(moodle_userid=3701, token="32c2fad270a6ca8ff1d712c62e37822c")
         for moodleId in moodleCourses:
             list.append(Course(name=moodleCourses[moodleId]['shortname'], id=moodleId, description=moodleCourses[moodleId]['fullname']))
+        # TODO : remove this test course
+        list.append(Course(name="Test", id="1", description="A test course."))
         return list
     
     # load a list with all tenants
@@ -140,11 +155,12 @@ class CourseHelper:
         self.switchTenant(course.name)
         # TODO : replace token with token=self.user.token.id
         #members = get_enrolled_students(course_id=courseId, token="32c2fad270a6ca8ff1d712c62e37822c")
-        members = ['studentA', 'studentB']                
+        # TODO remove member list and enable the above list
+        members = ['tokeh@htwg-konstanz.de']
         for member in members:
             name = courseId + "-" + member
             if not self.nova.servers.list(search_opts={'name': name}):
-                self.__startInstance(instanceName=name, imageId=imageId, flavorId=flavorId)
+                self.__startInstance(instanceName=name, student=member, imageId=imageId, flavorId=flavorId)
                 self.__sendVncConsole(course, student=member, instanceName=name)
             if not self.cinder.volumes.list(search_opts={'name': name}):
                 self.cinder.volumes.create(name=name, size=1)
@@ -180,13 +196,15 @@ class CourseHelper:
                 print 'sendVncConsole failed'
                 
     # helper method to start a single instance
-    def __startInstance(self, instanceName="courseId-studentEmail", imageId=None, flavorId=None):
+    def __startInstance(self, instanceName="courseId-studentEmail", student="studentEmail", imageId=None, flavorId=None):
+        # get the initScript and set it to the specific user
+        userdata = initScript.replace('##INSERT_USERNAME##', student)
         # find the image we like to use
         image = self.nova.images.find(id=imageId)
         # find the flavor we like to use
         flavor = self.nova.flavors.find(id=flavorId)
         # create the instance
-        instance = self.nova.servers.create(name=instanceName, image=image, flavor=flavor)
+        instance = self.nova.servers.create(name=instanceName, image=image, flavor=flavor, userdata=userdata)
 
         # Poll at 5 second intervals, until the status is no longer 'BUILD'
         status = instance.status
