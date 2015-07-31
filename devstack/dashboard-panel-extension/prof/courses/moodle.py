@@ -17,7 +17,7 @@ def main():
 
 def get_user_token():
 	ldap_userid = 'htwgapp'
-	password = ''
+	password = '@@@adminmoodlepw@@@'
 	moodle_url = "https://moodle.htwg-konstanz.de/moodle/login/token.php"
 	parameter = {'username':ldap_userid, 'password':password, 'service':'htwgapp'}
 	response = requests.post(moodle_url, params=parameter)
@@ -30,7 +30,7 @@ def get_user_token():
 
 def get_moodle_user_id(ldap_user_email, token):
 	moodle_url = "https://moodle.htwg-konstanz.de/moodle/webservice/rest/server.php"
-	parameter = {'wstoken':token, 'wsfunction':'core_user_get_users', 'criteria[0][key]':'email', 'criteria[0][value]':ldap_user_email}
+	parameter = {'wstoken':token, 'wsfunction':'core_user_get_users', 'criteria[0][key]':'email', 'criteria[0][value]':ldap_user_email + '@htwg-konstanz.de'}
 	response = requests.post(moodle_url, params=parameter)
 
 	response_root = ET.fromstring(response.content)

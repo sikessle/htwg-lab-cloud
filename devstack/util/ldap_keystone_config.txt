@@ -1,0 +1,18 @@
+url = ldap://ldap.htwg-konstanz.de:389
+suffix = dc=fh-konstanz,dc=de
+user_tree_dn = ou=users,dc=fh-konstanz,dc=de
+user_objectclass = FHKNPERSON
+user_id_attribute = uidNumber
+user_name_attribute = uid
+user_mail_attribute = mail
+
+user_allow_create = false
+user_allow_update = false
+user_allow_delete = false
+
+group_tree_dn = ou=groups,dc=fh-konstanz,dc=de
+group_id_attribute = gidNumber
+
+group_allow_create = false
+group_allow_update = false
+group_allow_delete = false

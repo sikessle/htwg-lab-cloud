@@ -11,8 +11,8 @@ class Admin:
     """
     def __init__(self):
         self.auth_url = 'http://192.168.35.129:35357/v2.0'
-        self.username = 'admin'
-        self.password = 'adminpw'
+        self.username = 'opnstadm'
+        self.password = '@@@adminpw@@@'
         self.ks = self.keystone()
 
     def getServiceEndpoints(self):
@@ -20,7 +20,7 @@ class Admin:
         print json.dumps(endpoints, sort_keys=True, indent=4, separators=(',', ': '))
         return endpoints
 
-    def keystone(self, tenant="demo"):
+    def keystone(self, tenant="service"):
         creds = {}
         creds['auth_url'] = self.auth_url
         creds['username'] = self.username
@@ -29,7 +29,7 @@ class Admin:
         keystone = ksclient.Client(**creds)
         return keystone
 
-    def nova(self, tenant="demo"):
+    def nova(self, tenant="service"):
         creds = {}
         creds['auth_url'] = self.auth_url
         creds['username'] = self.username
@@ -43,7 +43,7 @@ class Admin:
         client = glclient.Client(endpoint, token=self.ks.auth_token)
         return client
 
-    def cinder(self, tenant="demo"):
+    def cinder(self, tenant="service"):
         #endpoint = self.ks.service_catalog.url_for(service_type='volume', endpoint_type='publicURL')
         #client = ciclient.Client(endpoint, token=self.ks.auth_token)
         creds = {}

@@ -14,18 +14,18 @@ import time
 def keystone():
     creds = {}
     creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
-    creds['username'] = "admin"
-    creds['password'] = "adminpw"
-    creds['tenant_name'] = "demo"
+    creds['username'] = "opnstadm"
+    creds['password'] = "@@@adminpw@@@"
+    creds['tenant_name'] = "professor"
     keystone = ksclient.Client(**creds)
     return keystone
 
 def nova():
     creds = {}
     creds['auth_url'] = "http://192.168.35.129:35357/v2.0"
-    creds['username'] = "admin"
-    creds['api_key'] = "adminpw"
-    creds['project_id'] = "demo"
+    creds['username'] = "opnstadm"
+    creds['api_key'] = "@@@adminpw@@@"
+    creds['project_id'] = "professor"
     nova = nvclient.Client(**creds)
     return nova
 

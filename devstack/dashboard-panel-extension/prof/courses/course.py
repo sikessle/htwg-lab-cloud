@@ -3,6 +3,8 @@ import inspect
 from client import Admin
 from moodle import get_user_courses
 from moodle import get_enrolled_students
+from moodle import get_user_token
+from moodle import get_moodle_user_id
 from django.core.mail import send_mail
 import os
 
@@ -35,7 +37,7 @@ class CourseHelper:
         self.user = user
         self.client = Admin()
         self.actualTenant = None
-        self.switchTenant('demo')
+        self.switchTenant('professor')
 
     # helper method to switch the tenant. Instances will be started for a tenant. 
     # To start or stop instances we need to switch to the tenant
@@ -68,13 +70,11 @@ class CourseHelper:
     
     # load moodle courses and return all of them in a list.
     def __getMoodleCourses(self):
-        list = []        
-        # TODO : replace token with token=self.user.token.id
-        moodleCourses = get_user_courses(moodle_userid=3701, token="32c2fad270a6ca8ff1d712c62e37822c")
+        list = []
+        moodleCourses = get_user_courses(moodle_userid=get_moodle_user_id(self.user.id, get_user_token()), token=get_user_token())
         for moodleId in moodleCourses:
             list.append(Course(name=moodleCourses[moodleId]['shortname'], id=moodleId, description=moodleCourses[moodleId]['fullname']))
-        # TODO : remove this test course
-        list.append(Course(name="Test", id="1", description="A test course."))
+
         return list
     
     # load a list with all tenants
@@ -89,20 +89,37 @@ class CourseHelper:
     # add a course
     def __addCourse(self, course):
         # Create the course
-        tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description)
-        # get the Member role.
-        role = self.keystone.roles.find(name="admin")
+        try:
+            tenant = self.keystone.tenants.create(id=course.id, tenant_name=course.name, description=course.description)
+        except:
+            print "Error"
 
-        # TODO : enable if LDAP is running. add the course owner to the tenant  
-        # user = self.keystone.users.find(id=self.user.id)
-        # self.keystone.roles.add_user_role(user, role, tenant)
+        # get the Member role.
+        role = self.keystone.roles.find(name="Member")
+
+        user = self.keystone.users.get(self.user.id)
+
+        try:
+            self.keystone.roles.add_user_role(user, role, tenant)
+        except:
+            print "Error"
+        
         # Add the admin to the role.
-        admin = self.keystone.users.find(id=self.keystone.session.get_user_id())
-        self.keystone.roles.add_user_role(admin, role, tenant)
+        try:
+            admin = self.keystone.users.get("opnstadm")
+            #admin = self.keystone.users.get(self.keystone.session.get_user_id())
+            self.keystone.roles.add_user_role(admin, role, tenant)
+        except:
+            print "Error"
 
         # now the tenant exist, we need to switch to the new created tenant. Otherwise we would add security settings to
         # another active tenant.        
-        self.switchTenant(course.name)
+        
+	try:
+		self.switchTenant(course.name)
+	except:
+		print "Error"
+
         # Add the security group rules for the created tenant to the default security group
         # Therefore we need the default one.
         group = None
@@ -153,10 +170,9 @@ class CourseHelper:
     def startInstances(self, courseId=None, imageId=None, flavorId=None):
         course = self.getCourse(courseId)
         self.switchTenant(course.name)
-        # TODO : replace token with token=self.user.token.id
-        #members = get_enrolled_students(course_id=courseId, token="32c2fad270a6ca8ff1d712c62e37822c")
-        # TODO remove member list and enable the above list
-        members = ['tokeh@htwg-konstanz.de']
+
+        members = get_enrolled_students(course_id=courseId, token=get_user_token())
+
         for member in members:
             name = courseId + "-" + member
             if not self.nova.servers.list(search_opts={'name': name}):

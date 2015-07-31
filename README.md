@@ -33,6 +33,9 @@ Configuration:
 - **Vagrantfile** adjust eth2 IP, so that it is an IP in your local real network.
 - **devstack/local.conf** adjust `FLOATING_RANGE`, subnet of eth2 (mostly it is sufficient to change the ip to the ip of eth2)
 - **devstack/local.conf** adjust `LAB_CLOUD_PUBLIC_IP` (should match eth2 of Vagrantfile)
+- **devstack/util/instance.py** set ips to eth1 ip from Vagrantfile
+- **devstack/dashboard-panel-extension/prof/courses/client.py** set ips to eth1 ip from Vagrantfile
+- **devstack/set_admin_data.sh** insert admin passwords (separate textfile uploaded in moodle)
 
 Running: 
 

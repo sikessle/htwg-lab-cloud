@@ -1,0 +1,1 @@
+sed -i 's/\"admin_required\": \"role:admin or is_admin:1\",/\"admin_required\": \"role:admin or is_admin:1 or role:Member\",/g' /etc/keystone/policy.json
